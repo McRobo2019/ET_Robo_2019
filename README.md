@@ -1,3 +1,1 @@
-# ET_Robo_2019
-push test
-push test 0406
+リポジトリをhiro_jirenに変更しました。
