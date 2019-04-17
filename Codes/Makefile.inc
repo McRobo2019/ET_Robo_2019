@@ -1,10 +1,9 @@
 mkfile_path := $(dir $(lastword $(MAKEFILE_LIST)))
 
-APPL_COBJS += balancer.o balancer_param.o parameter.o
+APPL_COBJS += parameter.o
 
 APPL_CXXOBJS += \
 	operation.o \
-	BalancerCpp.o \
 	util.o \
     recognition.o \
     judgment.o \

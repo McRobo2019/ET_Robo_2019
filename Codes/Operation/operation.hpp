@@ -1,3 +1,4 @@
+
 /******************************************************************************
  *****************************************************************************/
 
@@ -8,7 +9,6 @@
 #include "parameter.h"
 #include "GyroSensor.h"
 #include "Motor.h"
-#include "BalancerCpp.h"
 
 
 using namespace std;
@@ -24,78 +24,33 @@ public:
   Operation(const ev3api::GyroSensor& gyroSensor,
 	   ev3api::Motor& leftWheel,
 	   ev3api::Motor& rightWheel,
-	   ev3api::Motor& tail_motor,
-	   Balancer* balancer);
+	   ev3api::Motor& arm_motor,	  
+	   ev3api::Motor& tail_motor);
 
   void init();
-  void setCommand(float velocity, int forward, float yawratecmd, signed int tail_ang_req, float yawrate, bool forward_curve_mode, bool tail_stand_mode, bool tail_lug_mode, bool rising_seesaw, bool falling_seesaw);
+  void setCommand(float velocity, int forward, float yawratecmd, float yawrate);
   void set_robo_mode_launch();
 
   void run();
-
-  void tail_control(signed int angle); //2017.07.28 kota copy from 3-apex
-  //170816 ota add tail control
-  void tail_reset();
-  void tail_stand_up(); //tail for gyro reset and color sensor calibration
-  void tail_lug();
-  
-  void tail_stand_from_balance();
-  
-  int   offset;    
-  bool  balance_mode;
-  bool  lug_mode;
-
-  int   log_forward;
-  int   log_turn;
-  int   log_gyro;
-  int   log_left_wheel_enc;
-  int   log_right_wheel_enc;
-  int   log_battery;
-  int   log_left_pwm;
-  int   log_right_pwm;
-  int   log_robo_mode;
-  int   log_stand_mode;
 
 private:
   const ev3api::GyroSensor& mGyroSensor;
   ev3api::Motor& mLeftWheel;
   ev3api::Motor& mRightWheel;
+  ev3api::Motor& mArm_Motor;
   ev3api::Motor& mTail_Motor;
-  Balancer* mBalancer;
-  PID *gTail_pwm = new PID();
-  PID *gForward  = new PID();
 
-  void forward_curve_gen();
-  void velocity_ctl();
+  PID *gForward  = new PID();
 
   enum Robo_Mode{
     SET,
     READY,
     LAUNCH,
-    LAUNCH_BALANCE,
-    BALANCE_RUN,
-    BALANCE_TO_TAIL,
-    TAIL_RUN,
-    LUG_RUN,
-    TAIL_TO_BALANCE,
+    RUN,
     ROBO_DEBUG
   };
 
-  enum Stand_Mode{
-    BALANCE,
-    TAIL_DOWN,
-    TAIL_ON,
-    TAIL_STAND,
-    TAIL_LUG,
-    LUG_TO_STAND,
-    STAND_VERT,
-    STAND_TO_BALANCE,
-    TAIL_FOR_RUN,
-    DEBUG
-  };
-
   Robo_Mode  ROBO_MODE;
-  Stand_Mode STAND_MODE;
 
   float mVelocity        = 0.0;
   int   mForward;
@@ -111,16 +66,10 @@ private:
 
 
   bool  mForward_curve_mode;
-  bool  mTail_stand_mode;
-  bool  mTail_lug_mode;
-  bool  mRising_seesaw;
-  bool  mFalling_seesaw;
    
-  int omega                  = 0;
   int right_wheel_enc        = 0;
   int left_wheel_enc         = 0;
-  signed int mTail_ang_req;
-  float      tail_motor_pwm;
+
 
   float YawrateController(float yawrate, float yawrate_cmd);
   float yaw_ctl_dt = 0.004;
@@ -176,12 +125,11 @@ private:
   float Pd_gain2 = 1.0-yaw_ctl_dt/0.1*1.0;
   float Pd_ud1 = 0.0;
 
-  void TailMode(int mForward, float mTurn); //PWM Gen. without Balancer task 0814
-  int mtail_mode_pwm_l;
-  int mtail_mode_pwm_r;
+  void PWM_Gen(int mForward, float mTurn);
+  int left_motor_pwm;
+  int right_motor_pwm;
 
-  bool balance_off_en;
-  //  bool pre_balancer_on;
+
 };
 
 #endif  // EV3_UNIT_BALANCINGWALKER_H_

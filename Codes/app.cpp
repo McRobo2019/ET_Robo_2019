@@ -68,7 +68,6 @@ static FILE     *bt     = NULL;   /* Bluetoothファイルハンドル */
 static Recognition *gRecognition;
 static Judgment    *gJudgment;
 static Operation   *gOperation;
-static Balancer    *gBalancer; //it will be removed
 
 //0729 kota Color Sensor Calibration
 unsigned char white       = 60;
@@ -133,7 +132,6 @@ static void sys_initialize() {
 
   
   // オブジェクトの作成
-  gBalancer    = new Balancer();
   gRecognition = new Recognition(gColorSensor,
 				 gLeftMotor,
 				 gRightMotor,
@@ -145,8 +143,8 @@ static void sys_initialize() {
   gOperation   = new Operation(gGyroSensor,
 			       gLeftMotor,
 			       gRightMotor,
-			       gTailMotor,
-			       gBalancer);
+			       gArmMotor,
+			       gTailMotor);
 
   //**********************************************************************************//
   //Set Tail Initial position
@@ -340,7 +338,6 @@ static void sys_destroy(){
   delete gRecognition;
   delete gJudgment;
   delete gOperation;
-  delete gBalancer;
 }
 
 //It will be move to the class for log ota 20190414
@@ -611,9 +608,6 @@ void rec_task(intptr_t exinf) {
                               gRecognition->dansa,
 			      gRecognition->sonarDistance);
 
-    
-    gJudgment->setRoboCommand(gOperation->balance_mode, gOperation->lug_mode);
-
   ext_tsk();
 }
 
@@ -634,13 +628,7 @@ void jud_task(intptr_t exinf) {
       gOperation->setCommand(gRecognition->ave_velo,//gRecognition->velocity,
 			    gJudgment->forward,
                             gJudgment->yawratecmd,
-                            gJudgment->ref_tail_angle,
-                            gRecognition->yawrate,
-                            gJudgment->forward_curve_mode,
-                            gJudgment->tail_stand_mode,
-			    gJudgment->tail_lug_mode,
-			    gJudgment->rising_seesaw,
-			    gJudgment->falling_seesaw);
+                            gRecognition->yawrate);
     }
     ext_tsk();
 }
@@ -731,6 +719,7 @@ void main_task(intptr_t unused) {
 
   gLeftMotor.~Motor();
   gRightMotor.~Motor();
+  gArmMotor.~Motor();
   gTailMotor.~Motor();
 
   ev3_led_set_color(LED_ORANGE);
