@@ -69,13 +69,7 @@ static Recognition *gRecognition;
 static Judgment    *gJudgment;
 static Operation   *gOperation;
 
-//0729 kota Color Sensor Calibration
-unsigned char white       = 60;
-unsigned char black       = 2;
-unsigned char white_slant = 12;
-unsigned char black_slant = 2;
-
-//It will be moved to log class 190414 ota
+//It will be moved to log class 190414 ota ----
 #ifdef LOG_RECORD
 
 #ifdef LOG_SHORT
@@ -103,6 +97,9 @@ static int   log_dat_03[20000];
 
 #endif
 
+//----It will be moved to log class 190414 ota
+
+
 /****************************************************************************************/
 //System Initialize
 //
@@ -122,7 +119,7 @@ static void sys_initialize() {
   //**********************************************************************************//
   ev3_lcd_fill_rect(0, 0, EV3_LCD_WIDTH, EV3_LCD_HEIGHT, EV3_LCD_WHITE);
   ev3_lcd_set_font(EV3_FONT_MEDIUM);
-  ev3_lcd_draw_string("LEFT_CS_10",0, 40);
+  ev3_lcd_draw_string("hirojiren_alpha_0421",0, 40);
   //**********************************************************************************//
   //New Object of Sub System(Class)
   //
@@ -165,7 +162,7 @@ static void sys_initialize() {
   
   ev3_lcd_fill_rect(0, 0, EV3_LCD_WIDTH, EV3_LCD_HEIGHT, EV3_LCD_WHITE);
   ev3_lcd_set_font(EV3_FONT_MEDIUM);
-  ev3_lcd_draw_string("LEFT 2018",0, 0);
+  ev3_lcd_draw_string("hirojiren_alpha",0, 0);
   battery = ev3_battery_voltage_mV();
   sprintf(battery_str, "V:%d", battery);
   ev3_lcd_draw_string(battery_str,0, 20);
@@ -178,7 +175,7 @@ static void sys_initialize() {
   //Set Gyro offset
   //
   //**********************************************************************************//
-  ev3_lcd_draw_string("Set ANG on GND",0, 60);
+  ev3_lcd_draw_string("Put on GND",0, 60);
   ev3_lcd_draw_string("PUSH TS 4 RESET",0, 80);
 
   while(1){
@@ -191,7 +188,7 @@ static void sys_initialize() {
     gyro = gGyroSensor.getAnglerVelocity();  // ジャイロセンサ値
     sprintf(gyro_str, "Gyro:%d", gyro);
     ev3_lcd_draw_string(gyro_str,0, 100);
-    tslp_tsk(10); //What dose it mean? kota 170812
+    tslp_tsk(10);
   }
   ev3_speaker_play_tone(NOTE_E4,200);
   ev3_lcd_fill_rect(0, 0, EV3_LCD_WIDTH, EV3_LCD_HEIGHT, EV3_LCD_WHITE);
@@ -205,7 +202,7 @@ static void sys_initialize() {
     gyro = gGyroSensor.getAnglerVelocity();  // ジャイロセンサ値
     sprintf(gyro_str, "Gyro:%d", gyro);
     ev3_lcd_draw_string(gyro_str,0, 100);
-    tslp_tsk(20); //What dose it mean? kota 170812
+    tslp_tsk(20);
     ev3_lcd_fill_rect(0, 0, EV3_LCD_WIDTH, EV3_LCD_HEIGHT, EV3_LCD_WHITE);
   }
   ev3_speaker_play_tone(NOTE_E4,200);
@@ -340,7 +337,7 @@ static void sys_destroy(){
   delete gOperation;
 }
 
-//It will be move to the class for log ota 20190414
+//It will be move to the class for log ota 20190414 ----
 #ifdef LOG_RECORD
 static void log_dat( ){
   
@@ -599,13 +596,12 @@ void rec_task(intptr_t exinf) {
                               gRecognition->yawrate,
                               gRecognition->abs_angle,
                               gRecognition->ave_angle,
-			      gTailMotor.getCount(),
+			      gTailMotor.getCount(),             //it will be modified later 20190420 ota
 			      gRecognition->robo_stop,
 			      gRecognition->robo_forward,
 			      gRecognition->robo_back,
 			      gRecognition->robo_turn_left,
 			      gRecognition->robo_turn_right,
-                              gRecognition->dansa,
 			      gRecognition->sonarDistance);
 
   ext_tsk();

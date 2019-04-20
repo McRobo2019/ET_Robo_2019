@@ -69,7 +69,7 @@ void Operation::set_robo_mode_launch(){
 }
 
 void Operation::run() {
-    int     battery       = ev3_battery_voltage_mV();
+  //    int     battery       = ev3_battery_voltage_mV();
 
     switch(ROBO_MODE){
 

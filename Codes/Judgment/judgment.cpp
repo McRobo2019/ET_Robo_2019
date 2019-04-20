@@ -20,14 +20,15 @@ void Judgment::init() {
   ON_LINE_MODE       = ON_THE_LEFT_EDGE;
   PRE_ON_LINE_MODE   = ON_THE_LEFT_EDGE;
   
+
   on_line            = true;
   left_line          = false;
   right_line         = false;
   lost_line          = false;
   line_to_map        = false; //181108
 
+
   line_trace_mode    = true;
-  forward_curve_mode = false;
 
   gAve_line_val->init();
   gAve_yaw_angle_500->init(); //20181108
@@ -85,10 +86,7 @@ void Judgment::run() {
 			      mRobo_back,
 			      mRobo_turn_left,
 			      mRobo_turn_right,
-			      mDansa,
 			      mSonar_dis,
-			      mRobo_balance_mode,
-			      mRobo_lug_mode,
 			      mMax_Forward,
 			      mRef_Yawrate,
 			      mMax_Yawrate,
@@ -101,10 +99,7 @@ void Judgment::run() {
   GetCalcResult(gMotion_Ctl->forward,
 		gMotion_Ctl->yawratecmd,
 		gMotion_Ctl->ref_tail_angle,
-		gMotion_Ctl->tail_stand_mode,
-		gMotion_Ctl->tail_lug_mode,
-		gMotion_Ctl->rising_seesaw,
-		gMotion_Ctl->falling_seesaw);
+		gMotion_Ctl->tail_stand_mode);
 }
 
 /****************************************************************************************/
@@ -123,7 +118,6 @@ void Judgment::det_navigation() {
 
     //https://drive.google.com/open?id=1Ih-fZX68pgRuQWVPbCW-5Oj-Bgrn3pgo
   if(DRIVE_MODE == LINE_TRACE){
-    //    forward_curve_mode = true; //20181008 for CS
 
     switch(ZONE){
 
@@ -756,7 +750,6 @@ void Judgment::det_navigation() {
 
        //DET RUNNING AREA------------------------------------------------------
 	if (  (mXvalue > FIRST_GRAY_AREA[0])&&(mYvalue < FIRST_GRAY_AREA[3])){
-	  gMotion_Ctl->set_mode_LUG();
 	  ZONE = LUG_ZONE;
 	  gMotion_Ctl->set_zone_garage();
 
@@ -778,7 +771,6 @@ void Judgment::det_navigation() {
 /** LEFT 2018 **********************************************************LINE TRACE **/
     case FIRST_GRAY_ZONE:
       det_navi_log       = 1120;
-      forward_curve_mode = true;
       mMax_Forward       = FIRST_GRAY_FORWARD_VAL;
 
       mMin_Yawrate = MINUS_RAD_5_DEG;
@@ -836,8 +828,6 @@ void Judgment::det_navigation() {
 /**  TRACK MODE                                                                                              **/
 /**************************************************************************************************************/
   }else if(DRIVE_MODE == TRACK){
-    //    forward_curve_mode = true;
-    forward_curve_mode = false;
     line_trace_mode    = false;
 
 /********************************************/
@@ -1317,8 +1307,6 @@ void Judgment::det_navigation() {
       mMax_Forward = FOURTH_CORNER_FORWARD_VAL;
 
       if (  (mXvalue > (FIRST_GRAY_AREA[0] - 200 ))&&(mYvalue < FIRST_GRAY_AREA[3])){
-	gMotion_Ctl->set_mode_LUG();
-	gMotion_Ctl->set_zone_garage();
 	ZONE = LUG_ZONE;
 
 
@@ -1338,8 +1326,6 @@ void Judgment::det_navigation() {
 	//      if (det_area(LUG_AREA[0],LUG_AREA[1],LUG_AREA[2],LUG_AREA[3],mPre_50mm_x,mPre_50mm_y)){
 	if(mPre_50mm_x > LUG_AREA[0]){
 	ZONE = LUG_ZONE;
-	gMotion_Ctl->set_mode_LUG();
-	forward_curve_mode = false;
 
       }else if (det_area(FIRST_GRAY_AREA[0],FIRST_GRAY_AREA[1],FIRST_GRAY_AREA[2],FIRST_GRAY_AREA[3],mXvalue,mYvalue) == false){
 	//ZONE = LOST; //debug 20180625 kota
@@ -1405,8 +1391,7 @@ void Judgment::det_navigation() {
 /**  Bluetooth Mode  it has not been complited yet                             **/
 /********************************************************************************/
   }else if(DRIVE_MODE == DEBUG){
-    //    forward_curve_mode = true;
-    forward_curve_mode = false;
+
     line_trace_mode    = false;
 
     gMotion_Ctl->set_mode_debug();    
@@ -1449,61 +1434,7 @@ bool Judgment::det_area(float x_left, float y_under, float x_right, float y_top,
 //it has not been completed, it do not work well.
 /****************************************************************************************/
 void Judgment::det_on_line(){
-  switch(ON_LINE_MODE){
 
-  case ON_THE_LEFT_EDGE:
-    on_line            = true;
-    left_line          = false;
-    right_line         = false;
-    lost_line          = false;
-
-    if(ave_line_val < 10){
-      ON_LINE_MODE     = LEFT_THE_LINE;
-      PRE_ON_LINE_MODE = ON_THE_LEFT_EDGE;
-    }
-
-    if(mLinevalue > 80){
-      ON_LINE_MODE     = CENTER_LINE;
-      PRE_ON_LINE_MODE = ON_THE_LEFT_EDGE;
-    }
-
-    break;
-
-  case LEFT_THE_LINE:
-    on_line            = false;
-    left_line          = true;
-    right_line         = false;
-    lost_line          = false;
-
-    break;
-
-  case CENTER_LINE:
-    on_line            = true;
-    left_line          = false;
-    right_line         = false;
-    lost_line          = false;
-    if(ave_line_val < 10){
-      if(PRE_ON_LINE_MODE == ON_THE_LEFT_EDGE){
-	ON_LINE_MODE = RIGHT_THE_LINE;
-      }
-    }
-    break;
-
-  case RIGHT_THE_LINE:
-    on_line            = false;
-    left_line          = false;
-    right_line         = true;
-    lost_line          = false;
-
-    break;
-
-  case UNKOWN:
-    break;
-
-  default:
-    break;
-
-  }
 }
 
 
@@ -1526,7 +1457,6 @@ void Judgment::setEyeCommand(int     linevalue,
 			      bool    robo_back,
 			      bool    robo_turn_left,
 			      bool    robo_turn_right,
-			      bool    dansa,
                               int16_t sonar_dis){
 
   mLinevalue       = linevalue;
@@ -1548,31 +1478,19 @@ void Judgment::setEyeCommand(int     linevalue,
   mRobo_back       = robo_back;
   mRobo_turn_left  = robo_turn_left;
   mRobo_turn_right = robo_turn_right;
-  mDansa           = dansa;
   mSonar_dis       = sonar_dis;
 }
 
 
-void Judgment::setRoboCommand(bool robo_balance_mode, bool robo_lug_mode){
-  mRobo_balance_mode = robo_balance_mode;
-  mRobo_lug_mode     = robo_lug_mode;
-}
-
 void Judgment::GetCalcResult(int   forward_calc,
 			      float yawratecmd_calc,
 			      float ref_tail_angle_calc,
-			      bool  tail_stand_mode_calc,
-			      bool  tail_lug_mode_calc,
-			      bool  rising_seesaw_calc,
-			      bool  falling_seesaw_calc){
+			      bool  tail_stand_mode_calc){
   
   forward         = forward_calc;
   yawratecmd      = yawratecmd_calc;
   ref_tail_angle  = ref_tail_angle_calc;
   tail_stand_mode = tail_stand_mode_calc;
-  tail_lug_mode   = tail_lug_mode_calc;
-  rising_seesaw   = rising_seesaw_calc;
-  falling_seesaw  = falling_seesaw_calc;
 
 }
 

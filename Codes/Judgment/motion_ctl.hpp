@@ -23,10 +23,7 @@ public:
 			    bool    robo_back,
 			    bool    robo_turn_left,
 			    bool    robo_turn_right,
-                            bool    dansa,
 			    int16_t sonar_dis,
-			    bool    robo_balance_mode,
-			    bool    robo_lug_mode,
 			    int     max_forward,
 			    float   ref_yawrate,
 			    float   max_yawrate,
@@ -35,8 +32,6 @@ public:
 
 	void set_mode_LT();
 	void set_mode_map_trace();
-	void set_mode_LUG();
-	void set_mode_seesaw();
 
 	void set_mode_tail_std_debug();
 	void set_mode_debug();
@@ -54,8 +49,6 @@ public:
 	void set_zone_4th_corner();
 	void set_zone_5th_corner();
 	void set_zone_1st_gray();
-	void set_zone_lug();
-	void set_zone_back_lug();
 	void set_zone_2nd_gray();
 	void set_zone_garage();
 	void set_zone_lost();
@@ -68,22 +61,16 @@ public:
 	float yawratecmd;
 	float ref_tail_angle;
 	bool  tail_stand_mode;
-	bool  tail_lug_mode;
-        bool  rising_seesaw;
-        bool  falling_seesaw;
 
 private:
     void LineTracerYawrate(int line_value);              //ライントレース（ヨーレート）
     void MapTracer(float mXvalue, float mYvalue, float mYawangle);  //仮想ゲート走行 0827 tada
-    void LUG_run(float odo, float angle,int line_value);
 
     PID *gForward = new PID();
 
     enum Motion_Mode{
       MAP_TRACE,
       LINE_TRACE,
-      LUG,
-      SEESAW,
       TAIL_STAND_DEBUG,
       DEBUG,
       DEBUG_1
@@ -103,76 +90,14 @@ private:
       FOURTH_CORNER_ZONE,
       FIFTH_CORNER_ZONE,
       FIRST_GRAY_ZONE,
-      LUG_ZONE,
-      BACK_LUG_ZONE,
       SECOND_GRAY_ZONE,
       GARAGE_ZONE,
       LOST
     };
 
-    enum Lug_Mode{
-      LUG_START,
-      APPROACH_TO_LUG,
-      TAIL_ON_1ST,
-      POS_ADJ_1ST,
-      LUG_MODE_1ST,
-      LUG_1ST,
-      PRE_1ST_TURN,
-      TURN_1ST,
-
-      APPROACH_TO_2ND_LUG,
-      LUG_MODE_2ND,
-      LUG_2ND,
-      PRE_2ND_TURN,
-      TURN_2ND,
-
-      APPROACH_TO_3RD_LUG,
-      LUG_MODE_3RD,
-      LUG_3RD,
-
-      TAIL_STAND_UP,
-      TURN_90,
-      FIND_GREEN,
-      TURN_M90,
-      FIND_LEFT_EDGE,
-      Y_POS_ADJ,
-      TURN_ZERO,
-      GRAY_GARAGE,
-
-      LUG_DEBUG_00
-    };
-
-  enum Seesaw_Mode{
-    SEESAW_START,
-    APPROACH_TO_SEESAW,
-    TAIL_ON,
-    TURN_TO_180,
-    FIND_GREEN_SS,
-    TURN_TO_ZERO,
-    FIND_LINE,
-    X_POS_ADJ,
-    TURN_TO_90,
-    FIND_SEESAW,
-    BACK_FOR_BALANCE,
-    BALANCE,
-    GET_ON,
-    FIRST_SEESAW,
-    SEESAW_OFF,
-    SEESAW_DEBUG_00,
-    SEESAW_DEBUG_01,
-    SEESAW_DEBUG_02,
-    SEESAW_DEBUG_03,
-    DONE
-
-
-  };
-
-
-
   Motion_Mode MOTION_MODE;
   Zone        ZONE;
-  Lug_Mode    LUG_MODE;
-  Seesaw_Mode SEESAW_MODE;
+
 
   int   Mmode;
   int   mLinevalue; //ライン検出値
@@ -202,11 +127,7 @@ private:
   bool  mRobo_turn_left  = false;
   bool  mRobo_turn_right = false;
 
-  bool    mDansa;      //段差検出値
   int16_t mSonar_dis;
-
-  bool  mRobo_balance_mode;
-  bool  mRobo_lug_mode;
 
   int   mMax_Forward;
   float mRef_Yawrate;

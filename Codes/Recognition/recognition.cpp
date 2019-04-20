@@ -581,30 +581,6 @@ void Recognition::det_Movement( ) {
 }
 
 
-void Recognition::det_Dansa( ) {
-  static int gyro_250d[250];
-  int cnt;
-  gyro_250d[0] = mGyro.getAnglerVelocity();
-
-  for(cnt =9; cnt > 0; cnt--){
-    gyro_250d[cnt] = gyro_250d[cnt-1];
-  }
- 
-  for(cnt = 0; cnt < 250; cnt++){
-    if(gyro_250d[cnt] < -100 || gyro_250d[cnt] > 100){
-      if(velocity < 0){
-	dansa = 1;
-	cnt = 250;
-      }else{
-	dansa = 0;
-      }
-    }else{
-      dansa = 0;
-    }
-  }
-}
-
-
 void Recognition::setSonarDistance(void) {
 
   if(sonar_counter%50 == 0){

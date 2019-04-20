@@ -28,7 +28,6 @@ public:
   void  average_dat(float dT); //20181008
   void  correct_odometry( );
   void  det_Movement();
-  void  det_Dansa();
   void  setSonarDistance(void);
 
   bool  stop_sys   = 0;
@@ -71,7 +70,6 @@ public:
   float ave_angle = 0;
   float ave_angle_500 = 0;
   
-  bool  dansa     = 0;
   //signals for robo movement
   bool  robo_stop       = 0;
   bool  robo_forward    = 0;
@@ -147,40 +145,19 @@ private:
 
   float real_wheel;
   float relative_angle;
-  //  float correction_angle = 0.0;
-  
-  //signals for detection robo's direction
-  //  int   cap_size = 1000;
-  //int   cap_cnt = 0;
 
-  //20181008 ---- for CS
-  //  float x_sum_dat     = 0.0;
-  //  float x_ave_dat     = 0.0;
   float dif_x_ave_dat = 0.0;
   float old_x_ave_dat = 0.0;
-  //  float x_dat_500ms[125]; //data array during 500ms @ 4ms task term
-  //----20181001 for CS
 
-  //20181008 ---- for CS
-  //  float y_sum_dat     = 0.0;
-  //  float y_ave_dat     = 0.0;
   float dif_y_ave_dat = 0.0;
   float old_y_ave_dat = 0.0;
-  //  float y_dat_500ms[125]; //data array during 500ms @ 4ms task term
-  //----20181001 for CS
 
-
-  //  float angle_sum_dat     = 0.0;
-  //  float angle_ave_dat     = 0.0;
   float dif_angle_ave_dat = 0.0;
   float old_angle_ave_dat = 0.0;
-  //  float angle_dat_500ms[125]; //data array during 500ms @ 4ms task term
 
-  //  float velocity_sum_dat     = 0.0;
-  //  float velocity_ave_dat     = 0.0;
   float dif_velocity_ave_dat = 0.0;
   float old_velocity_ave_dat = 0.0;
-  //  float velocity_dat_500ms[125]; //data array during 500ms @ 4ms task term
+
 
   float WheelAngVLt = 0;
   float WheelAngVRt = 0;

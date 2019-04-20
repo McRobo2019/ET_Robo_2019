@@ -35,10 +35,7 @@ public:
 			   bool    robo_back,
 			   bool    robo_turn_left,
 			   bool    robo_turn_right,
-                           bool    dansa,
 			   int16_t sonar_dis);
-
-  void setRoboCommand(bool robo_balance_mode, bool robo_lug_mode);
 
   Average_500_Data *gAve_line_val      = new Average_500_Data();
   Average_500_Data *gAve_yaw_angle_500 = new Average_500_Data(); //20181108
@@ -50,11 +47,8 @@ public:
   int   forward;           //前進目標値
   float yawratecmd;        //目標ヨーレート
   float ref_tail_angle;    //尻尾角度
-  bool  forward_curve_mode;
-  bool  tail_stand_mode;   //倒立走行フラグ
-  bool  tail_lug_mode;
-  bool  rising_seesaw;
-  bool  falling_seesaw;
+   bool  tail_stand_mode;   //倒立走行フラグ
+
   bool  on_line;
   bool  left_line;
   bool  right_line;
@@ -75,10 +69,7 @@ private:
   void GetCalcResult(int forward_calc,
 		     float yawratecmd_calc,
 		     float ref_tail_angle_calc,
-		     bool  tail_stand_mode_calc,
-		     bool  tail_stand_lug_calc,
-		     bool  rising_seesaw_calc,
-		     bool  falling_seesaw_calc);
+		     bool  tail_stand_mode_calc);
 
   //    StrategyDet *gStrategyDet = new StrategyDet();
   Motion_Ctl *gMotion_Ctl   = new Motion_Ctl();
@@ -97,7 +88,7 @@ private:
   float mOdo;             //Total Distance from Start point
   float mVelocity;        //速度
   float mPre_velo_0p5sec; //prediction vekicity 0.5 sec latar
-    float mYawrate;       //ヨーレート
+  float mYawrate;       //ヨーレート
   float mYawangle;        //ヨー角
   float mAve_yaw_angle;
 
@@ -108,11 +99,8 @@ private:
   bool  mRobo_back       = false;
   bool  mRobo_turn_left  = false;
   bool  mRobo_turn_right = false;
-  bool  mDansa;      //段差検出値
 
   int16_t mSonar_dis;
-  bool  mRobo_balance_mode;
-  bool  mRobo_lug_mode;
   
   int   mMax_Forward;
 
