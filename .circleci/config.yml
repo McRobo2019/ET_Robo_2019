@@ -90,10 +90,10 @@ jobs:
       - run: cd ./Codes/Test
       - run: cp ../Operation/yawrate_ctl.* ./
       - run: ls 
-#      - run: g++ ./Codes/prime.c -std=c++14
-       - run: g++ -Wall -c yawrate_ctl.cpp -std=c++14
-       - run: g++ -Wall -c test_codes.cpp  -std=c++14
-       - run: g++ -Wall -o test_codes test_codes.o yawrate_ctl.o -std=c++14
+#     - run: g++ ./Codes/prime.c -std=c++14
+#      - run: g++ -Wall -c yawrate_ctl.cpp -std=c++14
+#      - run: g++ -Wall -c test_codes.cpp  -std=c++14
+#      - run: g++ -Wall -o test_codes test_codes.o yawrate_ctl.o -std=c++14
 
 
 
