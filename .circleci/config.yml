@@ -88,7 +88,7 @@ jobs:
 #      - run: mkdir -p build && cd build
 #      - run: g++ -o main main.cpp -std=c++14
       - run: ls ./Codes/
-      - run: gcc -o ./Codes/prime.c
+      - run: gcc ./Codes/prime.c
 #      - run: ./main
 
 #  build_gcc_latest:
