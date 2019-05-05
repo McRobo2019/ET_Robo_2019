@@ -3,11 +3,13 @@ mkfile_path := $(dir $(lastword $(MAKEFILE_LIST)))
 APPL_COBJS += parameter.o
 
 APPL_CXXOBJS += \
-	operation.o \
-	util.o \
+    operation.o \
+    yawrate_ctl.o \
+    util.o \
     recognition.o \
     judgment.o \
-    motion_ctl.o 
+    motion_ctl.o
+
 
 SRCLANG := c++
 
