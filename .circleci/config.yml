@@ -26,38 +26,39 @@
 #      - run: echo "hello world"
 ###############################################################################################################
 
-version: 2
-
-workflows:
-  version: 2
-  dist-compile:
-    jobs:
-      - compile
-      - link:
-          requires: 
-            - compile
-
-
-jobs:
-
-  compile:
-    parallelism: 2
-    docker:
-      - image: gcc:8.2
-    steps:
-      - checkout
-      #split all c files based on the index ID we're running on, pass subset to gcc compile
-#      - run: circleci tests glob "**/*.c" | circleci tests split --split-by=filesize | xargs gcc -c 
-      - run: ls ./Codes
-#      - run: circleci tests glob "/Codes/parameter.c" | circleci tests split --split-by=filesize | xargs gcc -c 
-      - run: gcc ./Codes/prime.c
-      # move compiled files to specific folder and persist to workspace
-      - run: mkdir output && mv *.o output
-      - persist_to_workspace:
-          root: output
-          paths:
-            - "*.o"
-
+###############################################################################################################
+#version: 2
+#
+#workflows:
+#  version: 2
+#  dist-compile:
+#    jobs:
+#      - compile
+#      - link:
+#          requires: 
+#            - compile
+#
+#
+#jobs:
+#
+#  compile:
+#    parallelism: 2
+#    docker:
+#      - image: gcc:8.2
+#    steps:
+#      - checkout
+#      #split all c files based on the index ID we're running on, pass subset to gcc compile
+##      - run: circleci tests glob "**/*.c" | circleci tests split --split-by=filesize | xargs gcc -c 
+#      - run: ls ./Codes
+##      - run: circleci tests glob "/Codes/parameter.c" | circleci tests split --split-by=filesize | xargs gcc -c 
+#      - run: gcc ./Codes/prime.c
+#      # move compiled files to specific folder and persist to workspace
+#      - run: mkdir output && mv *.o output
+#      - persist_to_workspace:
+#          root: output
+#          paths:
+#            - "*.o"
+#
 #  link:
 #    docker:
 #      - image: gcc:8.2
@@ -77,3 +78,31 @@ jobs:
 #          path: program
 
 
+version: 2.0
+jobs:
+  build_gcc_6:
+    docker:
+      - image: gcc:6
+    steps:
+      - checkout
+      - run: mkdir -p build && cd build
+#      - run: g++ -o main main.cpp -std=c++14
+      - run: gcc -o ./Codes/prime.c
+#      - run: ./main
+
+#  build_gcc_latest:
+#    docker:
+#      - image: gcc:latest
+#    steps:
+#      - checkout
+#      - run: mkdir -p build && cd build
+#      - run: g++ -o main main.cpp -std=c++17
+#      - run: ./main
+#
+
+workflows:
+  version: 2
+  build_and_test:
+    jobs:
+      - build_gcc_6
+#      - build_gcc_latest
