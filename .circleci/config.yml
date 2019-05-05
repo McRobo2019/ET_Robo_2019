@@ -47,7 +47,8 @@ jobs:
     steps:
       - checkout
       #split all c files based on the index ID we're running on, pass subset to gcc compile
-      - run: circleci tests glob "**/*.c" | circleci tests split --split-by=filesize | xargs gcc -c 
+#      - run: circleci tests glob "**/*.c" | circleci tests split --split-by=filesize | xargs gcc -c 
+      - run: circleci tests glob "Codes/*.c" | circleci tests split --split-by=filesize | xargs gcc -c 
       # move compiled files to specific folder and persist to workspace
       - run: mkdir output && mv *.o output
       - persist_to_workspace:
