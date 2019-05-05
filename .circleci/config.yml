@@ -50,7 +50,7 @@ jobs:
 #      - run: circleci tests glob "**/*.c" | circleci tests split --split-by=filesize | xargs gcc -c 
       - run: ls ./Codes
 #      - run: circleci tests glob "/Codes/parameter.c" | circleci tests split --split-by=filesize | xargs gcc -c 
-      - run: gcc ./Codes/parameter.c
+      - run: gcc ./Codes/prime.c
       # move compiled files to specific folder and persist to workspace
       - run: mkdir output && mv *.o output
       - persist_to_workspace:
