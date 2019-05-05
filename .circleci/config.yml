@@ -87,9 +87,12 @@ jobs:
       - checkout
 #      - run: mkdir -p build && cd build
 #      - run: g++ -o main main.cpp -std=c++14
-      - run: ls ./Codes/
+      - run: cd ./Codes/Test
+      - run: cp ../Operation/yawrate_ctl.* ./
+      - run: ls 
 #      - run: gcc ./Codes/prime.c
-      - run: g++ ./Codes/prime.c -std=c++14
+#      - run: g++ ./Codes/prime.c -std=c++14
+       - run: make
 #      - run: ./main
 
 #  build_gcc_latest:
