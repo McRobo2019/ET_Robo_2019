@@ -87,7 +87,7 @@ jobs:
       - checkout
 #      - run: mkdir -p build && cd build
 #      - run: g++ -o main main.cpp -std=c++14
-      - run: pwd
+      - run: cp ./Codes/Test/test_codes.cpp ./*
       - run: ls
       - run: cd Codes
       - run: ls
