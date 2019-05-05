@@ -89,7 +89,7 @@ jobs:
 #      - run: g++ -o main main.cpp -std=c++14
       - run: pwd
       - run: ls
-      - run: cd ./Codes/Test
+      - run: cd Codes
       - run: ls
 #      - run: cp ../Operation/yawrate_ctl.cpp ./
       - run: pwd
