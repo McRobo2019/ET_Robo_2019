@@ -34,6 +34,10 @@ public:
 
   void run();
 
+  int left_motor_pwm;
+  int right_motor_pwm;
+
+
 private:
   const ev3api::GyroSensor& mGyroSensor;
   ev3api::Motor& mLeftWheel;
@@ -74,8 +78,6 @@ private:
 
 
   void PWM_Gen(int mForward, float mTurn);
-  int left_motor_pwm;
-  int right_motor_pwm;
 
 
 };
