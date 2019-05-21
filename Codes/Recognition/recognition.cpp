@@ -267,9 +267,15 @@ void Recognition::color_sensor_calib( ) {
     case SET_DEFAULT:
       ev3_lcd_draw_string("Set Defalut", 0, 20);
 
+      /*
       line_100_val = 180;
       line_50_val  = 90;
       line_0_val = 10;
+      */
+
+      line_100_val = 85;
+      line_50_val  = 90;
+      line_0_val = 15;
 
       line_val_offset = COLOR_SENSOR_OFFSET;
       line_val_gain   = COLOR_SENSOR_GAIN;
