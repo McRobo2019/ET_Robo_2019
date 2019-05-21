@@ -1,3 +1,4 @@
+
 //Hirojiren Proto System
 //Date:2019.4.13
 //Author:Kaoru Ota
@@ -37,9 +38,10 @@ using ev3api::Motor;
 using ev3api::Clock;
 
 //It will be moved to the class for log 190414 ota
-//#define LOG_RECORD
-//#define LOG_SHORT
+#define LOG_RECORD
+#define LOG_SHORT
 //#define LOG_LONG
+#define LOG_SHORT_SIZE 7500
 
 // Device objects
 // オブジェクトを静的に確保する
@@ -53,6 +55,8 @@ Motor       gTailMotor   (PORT_B);
 Motor       gArmMotor    (PORT_C);
 Motor       gLeftMotor   (PORT_D);
 
+
+
 enum Sys_Mode{
   LINE_TRACE,
   TRACK,
@@ -61,6 +65,7 @@ enum Sys_Mode{
 
 Sys_Mode SYS_MODE;
 
+Clock* Sys_Clock;
 
 static int32_t   bt_cmd = 0;      /* Bluetoothコマンド 1:リモートスタート */
 static FILE     *bt     = NULL;   /* Bluetoothファイルハンドル */
@@ -73,17 +78,26 @@ static Operation   *gOperation;
 #ifdef LOG_RECORD
 
 #ifdef LOG_SHORT
-static int   log_size = 10000;
+static int   log_size = LOG_SHORT_SIZE;
 static int   log_cnt  = 0;
-static int   log_dat_00[10000];
-static int   log_dat_01[10000];
-static int   log_dat_02[10000];
-static int   log_dat_03[10000];
-static int   log_dat_04[10000];
-static int   log_dat_05[10000];
-static int   log_dat_06[10000];
-static int   log_dat_07[10000];
-static int   log_dat_08[10000];
+static int   log_dat_00[LOG_SHORT_SIZE];
+static int   log_dat_01[LOG_SHORT_SIZE];
+static int   log_dat_02[LOG_SHORT_SIZE];
+static int   log_dat_03[LOG_SHORT_SIZE];
+static int   log_dat_04[LOG_SHORT_SIZE];
+static int   log_dat_05[LOG_SHORT_SIZE];
+static int   log_dat_06[LOG_SHORT_SIZE];
+static int   log_dat_07[LOG_SHORT_SIZE];
+static int   log_dat_08[LOG_SHORT_SIZE];
+static int   log_dat_09[LOG_SHORT_SIZE];
+static int   log_dat_10[LOG_SHORT_SIZE];
+static int   log_dat_11[LOG_SHORT_SIZE];
+static int   log_dat_12[LOG_SHORT_SIZE];
+static int   log_dat_13[LOG_SHORT_SIZE];
+static int   log_dat_14[LOG_SHORT_SIZE];
+static int   log_dat_15[LOG_SHORT_SIZE];
+static int   log_dat_16[LOG_SHORT_SIZE];
+
 #endif
 
 #ifdef LOG_LONG
@@ -129,6 +143,8 @@ static void sys_initialize() {
 
   
   // オブジェクトの作成
+  Sys_Clock       = new Clock();
+
   gRecognition = new Recognition(gColorSensor,
 				 gLeftMotor,
 				 gRightMotor,
@@ -344,57 +360,93 @@ static void log_dat( ){
   float float_to_int_x1000;
 
   switch(SYS_MODE){
-    case LINE_TRACE:
+  case LINE_TRACE:
 #ifdef LOG_SHORT
-      log_dat_00[log_cnt]  = gRecognition->odo;
-      log_dat_01[log_cnt]  = gRecognition->linevalue;
-      log_dat_02[log_cnt]  = (int)gRecognition->xvalue;
-      log_dat_03[log_cnt]  = (int)gRecognition->yvalue;
-      log_dat_04[log_cnt]  = (int)gRecognition->velocity;
-      log_dat_05[log_cnt]  = (int)gRecognition->pre_velo_0p5sec;
+    if (log_cnt < log_size){    
+      log_dat_00[log_cnt]  = Sys_Clock->now();
 
+      log_dat_01[log_cnt]  = ev3_battery_voltage_mV();
+      log_dat_02[log_cnt]  = ev3_battery_current_mA();
+
+      log_dat_03[log_cnt]  = gOperation->left_motor_pwm;
+      log_dat_04[log_cnt]  = gOperation->right_motor_pwm;
+
+      log_dat_05[log_cnt]  = gRecognition->encL;
+      log_dat_06[log_cnt]  = gRecognition->encR;
+
+      log_dat_07[log_cnt]  = gRecognition->color_r;
+      log_dat_08[log_cnt]  = gRecognition->color_g;
+      log_dat_09[log_cnt]  = gRecognition->color_b;
+
+
+      log_dat_10[log_cnt]  = gRecognition->linevalue;	    
+
+      log_dat_11[log_cnt]  = (int)gRecognition->xvalue;
+      log_dat_12[log_cnt]  = (int)gRecognition->yvalue;
+      log_dat_13[log_cnt]  = (int)gRecognition->velocity;
+
+      float_to_int_x1000   = gRecognition->yawrate * 1000.0;
+      log_dat_14[log_cnt]  =  (int)float_to_int_x1000;
+
+      log_dat_15[log_cnt]  = gRecognition->odo;
+      
       float_to_int_x1000   =  gRecognition->abs_angle*1000.0;
-      log_dat_06[log_cnt]  =  (int)float_to_int_x1000;
+      log_dat_16[log_cnt]  =  (int)float_to_int_x1000;
 
-      log_dat_07[log_cnt]  = gOperation->log_forward;
-      log_dat_08[log_cnt]  = gJudgment->det_navi_log;      
-
+    }
+      
 #endif
 
 #ifdef LOG_LONG
-
+    if (log_cnt < log_size){
       log_dat_00[log_cnt]  = (int)gRecognition->xvalue;
       log_dat_01[log_cnt]  = gJudgment->forward;
-      log_dat_02[log_cnt]  = gOperation->log_forward;
       log_dat_03[log_cnt]  = gRecognition->velocity;
+    }
 #endif
       break;
 
 
     case TRACK:
 #ifdef LOG_SHORT
-      log_dat_00[log_cnt]  = gRecognition->linevalue;
-      log_dat_01[log_cnt]  = gRecognition->odo;
-      log_dat_02[log_cnt]  = (int)gRecognition->xvalue;
-      log_dat_03[log_cnt]  = (int)gRecognition->yvalue;
+      if (log_cnt < log_size){
+	log_dat_00[log_cnt]  = Sys_Clock->now();
 
-      float_to_int_x1000   =  gRecognition->abs_angle*1000.0;
-      log_dat_04[log_cnt]  =  (int)float_to_int_x1000;
+	log_dat_01[log_cnt]  = ev3_battery_voltage_mV();
+	log_dat_02[log_cnt]  = ev3_battery_current_mA();
 
-      log_dat_05[log_cnt]  = gOperation->log_forward;
-      log_dat_06[log_cnt]  = gRecognition->velocity;
+	log_dat_03[log_cnt]  = gOperation->left_motor_pwm;
+	log_dat_04[log_cnt]  = gOperation->right_motor_pwm;
 
-      float_to_int_x1000   = gJudgment->yawratecmd * 1000.0;
-      log_dat_07[log_cnt]  =  (int)float_to_int_x1000;
+	log_dat_05[log_cnt]  = gRecognition->encL;
+	log_dat_06[log_cnt]  = gRecognition->encR;
 
-      log_dat_08[log_cnt]  = gJudgment->det_navi_log;
+	log_dat_07[log_cnt]  = gRecognition->color_r;
+	log_dat_08[log_cnt]  = gRecognition->color_g;
+	log_dat_09[log_cnt]  = gRecognition->color_b;
+
+	log_dat_10[log_cnt]  = gRecognition->linevalue;	    
+
+	log_dat_11[log_cnt]  = (int)gRecognition->xvalue;
+	log_dat_12[log_cnt]  = (int)gRecognition->yvalue;
+	log_dat_13[log_cnt]  = (int)gRecognition->velocity;
+
+	float_to_int_x1000   = gRecognition->yawrate * 1000.0;
+	log_dat_14[log_cnt]  =  (int)float_to_int_x1000;
+
+	log_dat_15[log_cnt]  = gRecognition->odo;
+      
+	float_to_int_x1000   =  gRecognition->abs_angle*1000.0;
+	log_dat_16[log_cnt]  =  (int)float_to_int_x1000;
+      }
 #endif
 
 #ifdef LOG_LONG
-      log_dat_00[log_cnt]  = (int)gRecognition->xvalue;
-      log_dat_01[log_cnt]  = gJudgment->forward;
-      log_dat_02[log_cnt]  = gOperation->log_forward;
-      log_dat_03[log_cnt]  = gRecognition->velocity;
+      if (log_cnt < log_size){
+	log_dat_00[log_cnt]  = (int)gRecognition->xvalue;
+	log_dat_01[log_cnt]  = gJudgment->forward;
+	log_dat_03[log_cnt]  = gRecognition->velocity;
+      }
 #endif
 
       break;
@@ -403,23 +455,47 @@ static void log_dat( ){
 
 #ifdef LOG_SHORT
 
-      log_dat_00[log_cnt]  = gRecognition->linevalue;
-      log_dat_01[log_cnt]  = gJudgment->ave_line_val;
-      log_dat_02[log_cnt]  = gJudgment->on_line * 100;
-      log_dat_03[log_cnt]  = gJudgment->left_line * 100 ;
-      log_dat_04[log_cnt]  = gJudgment->right_line * 100;
-      log_dat_05[log_cnt]  = gJudgment->lost_line * 100;
-      log_dat_06[log_cnt]  = gOperation->log_left_pwm; 
-      log_dat_07[log_cnt]  = gOperation->log_gyro;
-      log_dat_08[log_cnt]  = (int)gRecognition->yvalue;
+      if (log_cnt < log_size){
+	log_dat_00[log_cnt]  = Sys_Clock->now();
+
+	log_dat_01[log_cnt]  = ev3_battery_voltage_mV();
+	log_dat_02[log_cnt]  = ev3_battery_current_mA();
+
+	log_dat_03[log_cnt]  = gOperation->left_motor_pwm;
+	log_dat_04[log_cnt]  = gOperation->right_motor_pwm;
+
+	log_dat_05[log_cnt]  = gRecognition->encL;
+	log_dat_06[log_cnt]  = gRecognition->encR;
+
+	log_dat_07[log_cnt]  = gRecognition->color_r;
+	log_dat_08[log_cnt]  = gRecognition->color_g;
+	log_dat_09[log_cnt]  = gRecognition->color_b;
+
+
+	log_dat_10[log_cnt]  = gRecognition->linevalue;	    
+
+	log_dat_11[log_cnt]  = (int)gRecognition->xvalue;
+	log_dat_12[log_cnt]  = (int)gRecognition->yvalue;
+	log_dat_13[log_cnt]  = (int)gRecognition->velocity;
+
+	float_to_int_x1000   = gRecognition->yawrate * 1000.0;
+	log_dat_14[log_cnt]  =  (int)float_to_int_x1000;
+
+	log_dat_15[log_cnt]  = gRecognition->odo;
+      
+	float_to_int_x1000   =  gRecognition->abs_angle*1000.0;
+	log_dat_16[log_cnt]  =  (int)float_to_int_x1000;
+
+      }
 
 #endif
 
 #ifdef LOG_LONG
-      log_dat_00[log_cnt]  = (int)gRecognition->xvalue;
-      log_dat_01[log_cnt]  = gJudgment->forward;
-      log_dat_02[log_cnt]  = gOperation->log_forward;
-      log_dat_03[log_cnt]  = gRecognition->velocity;
+      if (log_cnt < log_size){
+	log_dat_00[log_cnt]  = (int)gRecognition->xvalue;
+	log_dat_01[log_cnt]  = gJudgment->forward;
+	log_dat_03[log_cnt]  = gRecognition->velocity;
+      }
 #endif
 
       break;
@@ -429,10 +505,8 @@ static void log_dat( ){
       break;
   }
 
-
-  log_cnt++;
-  if (log_cnt == log_size){
-    log_cnt  = 0;
+  if (log_cnt < log_size){
+    log_cnt++;
   }
 }
 
@@ -461,7 +535,7 @@ static void export_log_dat( ){
 
 
 	//READ FILE NUMBER
-  fp_rd = fopen("sys_dat.csv", "r");
+  fp_rd = fopen("log_num.csv", "r");
 
 
   i = 0;
@@ -478,7 +552,7 @@ static void export_log_dat( ){
   strcat(file_name, file_format);
 	
   //UPDATA NUM in sys_dat
-  fp_wr = fopen("sys_dat.csv", "w");
+  fp_wr = fopen("log_num.csv", "w");
   fprintf(fp_wr, "%d\n", str_to_num);
   fclose(fp_wr);
 
@@ -491,15 +565,15 @@ static void export_log_dat( ){
   switch(SYS_MODE){
 #ifdef LOG_SHORT
     case LINE_TRACE:
-      fprintf(fp_wr, "odo,line,x,y,velo,pre_velo,angle,robo_forward,det_navi_log\n");   
+      fprintf(fp_wr, "clock, mV, mA, left_motor_pwm, right_motor_pwm, left_motor_enc, right_motor_enc, color_r, color_g, color_b, line_value, x, y, velocity, yaw_rate_x1000, odo, angle_x1000\n");   
       break;
 
     case TRACK:
-      fprintf(fp_wr, "line,odo,x,y,abs_angle,forward,velocity,yaw_cmd,det_navi_log\n");   
+      fprintf(fp_wr, "clock, mV, mA, left_motor_pwm, right_motor_pwm, left_motor_enc, right_motor_enc, color_r, color_g, color_b, line_value, x, y, velocity, yaw_rate_x1000, odo, angle_x1000\n");   
       break;
 
     case DEBUG:
-      fprintf(fp_wr, "line, ave_line,on_line,left_line,right_line,lost_line,pwm,gyro,y \n");   
+      fprintf(fp_wr, "clock, mV, mA, left_motor_pwm, right_motor_pwm, left_motor_enc, right_motor_enc, color_r, color_g, color_b, line_value, x, y, velocity, yaw_rate_x1000, odo, angle_x1000\n");   
       break;
 #endif
 
@@ -524,7 +598,7 @@ static void export_log_dat( ){
 
     for(cnt = 0; cnt < log_size ; cnt++){
 #ifdef LOG_SHORT
-      fprintf(fp_wr, "%d,%d,%d,%d,%d,%d,%d,%d,%d\n",log_dat_00[cnt],log_dat_01[cnt], log_dat_02[cnt],log_dat_03[cnt],log_dat_04[cnt],log_dat_05[cnt],log_dat_06[cnt],log_dat_07[cnt],log_dat_08[cnt]);
+      fprintf(fp_wr, "%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d\n",log_dat_00[cnt],log_dat_01[cnt], log_dat_02[cnt],log_dat_03[cnt],log_dat_04[cnt],log_dat_05[cnt],log_dat_06[cnt],log_dat_07[cnt],log_dat_08[cnt],log_dat_09[cnt],log_dat_10[cnt],log_dat_11[cnt],log_dat_12[cnt],log_dat_13[cnt],log_dat_14[cnt],log_dat_15[cnt],log_dat_16[cnt]);
 #endif
 
 #ifdef LOG_LONG
@@ -707,7 +781,7 @@ void main_task(intptr_t unused) {
   ev3_sta_cyc(JUD_CYC);
   gOperation->set_robo_mode_launch();
   ev3_sta_cyc(OPE_CYC);
-  ter_tsk(BT_TASK);
+  //  ter_tsk(BT_TASK);
 
   slp_tsk();  // バックボタンが押されるまで待つ
 
