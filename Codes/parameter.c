@@ -17,7 +17,7 @@ int TAIL_ANGLE_LUG      = 67; /* 3点移動時の角度[度]      */
 int TAIL_ANGLE_GARAGE   = 94; /* 完全停止時の角度[度]     */
 
 float WHEEL_R       = 49.75; //Wheel radius 2018
-int   RoboTread     = 184; //トレッド長さ[mm]
+int   RoboTread     = 155; //トレッド長さ[mm]
 
 float MAX_VELOCITY      = 400; /**** ADJ_PARAMETER ****/
 //float MAX_VELOCITY      = 450; /**** ADJ_PARAMETER ****/
@@ -88,11 +88,17 @@ float GARAGE_X_POS          = 4990; /**** ADJ_PARAMETER   case GRAY_GARAGE:****/
 //int   TAIL_STD_LINE_DET      = 49; /**** ADJ_PARAMETER ****/
 int   TAIL_STD_LINE_DET      = 70;  /**** ADJ_PARAMETER ****/
 
+/*
 int   CALIB_LINE_100_MAX_THRS = 20;
 int   CALIB_LINE_50_MAX_THRS  = 100;
 int   CALIB_LINE_50_MIN_THRS  = 40;
 int   CALIB_LINE_0_MIN_THRS   = 150;
+*/
 
+int   CALIB_LINE_100_MAX_THRS = 20;
+int   CALIB_LINE_50_MAX_THRS  = 100;
+int   CALIB_LINE_50_MIN_THRS  = 40;
+int   CALIB_LINE_0_MIN_THRS   = 50;
 
 //HONBAN
 int   COLOR_SENSOR_OFFSET    = 18;  /**** ADJ_PARAMETER ****/
@@ -113,6 +119,8 @@ float ACCEL_GAIN                = 1.0;
 float DECEL_GAIN                = 1.0;
 
 //int START_FORWARD_VAL            = 180; //koko
+
+/*
 int START_FORWARD_VAL            =  30; //koko
 int FIRST_STRAIGHT_FORWARD_VAL   = 180;
 int ENTER_1ST_CORNER_FORWARD_VAL = 140;
@@ -136,6 +144,32 @@ int BACK_LUG_FORWARD_VAL         = 100;
 int SECOND_GRAY_FORWARD_VAL      = 100;
 int SEESAW_FORWARD_VAL           = 100;
 int GARAGE_FORWARD_VAL           = 100;
+*/
+
+
+int START_FORWARD_VAL            = 50; //koko
+int FIRST_STRAIGHT_FORWARD_VAL   = 50;
+int ENTER_1ST_CORNER_FORWARD_VAL = 50;
+int FIRST_CORNER_FORWARD_VAL     = 50;
+int SECOND_STRAIGHT_FORWARD_VAL  = 50;
+int ENTER_2ND_CORNER_FORWARD_VAL = 50;
+int SECOND_CORNER_FORWARD_VAL    = 50;
+int THIRD_STRAIGHT_FORWARD_VAL   = 50;
+int THIRD_CORNER_FORWARD_VAL     = 50;
+int S_CORNER_FORWARD_VAL         = 50;
+int FOURTH_STRAIGHT_FORWARD_VAL  = 50;
+int GOAL_VAL                     = 50;
+
+int FOURTH_CORNER_FORWARD_VAL    = 50;
+
+int ENTER_5TH_CORNER_FORWARD_VAL = 50;
+int FIFTH_CORNER_FORWARD_VAL     = 50;
+int FIRST_GRAY_FORWARD_VAL       = 50;
+int LUG_FORWARD_VAL              = 50;
+int BACK_LUG_FORWARD_VAL         = 50;
+int SECOND_GRAY_FORWARD_VAL      = 50;
+int SEESAW_FORWARD_VAL           = 50;
+int GARAGE_FORWARD_VAL           = 50;
 
 
 float START_AREA[4]            = { 300,    0,  500,  320};
