@@ -83,6 +83,9 @@ public:
 
   float correction_angle = 0.0;
   
+  int color_r, color_b, color_g;
+
+
 private:
 
   static const int8_t INITIAL_WHITE_THRESHOLD;

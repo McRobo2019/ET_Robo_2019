@@ -308,6 +308,11 @@ void Recognition::det_line_rgb(){
 
   mColorSensor.getRawColor(rgb_val);
 
+
+  color_r = (int)rgb_val.r;
+  color_g = (int)rgb_val.g;
+  color_b = (int)rgb_val.b;
+
   /*
   adj_brightness = rgb_val.b - COLOR_SENSOR_OFFSET;
   adj_brightness = adj_brightness/COLOR_SENSOR_GAIN;
