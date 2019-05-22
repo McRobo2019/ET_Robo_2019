@@ -5,6 +5,7 @@ APPL_COBJS += parameter.o
 APPL_CXXOBJS += \
     operation.o \
     yawrate_ctl.o \
+    line_tracer.o \
     util.o \
     recognition.o \
     judgment.o \

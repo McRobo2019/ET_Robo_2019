@@ -1392,7 +1392,7 @@ void Judgment::det_navigation() {
 /********************************************************************************/
   }else if(DRIVE_MODE == DEBUG){
 
-    line_trace_mode    = false;
+    line_trace_mode    = true;
 
     gMotion_Ctl->set_mode_debug();    
 
