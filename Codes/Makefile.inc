@@ -9,7 +9,6 @@ APPL_CXXOBJS += \
     util.o \
     recognition.o \
     judgment.o \
-    motion_ctl.o
 
 
 SRCLANG := c++

@@ -4,7 +4,8 @@
 
 #ifndef EV3_APP_ANAGOBRAIN_H_
 #define EV3_APP_ANAGOBRAIN_H_
-#include "motion_ctl.hpp"
+#include "parameter.h"
+//#include "motion_ctl.hpp"
 #include "util.hpp"
 #include "line_tracer.hpp"
 
@@ -73,7 +74,7 @@ private:
 		     bool  tail_stand_mode_calc);
 
   //    StrategyDet *gStrategyDet = new StrategyDet();
-  Motion_Ctl *gMotion_Ctl = new Motion_Ctl();
+  //  Motion_Ctl *gMotion_Ctl = new Motion_Ctl();
   Line_Trace *gLine_Trace = new Line_Trace();
 
   int   Mmode;
