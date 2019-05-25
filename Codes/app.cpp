@@ -133,7 +133,7 @@ static void sys_initialize() {
   //**********************************************************************************//
   ev3_lcd_fill_rect(0, 0, EV3_LCD_WIDTH, EV3_LCD_HEIGHT, EV3_LCD_WHITE);
   ev3_lcd_set_font(EV3_FONT_MEDIUM);
-  ev3_lcd_draw_string("hirojiren_alpha_0421",0, 40);
+  ev3_lcd_draw_string("hirojiren_alpha_0525",0, 40);
   //**********************************************************************************//
   //New Object of Sub System(Class)
   //
@@ -697,7 +697,7 @@ void jud_task(intptr_t exinf) {
       gJudgment->run();
       gOperation->setCommand(gRecognition->ave_velo,//gRecognition->velocity,
 			    gJudgment->forward,
-                            gJudgment->yawratecmd,
+                            gJudgment->target_yaw_rate,
                             gRecognition->yawrate);
     }
     ext_tsk();

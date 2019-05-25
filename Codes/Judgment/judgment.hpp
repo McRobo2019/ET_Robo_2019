@@ -4,8 +4,9 @@
 
 #ifndef EV3_APP_ANAGOBRAIN_H_
 #define EV3_APP_ANAGOBRAIN_H_
-#include "motion_ctl.hpp"
+#include "parameter.h"
 #include "util.hpp"
+#include "line_tracer.hpp"
 
 using namespace std;
 
@@ -45,9 +46,9 @@ public:
 
   bool  line_trace_mode;
   int   forward;           //前進目標値
-  float yawratecmd;        //目標ヨーレート
+  float target_yaw_rate;   //目標ヨーレート
   float ref_tail_angle;    //尻尾角度
-   bool  tail_stand_mode;   //倒立走行フラグ
+   bool tail_stand_mode;  //倒立走行フラグ
 
   bool  on_line;
   bool  left_line;
@@ -66,13 +67,9 @@ private:
 
   void det_on_line();
   
-  void GetCalcResult(int forward_calc,
-		     float yawratecmd_calc,
-		     float ref_tail_angle_calc,
-		     bool  tail_stand_mode_calc);
-
   //    StrategyDet *gStrategyDet = new StrategyDet();
-  Motion_Ctl *gMotion_Ctl   = new Motion_Ctl();
+  //  Motion_Ctl *gMotion_Ctl = new Motion_Ctl();
+  Line_Trace *gLine_Trace = new Line_Trace();
 
   int   Mmode;
   int   mLinevalue;   //ライン検出値
@@ -144,14 +141,25 @@ private:
     CENTER_LINE,
     LEFT_THE_LINE,
     RIGHT_THE_LINE,
-    UNKOWN,
+    UNKOWN
   };
+
+  enum Test_Mode{
+    MODE_00,
+    MODE_01,
+    MODE_02,
+    MODE_03,
+    MODE_04,
+    MODE_05
+  };
+
+
 
   Zone         ZONE;
   Drive_Mode   DRIVE_MODE;
   On_Line_Mode ON_LINE_MODE;
   On_Line_Mode PRE_ON_LINE_MODE;
-
+  Test_Mode    TEST_MODE;
 };
 
 #endif  // EV3_APP_ANAGOBRAIN_H_

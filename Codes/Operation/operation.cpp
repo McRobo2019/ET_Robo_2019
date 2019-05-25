@@ -48,7 +48,8 @@ void Operation::init() {
   mRightWheel.reset();
 
 
-  gForward->init_pid(0.05,0.01,0.001,dT_4ms);
+  //  gForward->init_pid(0.05,0.01,0.001,dT_4ms);
+  gForward->init_pid(0.05,0.01,0.001,dT_10ms);
 
   ROBO_MODE  = SET;
 }
@@ -58,11 +59,11 @@ void Operation::init() {
  * @param forward 前進値
  * @param turn    旋回値
  */
-void Operation::setCommand(float velocity, int forward, float yawratecmd, float yawrate) {
+void Operation::setCommand(float velocity, int forward, float target_yaw_rate, float yawrate) {
 
   mVelocity           = velocity;
   mForward            = forward;
-  mYawratecmd         = yawratecmd;
+  mTarget_Yaw_Rate         = target_yaw_rate;
   mYawrate            = yawrate;
 }
 
@@ -93,7 +94,7 @@ void Operation::run() {
       right_wheel_enc = mRightWheel.getCount();
       left_wheel_enc  = mLeftWheel.getCount();             // 左モータ回転角度
 
-      mTurn = gYawrate_Ctl->YawrateController(mYawrate, mYawratecmd);
+      mTurn = gYawrate_Ctl->YawrateController(mYawrate, mTarget_Yaw_Rate);
       PWM_Gen(mForward, mTurn);
       mLeftWheel.setPWM(left_motor_pwm);
       mRightWheel.setPWM(right_motor_pwm);
