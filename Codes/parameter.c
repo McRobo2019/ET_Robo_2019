@@ -25,6 +25,7 @@ float MAX_VELOCITY      = 400; /**** ADJ_PARAMETER ****/
 
 //Parameter of time length unit
 float dT_4ms   = 0.004;
+float dT_10ms   = 0.010;
 
 float PAI         =  3.1472;
 

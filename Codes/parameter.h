@@ -26,6 +26,7 @@ extern float MAX_VELOCITY;
 
 //Parameter of time length unit
 extern float dT_4ms;
+extern float dT_10ms;
 
 extern float PAI;
 

@@ -48,7 +48,8 @@ void Operation::init() {
   mRightWheel.reset();
 
 
-  gForward->init_pid(0.05,0.01,0.001,dT_4ms);
+  //  gForward->init_pid(0.05,0.01,0.001,dT_4ms);
+  gForward->init_pid(0.05,0.01,0.001,dT_10ms);
 
   ROBO_MODE  = SET;
 }
