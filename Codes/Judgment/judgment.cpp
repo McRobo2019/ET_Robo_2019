@@ -8,6 +8,10 @@
 #include <stdlib.h>
 #include "ev3api.h"
 #include "judgment.hpp"
+#include "Clock.h"
+
+using ev3api::Clock;
+Clock*       Jud_Clock;
 
 
 Judgment::Judgment() {
@@ -15,11 +19,14 @@ Judgment::Judgment() {
 }
 
 void Judgment::init() {
+
+  Jud_Clock       = new Clock();        
+
   ZONE               = START_ZONE;
   DRIVE_MODE         = LINE_TRACE;
   ON_LINE_MODE       = ON_THE_LEFT_EDGE;
   PRE_ON_LINE_MODE   = ON_THE_LEFT_EDGE;
-  
+  TEST_MODE          = MODE_00;
 
   on_line            = true;
   left_line          = false;
@@ -27,13 +34,10 @@ void Judgment::init() {
   lost_line          = false;
   line_to_map        = false; //181108
 
-
   line_trace_mode    = true;
 
   gAve_line_val->init();
   gAve_yaw_angle_500->init(); //20181108
-
-  //  gMotion_Ctl->init();
 
   mMax_Forward = 10;
 
@@ -70,40 +74,6 @@ void Judgment::run() {
 
   det_navigation();
 
-  /* 0525
-  gMotion_Ctl->SetCurrentData(mLinevalue,
-			      mGreen_flag,
-			      mXvalue,
-			      mYvalue,
-			      mPre_50mm_x,
-			      mPre_50mm_y,
-			      mOdo,
-			      mVelocity,
-			      mYawrate,
-			      mYawangle,
-			      mTail_angle,
-			      mRobo_stop,
-			      mRobo_forward,
-			      mRobo_back,
-			      mRobo_turn_left,
-			      mRobo_turn_right,
-			      mSonar_dis,
-			      mMax_Forward,
-			      mRef_Yawrate,
-			      mMax_Yawrate,
-			      mMin_Yawrate
-			      );
-
-  gMotion_Ctl->run(mXvalue,mYvalue,mYawangle);
-
-
-  GetCalcResult(gMotion_Ctl->forward,
-		gMotion_Ctl->yawratecmd,
-		gMotion_Ctl->ref_tail_angle,
-		gMotion_Ctl->tail_stand_mode);
-
-  */
-
 }
 
 /****************************************************************************************/
@@ -112,14 +82,17 @@ void Judgment::run() {
 /****************************************************************************************/
 void Judgment::det_navigation() {
 
-  /*  float yaw_time;
+  //  float yaw_time;
 
   static float ref_odo;
+  static float ref_angle;
+  /*
   static float dif_odo;
 
   static int   ref_forward;
   static float acl_forward;
   */
+  static uint ref_clock;
 
   if(DRIVE_MODE == LINE_TRACE){
     line_trace_mode = true;
@@ -130,13 +103,58 @@ void Judgment::det_navigation() {
     mMax_Yawrate = RAD_45_DEG;
     mMin_Yawrate = MINUS_RAD_45_DEG;
 
-    yawratecmd = gLine_Trace->line_trace_yaw_rate(mLinevalue, mRef_Yawrate, mMax_Yawrate, mMin_Yawrate);
+    target_yaw_rate = gLine_Trace->line_trace_yaw_rate(mLinevalue, mRef_Yawrate, mMax_Yawrate, mMin_Yawrate);
 
-  }else if(DRIVE_MODE == TRACK){
+  }
+  else if(DRIVE_MODE == TRACK){
     line_trace_mode    = false;
 
-  }else if(DRIVE_MODE == DEBUG){
+  }
+  else if(DRIVE_MODE == DEBUG){
     line_trace_mode    = false;
+
+    switch(TEST_MODE){
+    case MODE_00:
+      forward         = 0;
+      target_yaw_rate = 0.0;
+
+      ref_clock = Jud_Clock->now() + 1000; //1sec
+      ref_odo   = mOdo + 2000; // 3m
+      TEST_MODE = MODE_01;
+      break;
+
+    case MODE_01:
+      forward         = 0;
+      target_yaw_rate = 0.0;
+      if(Jud_Clock->now() > ref_clock){
+	TEST_MODE = MODE_02;
+      }
+      break;
+
+    case MODE_02:
+      forward         = 100;
+      target_yaw_rate = 0.0;
+
+      if(mOdo > ref_odo){
+	TEST_MODE = MODE_03;
+	ref_angle = mYawangle + RAD_180_DEG;
+      }
+      break;
+
+    case MODE_03:
+      	forward         = 100;
+	target_yaw_rate = RAD_45_DEG;
+
+	if(mYawangle > ref_angle){
+	  TEST_MODE = MODE_02;
+	  ref_odo   = mOdo + 2000; // 3m
+	}
+
+      break;
+
+    default:
+      break;
+    }
   }
 }
 
@@ -206,15 +224,4 @@ void Judgment::setEyeCommand(int     linevalue,
 }
 
 
-void Judgment::GetCalcResult(int   forward_calc,
-			      float yawratecmd_calc,
-			      float ref_tail_angle_calc,
-			      bool  tail_stand_mode_calc){
-  
-  forward         = forward_calc;
-  yawratecmd      = yawratecmd_calc;
-  ref_tail_angle  = ref_tail_angle_calc;
-  tail_stand_mode = tail_stand_mode_calc;
-
-}
 

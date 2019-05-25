@@ -697,7 +697,7 @@ void jud_task(intptr_t exinf) {
       gJudgment->run();
       gOperation->setCommand(gRecognition->ave_velo,//gRecognition->velocity,
 			    gJudgment->forward,
-                            gJudgment->yawratecmd,
+                            gJudgment->target_yaw_rate,
                             gRecognition->yawrate);
     }
     ext_tsk();
