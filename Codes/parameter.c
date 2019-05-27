@@ -16,8 +16,10 @@ int TAIL_ON_ANGLE       = 85; /* 完全停止時の角度[度]     */
 int TAIL_ANGLE_LUG      = 67; /* 3点移動時の角度[度]      */
 int TAIL_ANGLE_GARAGE   = 94; /* 完全停止時の角度[度]     */
 
-float WHEEL_R       = 49.75; //Wheel radius 2018
-int   RoboTread     = 155; //トレッド長さ[mm]
+//float WHEEL_R       = 49.75; //Wheel radius 2018
+float WHEEL_R       = 50.0; //Wheel radius 20190527 refer from 2018 cs model
+//int   RoboTread     = 155; //トレッド長さ[mm]
+int   RoboTread     = 147.6; //トレッド長さ[mm] 20190527, ota, refer from 2018 cs mode 
 
 float MAX_VELOCITY      = 400; /**** ADJ_PARAMETER ****/
 //float MAX_VELOCITY      = 450; /**** ADJ_PARAMETER ****/
