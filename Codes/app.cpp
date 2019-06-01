@@ -251,8 +251,8 @@ static void sys_initialize() {
     switch(SYS_MODE){
 
     case LINE_TRACE:
-      ev3_lcd_draw_string("->LINE_TRACE",0, 20);
-      ev3_lcd_draw_string("TRACK_MODE  ",0, 40);
+      ev3_lcd_draw_string("->AUTO_BRAKE",0, 20);
+      ev3_lcd_draw_string("UROURO  ",0, 40);
       ev3_lcd_draw_string("DEBUG_MODE  ",0, 80);
 
       if (ev3_button_is_pressed(ENTER_BUTTON)){
@@ -270,8 +270,8 @@ static void sys_initialize() {
 
 
     case TRACK:
-      ev3_lcd_draw_string("LINE_TRACE  ",0, 20);
-      ev3_lcd_draw_string("->TRACK_MODE",0, 40);
+      ev3_lcd_draw_string("AUTO_BRAKE  ",0, 20);
+      ev3_lcd_draw_string("->UROURO",0, 40);
       ev3_lcd_draw_string("DEBUG_MODE  ",0, 80);
 
       if (ev3_button_is_pressed(ENTER_BUTTON)){
@@ -288,8 +288,8 @@ static void sys_initialize() {
       break;
 
     case DEBUG:
-      ev3_lcd_draw_string("LINE_TRACE  ",0, 20);
-      ev3_lcd_draw_string("TRACK_MODE  ",0, 40);
+      ev3_lcd_draw_string("AUTO_BRAKE  ",0, 20);
+      ev3_lcd_draw_string("UROURO  ",0, 40);
       ev3_lcd_draw_string("->DEBUG_MODE",0, 80);
 
       if (ev3_button_is_pressed(ENTER_BUTTON)){
@@ -317,10 +317,10 @@ static void sys_initialize() {
     if (set_mode == true){
 
       if(SYS_MODE == LINE_TRACE){
-	ev3_lcd_draw_string("SET_LINE_TRACE            ",0, 100);
+	ev3_lcd_draw_string("SET_AUTO_BRAKE            ",0, 100);
 	gJudgment->set_drive_mode_LT();
       }else if(SYS_MODE == TRACK){
-	ev3_lcd_draw_string("SET_TRACK_MODE            ",0, 100);
+	ev3_lcd_draw_string("SET_UROURO                ",0, 100);
 	gJudgment->set_drive_mode_TK();
       }else{
 	ev3_lcd_draw_string("SET_DEBUG_MODE            ",0, 100);

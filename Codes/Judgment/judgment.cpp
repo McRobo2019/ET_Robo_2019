@@ -103,7 +103,7 @@ void Judgment::det_navigation() {
       forward         = 0;
       target_yaw_rate = 0.0;
       dir_mode  = 1.0;
-      ref_clock = Jud_Clock->now() + 1000; //1sec
+      ref_clock = Jud_Clock->now() + 300; //1sec
       ref_odo   = mOdo + 1500; // 3m
       TEST_MODE = MODE_01;
       break;
@@ -116,38 +116,20 @@ void Judgment::det_navigation() {
       }
       break;
 
-    case MODE_02:  //Search
-      forward         = 0;
-      target_yaw_rate = dir_mode * RAD_45_DEG;
-      if( mSonar_dis > 120){	
-	TEST_MODE = MODE_03; //forward
-	ref_odo   = mOdo + 3000; // 3m
-	dir_mode = -1.0 * dir_mode;
-      }
-      break;
-      
-    case MODE_03:  //forward
+    case MODE_02:  //forward
       forward         = 60;
       target_yaw_rate = 0.0;
 
-      //      if( (mOdo > ref_odo) || (mSonar_dis <50)){
-
       if( mSonar_dis <50){
-	TEST_MODE = MODE_02; //Search
-      }else if( mSonar_dis <90){
-	TEST_MODE = MODE_05;
-	ref_angle = mYawangle + RAD_45_DEG;
+	TEST_MODE = MODE_03; //Stop
       }
+      break;
+      
+    case MODE_03:  //Stop
+      forward         = 0;
+      target_yaw_rate = 0.0;
 
-      if( mOdo > ref_odo){ //Turn 45
-	TEST_MODE = MODE_05;
-	ref_angle = mYawangle + RAD_45_DEG;
-      }
-
-      if(mAve_wheel_load > 20){
-	TEST_MODE = MODE_04;
-	ref_odo = mOdo - 150;
-      }
+      
       break;
 
     case MODE_04: //Back
