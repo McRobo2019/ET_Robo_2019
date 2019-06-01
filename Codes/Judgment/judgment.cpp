@@ -93,22 +93,211 @@ void Judgment::det_navigation() {
   static float acl_forward;
   */
   static uint ref_clock;
-
+  static float dir_mode;
+  
   if(DRIVE_MODE == LINE_TRACE){
-    line_trace_mode = true;
 
-    forward    = 30;    
+    line_trace_mode    = false;
+    switch(TEST_MODE){
+    case MODE_00: // set init value
+      forward         = 0;
+      target_yaw_rate = 0.0;
+      dir_mode  = 1.0;
+      ref_clock = Jud_Clock->now() + 1000; //1sec
+      ref_odo   = mOdo + 1500; // 3m
+      TEST_MODE = MODE_01;
+      break;
 
-    mRef_Yawrate = 0.0;
-    mMax_Yawrate = RAD_45_DEG;
-    mMin_Yawrate = MINUS_RAD_45_DEG;
+    case MODE_01: //start 
+      forward         = 0;
+      target_yaw_rate = 0.0;
+      if(Jud_Clock->now() > ref_clock){
+	TEST_MODE = MODE_02;
+      }
+      break;
 
-    target_yaw_rate = gLine_Trace->line_trace_yaw_rate(mLinevalue, mRef_Yawrate, mMax_Yawrate, mMin_Yawrate);
+    case MODE_02:  //Search
+      forward         = 0;
+      target_yaw_rate = dir_mode * RAD_45_DEG;
+      if( mSonar_dis > 120){	
+	TEST_MODE = MODE_03; //forward
+	ref_odo   = mOdo + 3000; // 3m
+	dir_mode = -1.0 * dir_mode;
+      }
+      break;
+      
+    case MODE_03:  //forward
+      forward         = 60;
+      target_yaw_rate = 0.0;
 
+      //      if( (mOdo > ref_odo) || (mSonar_dis <50)){
+
+      if( mSonar_dis <50){
+	TEST_MODE = MODE_02; //Search
+      }else if( mSonar_dis <90){
+	TEST_MODE = MODE_05;
+	ref_angle = mYawangle + RAD_45_DEG;
+      }
+
+      if( mOdo > ref_odo){ //Turn 45
+	TEST_MODE = MODE_05;
+	ref_angle = mYawangle + RAD_45_DEG;
+      }
+
+      if(mAve_wheel_load > 20){
+	TEST_MODE = MODE_04;
+	ref_odo = mOdo - 150;
+      }
+      break;
+
+    case MODE_04: //Back
+      forward         = -30;
+      target_yaw_rate = 0.0;
+
+      if(mOdo <  ref_odo){
+	TEST_MODE = MODE_02; //Search
+      }
+      break;
+
+    case MODE_05: //Turn 5
+      forward         = 60;
+      target_yaw_rate = RAD_5_DEG;
+      
+      if(mYawangle > ref_angle){
+	TEST_MODE = MODE_06;
+	ref_angle = mYawangle - RAD_45_DEG;
+      }
+
+      if( mSonar_dis <50){
+	TEST_MODE = MODE_02; //Search
+      }
+      break;
+
+    case MODE_06: //Turn -45
+      forward         = 60;
+      target_yaw_rate = -1.0*RAD_5_DEG;
+      
+      if(mYawangle < ref_angle){
+	TEST_MODE = MODE_05;
+	ref_angle = mYawangle + RAD_45_DEG;
+      }
+
+      if( mSonar_dis <50){
+	TEST_MODE = MODE_02; //Search
+      }
+      break;
+
+
+
+    default:
+      break;
+    }
+
+
+
+    
   }
   else if(DRIVE_MODE == TRACK){
     line_trace_mode    = false;
 
+    line_trace_mode    = false;
+    switch(TEST_MODE){
+    case MODE_00: // set init value
+      forward         = 0;
+      target_yaw_rate = 0.0;
+      dir_mode  = 1.0;
+      ref_clock = Jud_Clock->now() + 1000; //1sec
+      ref_odo   = mOdo + 1500; // 3m
+      TEST_MODE = MODE_01;
+      break;
+
+    case MODE_01: //start 
+      forward         = 0;
+      target_yaw_rate = 0.0;
+      if(Jud_Clock->now() > ref_clock){
+	TEST_MODE = MODE_02;
+      }
+      break;
+
+    case MODE_02:  //Search
+      forward         = 0;
+      target_yaw_rate = dir_mode * RAD_45_DEG;
+      if( mSonar_dis > 120){	
+	TEST_MODE = MODE_03; //forward
+	ref_odo   = mOdo + 3000; // 3m
+	dir_mode = -1.0 * dir_mode;
+      }
+      break;
+      
+    case MODE_03:  //forward
+      forward         = 60;
+      target_yaw_rate = 0.0;
+
+      //      if( (mOdo > ref_odo) || (mSonar_dis <50)){
+
+      if( mSonar_dis <50){
+	TEST_MODE = MODE_02; //Search
+      }else if( mSonar_dis <90){
+	TEST_MODE = MODE_05;
+	ref_angle = mYawangle + RAD_45_DEG;
+      }
+
+      if( mOdo > ref_odo){ //Turn 45
+	TEST_MODE = MODE_05;
+	ref_angle = mYawangle + RAD_45_DEG;
+      }
+
+      if(mAve_wheel_load > 20){
+	TEST_MODE = MODE_04;
+	ref_odo = mOdo - 150;
+      }
+      break;
+
+    case MODE_04: //Back
+      forward         = -30;
+      target_yaw_rate = 0.0;
+
+      if(mOdo <  ref_odo){
+	TEST_MODE = MODE_02; //Search
+      }
+      break;
+
+    case MODE_05: //Turn 5
+      forward         = 60;
+      target_yaw_rate = RAD_5_DEG;
+      
+      if(mYawangle > ref_angle){
+	TEST_MODE = MODE_06;
+	ref_angle = mYawangle - RAD_45_DEG;
+      }
+
+      if( mSonar_dis <50){
+	TEST_MODE = MODE_02; //Search
+      }
+      break;
+
+    case MODE_06: //Turn -45
+      forward         = 60;
+      target_yaw_rate = -1.0*RAD_5_DEG;
+      
+      if(mYawangle < ref_angle){
+	TEST_MODE = MODE_05;
+	ref_angle = mYawangle + RAD_45_DEG;
+      }
+
+      if( mSonar_dis <50){
+	TEST_MODE = MODE_02; //Search
+      }
+      break;
+
+
+
+    default:
+      break;
+    }
+
+
+    
   }
   else if(DRIVE_MODE == DEBUG){
     line_trace_mode    = false;
@@ -193,6 +382,7 @@ void Judgment::setEyeCommand(int     linevalue,
 			      float   yawrate,
 			      float   abs_angle,
 			      float   ave_angle,
+			      float   ave_wheel_load,
 			      int     robo_tail_angle,
 			      bool    robo_stop,
 			      bool    robo_forward,
@@ -213,7 +403,7 @@ void Judgment::setEyeCommand(int     linevalue,
   mYawrate         = yawrate;
   mYawangle        = abs_angle;
   mAve_yaw_angle   = ave_angle;
-
+  mAve_wheel_load  = ave_wheel_load;
   mTail_angle      = robo_tail_angle;
   mRobo_stop       = robo_stop;
   mRobo_forward    = robo_forward;

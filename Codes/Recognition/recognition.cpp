@@ -359,7 +359,7 @@ void Recognition::wheel_odometry(float dT) {
 
   int   WheelAngRdeg = mRightWheel.getCount();  //右モータ回転角度[deg]
   int   WheelAngLdeg = mLeftWheel.getCount();   //右モータ回転角度[deg]
-
+  int   battery_mA   = ev3_battery_current_mA();
   encR =  WheelAngRdeg;
   encL =  WheelAngLdeg;
 
@@ -390,6 +390,22 @@ void Recognition::wheel_odometry(float dT) {
   //  det_Movement(); //20180501
 
   //  pre_velo_0p5sec  =  ave_velo + (ave_accel * 0.5);
+  wheel_rotational_speed = (float)(encL - old_encL)/dT;
+
+  if(ave_wheel_rot_speed < 0){
+    abs_ave_wheel_speed  =  -1.0 * ave_wheel_rot_speed;
+  }else{
+    abs_ave_wheel_speed  =  ave_wheel_rot_speed;
+  }
+  
+  if(abs_ave_wheel_speed  < 1){
+    abs_ave_wheel_speed  = 1;
+  }
+
+  wheel_load             = battery_mA/abs_ave_wheel_speed;
+  old_encL               = encL;
+
+
 }
 
 void Recognition::average_dat(float dT) {

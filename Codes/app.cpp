@@ -670,7 +670,8 @@ void rec_task(intptr_t exinf) {
                               gRecognition->yawrate,
                               gRecognition->abs_angle,
                               gRecognition->ave_angle,
-			      gTailMotor.getCount(),             //it will be modified later 20190420 ota
+			      gRecognition->ave_wheel_load,
+			     gTailMotor.getCount(),             //it will be modified later 20190420 ota
 			      gRecognition->robo_stop,
 			      gRecognition->robo_forward,
 			      gRecognition->robo_back,

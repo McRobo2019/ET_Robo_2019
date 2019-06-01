@@ -30,6 +30,7 @@ public:
 			   float   yawrate,
 			   float   abs_angle,
 			   float   ave_angle,
+			   float   ave_wheel_load,
 			   int     robo_tail_angle,
 			   bool    robo_stop,
 			   bool    robo_forward,
@@ -88,6 +89,7 @@ private:
   float mYawrate;       //ヨーレート
   float mYawangle;        //ヨー角
   float mAve_yaw_angle;
+  float mAve_wheel_load;
 
   int   mTail_angle;
   //signals for robo movement
@@ -150,7 +152,9 @@ private:
     MODE_02,
     MODE_03,
     MODE_04,
-    MODE_05
+    MODE_05,
+    MODE_06
+
   };
 
 
