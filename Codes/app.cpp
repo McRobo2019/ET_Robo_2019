@@ -178,7 +178,7 @@ static void sys_initialize() {
   
   ev3_lcd_fill_rect(0, 0, EV3_LCD_WIDTH, EV3_LCD_HEIGHT, EV3_LCD_WHITE);
   ev3_lcd_set_font(EV3_FONT_MEDIUM);
-  ev3_lcd_draw_string("hirojiren_alpha",0, 0);
+  ev3_lcd_draw_string("MAZDA OPEN DAY",0, 0);
   battery = ev3_battery_voltage_mV();
   sprintf(battery_str, "V:%d", battery);
   ev3_lcd_draw_string(battery_str,0, 20);
@@ -191,6 +191,13 @@ static void sys_initialize() {
   //Set Gyro offset
   //
   //**********************************************************************************//
+
+  gRecognition->init();   //reset gyro
+  gOperation->init();  //
+  gJudgment->init(); //initialize mode
+
+
+  /*
   ev3_lcd_draw_string("Put on GND",0, 60);
   ev3_lcd_draw_string("PUSH TS 4 RESET",0, 80);
 
@@ -199,7 +206,7 @@ static void sys_initialize() {
       gRecognition->init();   //reset gyro
       gOperation->init();  //
       gJudgment->init(); //initialize mode
-      break; /* タッチセンサが押された */
+      break; // タッチセンサが押された 
     }
     gyro = gGyroSensor.getAnglerVelocity();  // ジャイロセンサ値
     sprintf(gyro_str, "Gyro:%d", gyro);
@@ -213,7 +220,7 @@ static void sys_initialize() {
 
   while(1){
     if (gTouchSensor.isPressed()){
-      break; /* タッチセンサが押された */
+      break; //タッチセンサが押された 
     }
     gyro = gGyroSensor.getAnglerVelocity();  // ジャイロセンサ値
     sprintf(gyro_str, "Gyro:%d", gyro);
@@ -223,7 +230,8 @@ static void sys_initialize() {
   }
   ev3_speaker_play_tone(NOTE_E4,200);
   ev3_lcd_fill_rect(0, 0, EV3_LCD_WIDTH, EV3_LCD_HEIGHT, EV3_LCD_WHITE);
-
+  */
+  
   //**********************************************************************************//
   //Connect Bluetooh
   //
@@ -739,7 +747,7 @@ void main_task(intptr_t unused) {
   //**********************************************************************************//
   //Color Sensor calibration
   //**********************************************************************************//
-  gRecognition->color_sensor_calib(); //20180930 kota
+  //  gRecognition->color_sensor_calib(); //20180930 kota
   //**********************************************************************************//
   //Reset angle of tail
   //**********************************************************************************//

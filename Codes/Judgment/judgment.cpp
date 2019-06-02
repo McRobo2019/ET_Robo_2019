@@ -120,7 +120,7 @@ void Judgment::det_navigation() {
       forward         = 60;
       target_yaw_rate = 0.0;
 
-      if( mSonar_dis <50){
+      if( mSonar_dis <10){
 	TEST_MODE = MODE_03; //Stop
       }
       break;
