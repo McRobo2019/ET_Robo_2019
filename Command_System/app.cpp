@@ -377,6 +377,8 @@ void bt_task(intptr_t unused)
       break;
 
     default:
+      //      log_dat_00[log_cnt]  = 999;      
+      log_cnt++;
       ev3_led_set_color(LED_OFF);
       break;
     }
@@ -412,14 +414,19 @@ void main_task(intptr_t unused) {
       ev3_led_set_color(LED_GREEN);
     }
 
+    if (ev3_button_is_pressed(BACK_BUTTON)) {
+      break;
+    }
+
+
     tslp_tsk(500); //What dose it mean? kota 170812
     ev3_led_set_color(LED_OFF);
   }
 
-
-  slp_tsk();  // バックボタンが押されるまで待つ
-
-
+  //  slp_tsk();  // バックボタンが押されるまで待つ
+  ev3_lcd_draw_string("Saving Log Data",0, 40);
+  export_log_dat( );
+  ev3_lcd_draw_string("Saving Log Data is done",0, 60);
 
   sys_destroy();
   ext_tsk();
