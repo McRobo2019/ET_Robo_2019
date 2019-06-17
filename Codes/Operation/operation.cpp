@@ -108,6 +108,30 @@ void Operation::run() {
 }
 
 
+void Operation::arm_reset(){
+  int32_t angle    = 0;
+  int32_t angle_1d = 0;
+
+  mTail_Motor.setPWM(-10);
+  angle = 0;
+  angle_1d = 1;
+
+  while(1){
+    if(angle == angle_1d){
+      mArm_Motor.stop();
+      mArm_Motor.reset();
+      break;
+    }
+    else{
+      angle_1d = angle;
+      tslp_tsk(1000);
+      angle = mArm_Motor.getCount();
+    }
+  }
+  mArm_Motor.stop();
+  mArm_Motor.reset();
+}
+
 //2017.07.28 k-ota copy from 3-apex
 //*****************************************************************************
 // 関数名 : tail_control

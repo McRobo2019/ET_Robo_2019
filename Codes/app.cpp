@@ -7,6 +7,9 @@
 #include "stdio.h"
 #include "string.h"
 #include "stdlib.h"
+//#include "vector.h"
+#include <vector>
+
 
 #include "app.hpp"
 #include "util.hpp"
@@ -123,9 +126,12 @@ static void sys_initialize() {
   
   int  battery;
   char battery_str[32];
-  int  gyro;
-  char gyro_str[32];
+  //  int  gyro;
+  //  char gyro_str[32];
   bool set_mode;
+
+
+  std::vector<int> vec{1,2,3};
 
   //**********************************************************************************//
   //Display Course mode on LCD
@@ -717,6 +723,11 @@ void ope_cyc(intptr_t exinf) {
 }
 
 void ope_task(intptr_t exinf) {
+
+
+  if (gTouchSensor.isPressed()){
+    gRecognition->init();   //reset gyro
+  }
 
 #ifdef LOG_RECORD
   log_dat();

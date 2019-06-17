@@ -94,7 +94,8 @@ void Judgment::det_navigation() {
   */
   static uint ref_clock;
   static float dir_mode;
-  
+  static int turn_cnt;
+
   if(DRIVE_MODE == LINE_TRACE){
 
     line_trace_mode    = false;
@@ -106,6 +107,8 @@ void Judgment::det_navigation() {
       ref_clock = Jud_Clock->now() + 300; //1sec
       ref_odo   = mOdo + 1500; // 3m
       TEST_MODE = MODE_01;
+      turn_cnt = 0;
+
       break;
 
     case MODE_01: //start 
@@ -120,7 +123,7 @@ void Judgment::det_navigation() {
       forward         = 60;
       target_yaw_rate = 0.0;
 
-      if( mSonar_dis <10){
+      if( mSonar_dis < 20){
 	TEST_MODE = MODE_03; //Stop
       }
       break;
@@ -218,7 +221,10 @@ void Judgment::det_navigation() {
       //      if( (mOdo > ref_odo) || (mSonar_dis <50)){
 
       if( mSonar_dis <50){
+	
 	TEST_MODE = MODE_02; //Search
+	turn_cnt++;
+
       }else if( mSonar_dis <90){
 	TEST_MODE = MODE_05;
 	ref_angle = mYawangle + RAD_45_DEG;

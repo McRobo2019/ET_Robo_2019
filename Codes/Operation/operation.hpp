@@ -34,6 +34,9 @@ public:
 
   void run();
 
+  void arm_reset();
+  void arm_stand_up(); //tail for gyro reset and color sensor calibration
+
   int left_motor_pwm;
   int right_motor_pwm;
 

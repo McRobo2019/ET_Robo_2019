@@ -12,8 +12,9 @@ using namespace std;
 
 class Judgment {
 public:
-	explicit Judgment();//コンストラクタ
-	void init();
+  explicit Judgment();//コンストラクタ
+
+  void init();
 	void set_drive_mode_LT();
 	void set_drive_mode_TK();
 	void set_drive_mode_DB();
