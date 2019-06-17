@@ -364,16 +364,65 @@ void bt_task(intptr_t unused)
 {
   while(1){
     uint8_t c = fgetc(bt); /* 受信 */
+    int temp = 0;
 
+    if (ev3_button_is_pressed(ENTER_BUTTON)){
+      temp = 9;
+      fprintf(bt,"%d",temp);
+      fputc(c, bt); /* エコーバック */
+    }
+
+    fprintf(bt,"hello");
 
     switch(c){
-    case '1':
-      bt_cmd = 1;
-      break;
 
     case '0':
       ev3_speaker_play_tone(NOTE_C4,200);
       ev3_led_set_color(LED_GREEN);
+      temp = 10;
+      fprintf(bt,"%d", temp);
+      break;
+
+    case '1':
+      ev3_speaker_play_tone(NOTE_D4,200);
+      ev3_led_set_color(LED_GREEN);
+      bt_cmd = 1;
+      temp = 11;
+      fprintf(bt,"%d", temp);
+
+      break;
+
+    case '2':
+      ev3_speaker_play_tone(NOTE_E4,200);
+      ev3_led_set_color(LED_GREEN);
+      temp = 12;
+      fprintf(bt,"%d", temp);
+
+      break;
+
+    case '3':
+      ev3_speaker_play_tone(NOTE_F4,200);
+      ev3_led_set_color(LED_GREEN);
+      temp = 13;
+      fprintf(bt,"%d", temp);
+
+      break;
+
+    case '4':
+      ev3_speaker_play_tone(NOTE_G4,200);
+      ev3_led_set_color(LED_GREEN);
+      temp = 14;
+      fprintf(bt,"%d", temp);
+
+      break;
+
+
+    case '5':
+      ev3_speaker_play_tone(NOTE_C4,200);
+      ev3_led_set_color(LED_GREEN);
+      temp = 15;
+      fprintf(bt,"hello");
+
       break;
 
     default:
@@ -419,7 +468,7 @@ void main_task(intptr_t unused) {
     }
 
 
-    tslp_tsk(500); //What dose it mean? kota 170812
+    tslp_tsk(50); //What dose it mean? kota 170812
     ev3_led_set_color(LED_OFF);
   }
 
