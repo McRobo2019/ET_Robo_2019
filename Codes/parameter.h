@@ -19,7 +19,8 @@ extern int TAIL_ANGLE_LUG; /* 3点移動時の角度[度] */
 extern int TAIL_ANGLE_GARAGE; /* 完全停止時の角度[度] */
 
 extern float WHEEL_R;       //radius of wheel[mm]
-extern int   RoboTread;      //トレッド長さ[mm]
+extern float RoboTread;      //トレッド長さ[mm]
+extern float HALF_TREAD;
 
 extern float MAX_VELOCITY;
 

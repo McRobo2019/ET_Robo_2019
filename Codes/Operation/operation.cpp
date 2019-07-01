@@ -59,12 +59,15 @@ void Operation::init() {
  * @param forward 前進値
  * @param turn    旋回値
  */
-void Operation::setCommand(float velocity, int forward, float target_yaw_rate, float yawrate) {
+void Operation::setCommand(float velocity, int forward, float target_yaw_rate, float yawrate, int target_velocity, float target_omega){
 
   mVelocity           = velocity;
   mForward            = forward;
-  mTarget_Yaw_Rate         = target_yaw_rate;
+  mTarget_Yaw_Rate    = target_yaw_rate;
   mYawrate            = yawrate;
+  
+  mTarget_Velocity    = target_velocity;
+  mTarget_Omega       = target_omega;
 }
 
 void Operation::set_robo_mode_launch(){
@@ -73,7 +76,8 @@ void Operation::set_robo_mode_launch(){
 
 void Operation::run() {
   //    int     battery       = ev3_battery_voltage_mV();
-
+  float vl;
+  float vr;
     switch(ROBO_MODE){
 
     case SET:
@@ -93,6 +97,18 @@ void Operation::run() {
     case RUN:
       right_wheel_enc = mRightWheel.getCount();
       left_wheel_enc  = mLeftWheel.getCount();             // 左モータ回転角度
+
+      //190620 ota
+      vl = (float)mTarget_Velocity;
+      vr = vl;
+      vl = vl - (mTarget_Omega * HALF_TREAD);
+      vr = vr + (mTarget_Omega * HALF_TREAD);
+
+      vl = vl + 0.5;
+      vr = vr + 0.5;
+
+      
+      gMotor_ctlModelClass->step();
 
       mTurn = gYawrate_Ctl->YawrateController(mYawrate, mTarget_Yaw_Rate);
       PWM_Gen(mForward, mTurn);

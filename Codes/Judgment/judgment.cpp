@@ -109,6 +109,70 @@ void Judgment::det_navigation() {
   else if(DRIVE_MODE == TRACK){
     line_trace_mode    = false;
 
+    switch(TEST_MODE){
+    case MODE_00:
+      target_velocity = 0;
+      target_omega    = 0.0;
+
+      ref_clock = Jud_Clock->now() + 499; //0.5sec
+      ref_odo   = mOdo + 4399;
+      TEST_MODE = MODE_01;
+      break;
+
+    case MODE_01:
+      target_velocity = 0;
+      target_omega    = 0.0;
+
+      if(Jud_Clock->now() > ref_clock){
+	TEST_MODE = MODE_02;
+	ref_clock = Jud_Clock->now();
+      }
+      break;
+
+    case MODE_02:
+      target_omega    = 0.0;
+      target_velocity = 200*(Jud_Clock->now() - ref_clock);
+      if(target_velocity > 399){
+	target_velocity = 400;
+	TEST_MODE = MODE_03;
+      }
+      break;
+
+    case MODE_03:
+      target_velocity = 400;
+      target_omega    = 0.0;
+      if(mOdo > ref_odo){
+	TEST_MODE = MODE_04;
+	ref_odo   = mOdo + 401;
+      }
+      break;
+
+    case MODE_04:
+      target_velocity = ref_odo - mOdo;
+      target_omega    = 0.0;
+
+      if(target_velocity > 400){
+	target_velocity = 400;
+      }else if(target_velocity < 0){
+	target_velocity = 0;
+      }
+
+      if(mOdo > ref_odo){
+	TEST_MODE = MODE_05;
+      }
+      break;
+
+    case MODE_05:
+      target_velocity = 0;
+      target_omega    = 0.0;
+      break;
+
+    default:
+      break;
+    }
+
+
+    
   }
   else if(DRIVE_MODE == DEBUG){
     line_trace_mode    = false;

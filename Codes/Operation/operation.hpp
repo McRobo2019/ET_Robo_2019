@@ -10,6 +10,7 @@
 #include "GyroSensor.h"
 #include "Motor.h"
 #include "yawrate_ctl.hpp"
+#include "motor_ctl.h"
 
 
 using namespace std;
@@ -29,14 +30,18 @@ public:
 	   ev3api::Motor& tail_motor);
 
   void init();
-  void setCommand(float velocity, int forward, float target_yaw_rate, float yawrate);
+  void setCommand(float velocity, int forward, float target_yaw_rate, float yawrate, int target_velocity, float target_omega);
   void set_robo_mode_launch();
 
   void run();
 
+  //190620 ota
+  int target_right_velocity; //target right wheel velocity 
+  int target_left_velocity;  //target left wheel velocity
+
   int left_motor_pwm;
   int right_motor_pwm;
-
+ 
 
 private:
   const ev3api::GyroSensor& mGyroSensor;
@@ -47,6 +52,8 @@ private:
 
   PID *gForward  = new PID();
   Yawrate_Ctl *gYawrate_Ctl = new Yawrate_Ctl();
+  motor_ctlModelClass *gMotor_ctlModelClass = new motor_ctlModelClass;
+
 
   enum Robo_Mode{
     SET,
@@ -63,7 +70,10 @@ private:
   float mTurn;
   float mTarget_Yaw_Rate;//目標Yawrate
   float mYawrate;
-
+  //190620
+  int   mTarget_Velocity;
+  float mTarget_Omega;
+  //
   int   mTarget_forward  = 0;
   float mCurved_forward  = 0;
   int   mCurrent_forward = 0;

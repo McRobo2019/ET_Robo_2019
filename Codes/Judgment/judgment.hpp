@@ -45,10 +45,14 @@ public:
   float ave_yaw_angle_500; //20181108
 
   bool  line_trace_mode;
+
+  int   target_velocity;  //20190620 ota
+  float target_omega;      //20190620 ota
+
   int   forward;           //前進目標値
   float target_yaw_rate;   //目標ヨーレート
   float ref_tail_angle;    //尻尾角度
-   bool tail_stand_mode;  //倒立走行フラグ
+  bool  tail_stand_mode;    //倒立走行フラグ
 
   bool  on_line;
   bool  left_line;
