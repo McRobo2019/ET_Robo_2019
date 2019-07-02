@@ -412,7 +412,7 @@ static void log_dat( ){
       if (log_cnt < log_size){
 	log_dat_00[log_cnt]  = Sys_Clock->now();
 
-	log_dat_01[log_cnt]  = ev3_battery_voltage_mV();
+	log_dat_01[log_cnt]  = gJudgment->det_navi_log;
 	log_dat_02[log_cnt]  = ev3_battery_current_mA();
 
 	log_dat_03[log_cnt]  = gOperation->left_motor_pwm;
