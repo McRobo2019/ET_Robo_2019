@@ -47,7 +47,8 @@ void Operation::init() {
   mLeftWheel.reset();
   mRightWheel.reset();
 
-
+  gLeft_Motor_ctlModelClass->initialize();
+  gRight_Motor_ctlModelClass->initialize();
   //  gForward->init_pid(0.05,0.01,0.001,dT_4ms);
   gForward->init_pid(0.05,0.01,0.001,dT_10ms);
 
@@ -78,6 +79,8 @@ void Operation::run() {
   //    int     battery       = ev3_battery_voltage_mV();
   float vl;
   float vr;
+  float l_pwm;
+  float r_pwm;
     switch(ROBO_MODE){
 
     case SET:
@@ -104,14 +107,29 @@ void Operation::run() {
       vl = vl - (mTarget_Omega * HALF_TREAD);
       vr = vr + (mTarget_Omega * HALF_TREAD);
 
+      /*
       vl = vl + 0.5;
       vr = vr + 0.5;
+      */
+      gLeft_Motor_ctlModelClass->setIn1(vl);
+      gLeft_Motor_ctlModelClass->setIn2(10.0);
+      gLeft_Motor_ctlModelClass->step();
+      l_pwm = gLeft_Motor_ctlModelClass->getOut1();
+      left_motor_pwm = (int)l_pwm;
 
-      
-      gMotor_ctlModelClass->step();
 
+      gRight_Motor_ctlModelClass->setIn1(vr);
+      gRight_Motor_ctlModelClass->setIn2(10.0);
+      gRight_Motor_ctlModelClass->step();
+      r_pwm = gRight_Motor_ctlModelClass->getOut1();
+      right_motor_pwm = (int)r_pwm;
+
+
+      /*
       mTurn = gYawrate_Ctl->YawrateController(mYawrate, mTarget_Yaw_Rate);
       PWM_Gen(mForward, mTurn);
+      */
+      
       mLeftWheel.setPWM(left_motor_pwm);
       mRightWheel.setPWM(right_motor_pwm);
 

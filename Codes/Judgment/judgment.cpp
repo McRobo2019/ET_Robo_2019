@@ -105,6 +105,12 @@ void Judgment::det_navigation() {
 
     target_yaw_rate = gLine_Trace->line_trace_yaw_rate(mLinevalue, mRef_Yawrate, mMax_Yawrate, mMin_Yawrate);
 
+    target_velocity = 100;
+    target_omega    = 0.0;
+
+
+
+    
   }
   else if(DRIVE_MODE == TRACK){
     line_trace_mode    = false;

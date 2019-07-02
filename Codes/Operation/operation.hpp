@@ -52,7 +52,8 @@ private:
 
   PID *gForward  = new PID();
   Yawrate_Ctl *gYawrate_Ctl = new Yawrate_Ctl();
-  motor_ctlModelClass *gMotor_ctlModelClass = new motor_ctlModelClass;
+  motor_ctlModelClass *gLeft_Motor_ctlModelClass = new motor_ctlModelClass;
+    motor_ctlModelClass *gRight_Motor_ctlModelClass = new motor_ctlModelClass;
 
 
   enum Robo_Mode{
