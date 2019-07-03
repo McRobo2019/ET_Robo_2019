@@ -30,7 +30,8 @@ public:
 	   ev3api::Motor& tail_motor);
 
   void init();
-  void setCommand(float velocity, int forward, float target_yaw_rate, float yawrate, int target_velocity, float target_omega);
+  //  void setCommand(float velocity, int forward, float target_yaw_rate, float yawrate, int target_velocity, float target_omega);
+  void setCommand(float velocity, float left_wheel_velocity, float right_wheel_velocity, int forward, float target_yaw_rate, float yawrate, int target_velocity, float target_omega);
   void set_robo_mode_launch();
 
   void run();
@@ -67,6 +68,9 @@ private:
   Robo_Mode  ROBO_MODE;
 
   float mVelocity        = 0.0;
+  float mLeft_Wheel_Velocity  = 0.0;
+  float mRight_Wheel_Velocity = 0.0;
+
   int   mForward;
   float mTurn;
   float mTarget_Yaw_Rate;//目標Yawrate

@@ -60,9 +60,13 @@ void Operation::init() {
  * @param forward 前進値
  * @param turn    旋回値
  */
-void Operation::setCommand(float velocity, int forward, float target_yaw_rate, float yawrate, int target_velocity, float target_omega){
 
-  mVelocity           = velocity;
+void Operation::setCommand(float velocity, float left_wheel_velocity, float right_wheel_velocity, int forward, float target_yaw_rate, float yawrate, int target_velocity, float target_omega){
+
+  mVelocity             = velocity;
+  mLeft_Wheel_Velocity  = left_wheel_velocity;
+  mRight_Wheel_Velocity = right_wheel_velocity;
+
   mForward            = forward;
   mTarget_Yaw_Rate    = target_yaw_rate;
   mYawrate            = yawrate;
@@ -112,14 +116,14 @@ void Operation::run() {
       vr = vr + 0.5;
       */
       gLeft_Motor_ctlModelClass->setIn1(vl);
-      gLeft_Motor_ctlModelClass->setIn2(10.0);
+      gLeft_Motor_ctlModelClass->setIn2(mLeft_Wheel_Velocity);
       gLeft_Motor_ctlModelClass->step();
       l_pwm = gLeft_Motor_ctlModelClass->getOut1();
       left_motor_pwm = (int)l_pwm;
 
 
       gRight_Motor_ctlModelClass->setIn1(vr);
-      gRight_Motor_ctlModelClass->setIn2(10.0);
+      gRight_Motor_ctlModelClass->setIn2(mRight_Wheel_Velocity);
       gRight_Motor_ctlModelClass->step();
       r_pwm = gRight_Motor_ctlModelClass->getOut1();
       right_motor_pwm = (int)r_pwm;

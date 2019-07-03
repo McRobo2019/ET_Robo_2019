@@ -57,8 +57,8 @@ void Recognition::init(){
   encR      = 0;
   encL      = 0;
 
-  old_encR  = 0;
-  old_encL  = 0;
+  pre_encR  = 0;
+  pre_encL  = 0;
 
   wheel_rotational_speed = 0;
   ave_wheel_rot_speed    = 0;
@@ -363,6 +363,13 @@ void Recognition::wheel_odometry(float dT) {
   encR =  WheelAngRdeg;
   encL =  WheelAngLdeg;
 
+  //20190703 wheel velocity
+  left_wheel_velocity  = ((encL - pre_encL)*RAD_1_DEG*real_wheel)/dT;
+  right_wheel_velocity = ((encR - pre_encR)*RAD_1_DEG*real_wheel)/dT;
+  
+  pre_encL = encL;
+  pre_encR = encR;
+  
   odo            = ((float)WheelAngLdeg + (float)WheelAngRdeg)/2.0 * RAD_1_DEG * real_wheel; //[mm]
 
   velocity_input = (odo - odo_prev)/dT;
