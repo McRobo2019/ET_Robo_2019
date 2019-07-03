@@ -426,9 +426,9 @@ static void log_dat( ){
 	log_dat_09[log_cnt]  = gOperation->target_left_velocity;
 	log_dat_10[log_cnt]  = gOperation->target_right_velocity;
 
-	log_dat_11[log_cnt]  = (int)gRecognition->xvalue;
-	log_dat_12[log_cnt]  = (int)gRecognition->yvalue;
-	log_dat_13[log_cnt]  = (int)gRecognition->velocity;
+	log_dat_11[log_cnt]  = (int)gRecognition->velocity;
+	log_dat_12[log_cnt]  = (int)gRecognition->left_wheel_velocity;
+	log_dat_13[log_cnt]  = (int)gRecognition->right_wheel_velocity;
 
 	float_to_int_x1000   = gRecognition->yawrate * 1000.0;
 	log_dat_14[log_cnt]  =  (int)float_to_int_x1000;
@@ -568,7 +568,7 @@ static void export_log_dat( ){
       break;
 
     case TRACK:
-      fprintf(fp_wr, "clock, mV, mA, left_motor_pwm, right_motor_pwm, left_motor_enc, right_motor_enc, target_velocity, target_omega, target_vl, target_vr, x, y, velocity, yaw_rate_x1000, odo, angle_x1000\n");   
+      fprintf(fp_wr, "clock, navi_log, mA, left_motor_pwm, right_motor_pwm, left_motor_enc, right_motor_enc, target_velocity, target_omega, target_vl, target_vr, velocity, left_wheel_velo, right_wheel_velo, yaw_rate_x1000, odo, angle_x1000\n");   
       break;
 
     case DEBUG:
