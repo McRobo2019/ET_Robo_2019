@@ -195,21 +195,82 @@ void Judgment::det_navigation() {
 
     switch(TEST_MODE){
     case MODE_00:
+      det_navi_log = 0;
+      target_velocity = 0;
+      target_omega    = 0.0;
 
+      ref_clock = Jud_Clock->now() + 500; //0.5sec
+      ref_odo   = mOdo + 1200;
+      TEST_MODE = MODE_01;
+
+      det_navi_log = ref_odo;
       break;
 
     case MODE_01:
+      
+      target_velocity = 0;
+      target_omega    = 0.0;
 
+      if(Jud_Clock->now() > ref_clock){
+	TEST_MODE = MODE_02;
+	ref_clock = Jud_Clock->now();
+      }
       break;
 
     case MODE_02:
 
+      target_omega    = 0.0;
+      target_velocity = 0.2*(Jud_Clock->now() - ref_clock);
+      if(target_velocity >= 400){
+	target_velocity = 400;
+	TEST_MODE = MODE_03;
+      }
+
       break;
 
     case MODE_03:
+      target_velocity = 400;
+      target_omega    = 0.0;
 
+      if(mOdo > ref_odo){
+	TEST_MODE = MODE_04;
+	ref_odo   = mOdo;
+      }
 
       break;
+
+    case MODE_04:
+      target_velocity = 400;
+      target_omega    = 1/2000 * PAI * (mOdo - ref_odo);
+      if (target_omega >= 0.4 * PAI){
+	TEST_MODE = MODE_05;	
+	ref_odo = 3600;
+      }
+
+      break;
+
+    case MODE_05:
+
+      break;
+
+    case MODE_06:
+
+      break;
+
+    case MODE_07:
+
+      break;
+
+    case MODE_08:
+
+      break;
+
+    case MODE_09:
+
+      break;
+
+
+
 
     default:
       break;
