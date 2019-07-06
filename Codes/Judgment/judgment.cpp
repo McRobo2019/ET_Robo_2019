@@ -265,8 +265,8 @@ void Judgment::det_navigation() {
     case MODE_06:
       det_navi_log = 6;
 		target_velocity = 400;
-		target_omega = 1 / 2000 * PAI * (ref_odo - mOdo);
-		if (target_omega < 0) {
+		target_omega = 0.4 * PAI * (ref_odo - mOdo)/800.0;
+		if (target_omega <= 0) {
 			TEST_MODE = MODE_07;
 			ref_odo = 5200;
 		}
