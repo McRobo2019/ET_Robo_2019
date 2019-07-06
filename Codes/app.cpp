@@ -457,7 +457,7 @@ static void log_dat( ){
       if (log_cnt < log_size){
 	log_dat_00[log_cnt]  = Sys_Clock->now();
 
-	log_dat_01[log_cnt]  = ev3_battery_voltage_mV();
+	log_dat_01[log_cnt]  = gJudgment->det_navi_log;
 	log_dat_02[log_cnt]  = ev3_battery_current_mA();
 
 	log_dat_03[log_cnt]  = gOperation->left_motor_pwm;
@@ -466,16 +466,14 @@ static void log_dat( ){
 	log_dat_05[log_cnt]  = gRecognition->encL;
 	log_dat_06[log_cnt]  = gRecognition->encR;
 
-	log_dat_07[log_cnt]  = gRecognition->color_r;
-	log_dat_08[log_cnt]  = gRecognition->color_g;
-	log_dat_09[log_cnt]  = gRecognition->color_b;
+	log_dat_07[log_cnt]  = gJudgment->target_velocity;  //20190620 ota
+	log_dat_08[log_cnt]  = gJudgment->target_omega;
+	log_dat_09[log_cnt]  = gOperation->target_left_velocity;
+	log_dat_10[log_cnt]  = gOperation->target_right_velocity;
 
-
-	log_dat_10[log_cnt]  = gRecognition->linevalue;	    
-
-	log_dat_11[log_cnt]  = (int)gRecognition->xvalue;
-	log_dat_12[log_cnt]  = (int)gRecognition->yvalue;
-	log_dat_13[log_cnt]  = (int)gRecognition->velocity;
+	log_dat_11[log_cnt]  = (int)gRecognition->velocity;
+	log_dat_12[log_cnt]  = (int)gRecognition->left_wheel_velocity;
+	log_dat_13[log_cnt]  = (int)gRecognition->right_wheel_velocity;
 
 	float_to_int_x1000   = gRecognition->yawrate * 1000.0;
 	log_dat_14[log_cnt]  =  (int)float_to_int_x1000;
@@ -484,7 +482,6 @@ static void log_dat( ){
       
 	float_to_int_x1000   =  gRecognition->abs_angle*1000.0;
 	log_dat_16[log_cnt]  =  (int)float_to_int_x1000;
-
       }
 
 #endif
@@ -572,7 +569,7 @@ static void export_log_dat( ){
       break;
 
     case DEBUG:
-      fprintf(fp_wr, "clock, mV, mA, left_motor_pwm, right_motor_pwm, left_motor_enc, right_motor_enc, color_r, color_g, color_b, line_value, x, y, velocity, yaw_rate_x1000, odo, angle_x1000\n");   
+      fprintf(fp_wr, "clock, navi_log, mA, left_motor_pwm, right_motor_pwm, left_motor_enc, right_motor_enc, target_velocity, target_omega, target_vl, target_vr, velocity, left_wheel_velo, right_wheel_velo, yaw_rate_x1000, odo, angle_x1000\n");   
       break;
 #endif
 

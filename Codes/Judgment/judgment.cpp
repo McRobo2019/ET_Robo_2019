@@ -207,7 +207,7 @@ void Judgment::det_navigation() {
       break;
 
     case MODE_01:
-      
+      det_navi_log = 1;
       target_velocity = 0;
       target_omega    = 0.0;
 
@@ -218,7 +218,7 @@ void Judgment::det_navigation() {
       break;
 
     case MODE_02:
-
+      det_navi_log = 2;
       target_omega    = 0.0;
       target_velocity = 0.2*(Jud_Clock->now() - ref_clock);
       if(target_velocity >= 400){
@@ -229,6 +229,7 @@ void Judgment::det_navigation() {
       break;
 
     case MODE_03:
+      det_navi_log = 3;
       target_velocity = 400;
       target_omega    = 0.0;
 
@@ -240,8 +241,9 @@ void Judgment::det_navigation() {
       break;
 
     case MODE_04:
+      det_navi_log = 4;
       target_velocity = 400;
-      target_omega    = 1/2000 * PAI * (mOdo - ref_odo);
+      target_omega    = 0.4 * PAI * (mOdo - ref_odo)/800.0;
       if (target_omega >= 0.4 * PAI){
 	TEST_MODE = MODE_05;	
 	ref_odo = 3600;
@@ -250,6 +252,7 @@ void Judgment::det_navigation() {
       break;
 
     case MODE_05:
+      det_navi_log = 5;
 		target_velocity = 400;
 		target_omega = 0.4 * PAI;
 		
@@ -260,6 +263,7 @@ void Judgment::det_navigation() {
       break;
 
     case MODE_06:
+      det_navi_log = 6;
 		target_velocity = 400;
 		target_omega = 1 / 2000 * PAI * (ref_odo - mOdo);
 		if (target_omega < 0) {
@@ -270,6 +274,7 @@ void Judgment::det_navigation() {
       break;
 
     case MODE_07:
+      det_navi_log = 7;
 		target_velocity = 400;
 		target_omega = 0;
 		if (mOdo > ref_odo) {
@@ -281,6 +286,7 @@ void Judgment::det_navigation() {
       break;
 
     case MODE_08:
+      det_navi_log = 8;
 		target_velocity = 0.2 * (ref_clock - Jud_Clock->now());
 		target_omega = 0;
 		if (target_velocity < 0) {
@@ -290,6 +296,7 @@ void Judgment::det_navigation() {
       break;
 
     case MODE_09:
+      det_navi_log = 9;
 		target_velocity = 0;
 		target_omega = 0.0;
 
