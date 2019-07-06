@@ -158,10 +158,7 @@ private:
     MODE_06,
     MODE_07,
     MODE_08,
-    MODE_09,
-
-
-
+    MODE_09
   };
 
 
