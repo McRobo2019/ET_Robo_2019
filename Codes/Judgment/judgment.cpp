@@ -110,7 +110,7 @@ void Judgment::det_navigation() {
     line_trace_mode    = false;
 
     switch(TEST_MODE){
-    case MODE_00:
+    case MODE_00: 
       target_velocity = 0;
       target_omega    = 0.0;
 
