@@ -347,8 +347,19 @@ void Recognition::det_line_rgb(){
 void Recognition::wheel_odometry(float dT) {
 
   static float odo_prev;
+
   static float velocity_input;
   static float velocity_prev;
+
+  static float left_wheel_velo_input;
+  static float left_wheel_velo_prev;
+
+  static float right_wheel_velo_input;
+  static float right_wheel_velo_prev;
+
+
+
+
   //LPF 10[rad/s]/////////////////////////////////////
   static float Alpfd = 0.9391; // LPF
   static float Blpfd = 1; // LPF
@@ -364,11 +375,9 @@ void Recognition::wheel_odometry(float dT) {
   encL =  WheelAngLdeg;
 
   //20190703 wheel velocity
-  left_wheel_velocity  = ((encL - pre_encL)*RAD_1_DEG*real_wheel)/dT;
-  right_wheel_velocity = ((encR - pre_encR)*RAD_1_DEG*real_wheel)/dT;
+  //  left_wheel_velocity  = ((encL - pre_encL)*RAD_1_DEG*real_wheel)/dT;
+  //  right_wheel_velocity = ((encR - pre_encR)*RAD_1_DEG*real_wheel)/dT;
   
-  pre_encL = encL;
-  pre_encR = encR;
   
   odo            = ((float)WheelAngLdeg + (float)WheelAngRdeg)/2.0 * RAD_1_DEG * real_wheel; //[mm]
 
@@ -376,6 +385,18 @@ void Recognition::wheel_odometry(float dT) {
   velocity       = Clpfd * velocity_prev + Dlpfd * velocity_input;
   velocity_prev  = Alpfd * velocity_prev + Blpfd * velocity_input;
   
+  left_wheel_velo_input = ((encL - pre_encL)*RAD_1_DEG*real_wheel)/dT;
+  left_wheel_velocity   = Clpfd * left_wheel_velo_prev + Dlpfd * left_wheel_velo_input;
+  left_wheel_velo_prev  = Alpfd * left_wheel_velo_prev + Blpfd * left_wheel_velo_input;
+  
+  right_wheel_velo_input = ((encR - pre_encR)*RAD_1_DEG*real_wheel)/dT;
+  right_wheel_velocity   = Clpfd * right_wheel_velo_prev + Dlpfd * right_wheel_velo_input;
+  right_wheel_velo_prev  = Alpfd * right_wheel_velo_prev + Blpfd * right_wheel_velo_input;
+
+  pre_encL = encL;
+  pre_encR = encR;
+
+
   relative_angle =  ((float)WheelAngRdeg - (float)WheelAngLdeg) * RAD_1_DEG * real_wheel / RoboTread; //ロボのYaw角[rad]
   //  relative_angle = relative_angle + correction_angle; //20180701 kota
 

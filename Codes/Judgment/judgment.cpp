@@ -195,40 +195,19 @@ void Judgment::det_navigation() {
 
     switch(TEST_MODE){
     case MODE_00:
-      forward         = 0;
-      target_yaw_rate = 0.0;
 
-      ref_clock = Jud_Clock->now() + 1000; //1sec
-      ref_odo   = mOdo + 2000; // 3m
-      TEST_MODE = MODE_01;
       break;
 
     case MODE_01:
-      forward         = 0;
-      target_yaw_rate = 0.0;
-      if(Jud_Clock->now() > ref_clock){
-	TEST_MODE = MODE_02;
-      }
+
       break;
 
     case MODE_02:
-      forward         = 100;
-      target_yaw_rate = 0.0;
 
-      if(mOdo > ref_odo){
-	TEST_MODE = MODE_03;
-	ref_angle = mYawangle + RAD_180_DEG;
-      }
       break;
 
     case MODE_03:
-      	forward         = 100;
-	target_yaw_rate = RAD_45_DEG;
 
-	if(mYawangle > ref_angle){
-	  TEST_MODE = MODE_02;
-	  ref_odo   = mOdo + 2000; // 3m
-	}
 
       break;
 
