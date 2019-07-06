@@ -105,21 +105,35 @@ void Judgment::det_navigation() {
 
     target_yaw_rate = gLine_Trace->line_trace_yaw_rate(mLinevalue, mRef_Yawrate, mMax_Yawrate, mMin_Yawrate);
 
+    target_velocity = 100;
+    target_omega    = 0.0;
+
+
+
+    
   }
   else if(DRIVE_MODE == TRACK){
     line_trace_mode    = false;
 
     switch(TEST_MODE){
+<<<<<<< HEAD
+    case MODE_00:
+      det_navi_log = 0;
+=======
     case MODE_00: 
+>>>>>>> master
       target_velocity = 0;
       target_omega    = 0.0;
 
       ref_clock = Jud_Clock->now() + 499; //0.5sec
       ref_odo   = mOdo + 4399;
       TEST_MODE = MODE_01;
+
+      det_navi_log = ref_odo;
       break;
 
     case MODE_01:
+      det_navi_log = 100000+ref_odo;
       target_velocity = 0;
       target_omega    = 0.0;
 
@@ -130,8 +144,11 @@ void Judgment::det_navigation() {
       break;
 
     case MODE_02:
+      det_navi_log = 300000+ref_odo;
+
       target_omega    = 0.0;
-      target_velocity = 200*(Jud_Clock->now() - ref_clock);
+      //      target_velocity = 200*(Jud_Clock->now() - ref_clock);
+      target_velocity = 0.2*(Jud_Clock->now() - ref_clock);
       if(target_velocity > 399){
 	target_velocity = 400;
 	TEST_MODE = MODE_03;
@@ -139,6 +156,7 @@ void Judgment::det_navigation() {
       break;
 
     case MODE_03:
+      det_navi_log = 300000+ref_odo;
       target_velocity = 400;
       target_omega    = 0.0;
       if(mOdo > ref_odo){
@@ -148,6 +166,7 @@ void Judgment::det_navigation() {
       break;
 
     case MODE_04:
+      det_navi_log = 400000+ref_odo;
       target_velocity = ref_odo - mOdo;
       target_omega    = 0.0;
 
@@ -163,6 +182,7 @@ void Judgment::det_navigation() {
       break;
 
     case MODE_05:
+      det_navi_log = 500000+ref_odo;
       target_velocity = 0;
       target_omega    = 0.0;
       break;
@@ -179,42 +199,115 @@ void Judgment::det_navigation() {
 
     switch(TEST_MODE){
     case MODE_00:
-      forward         = 0;
-      target_yaw_rate = 0.0;
+      det_navi_log = 0;
+      target_velocity = 0;
+      target_omega    = 0.0;
 
-      ref_clock = Jud_Clock->now() + 1000; //1sec
-      ref_odo   = mOdo + 2000; // 3m
+      ref_clock = Jud_Clock->now() + 500; //0.5sec
+      ref_odo   = mOdo + 1200;
       TEST_MODE = MODE_01;
+
+      det_navi_log = ref_odo;
       break;
 
     case MODE_01:
-      forward         = 0;
-      target_yaw_rate = 0.0;
+      det_navi_log = 1;
+      target_velocity = 0;
+      target_omega    = 0.0;
+
       if(Jud_Clock->now() > ref_clock){
 	TEST_MODE = MODE_02;
+	ref_clock = Jud_Clock->now();
       }
       break;
 
     case MODE_02:
-      forward         = 100;
-      target_yaw_rate = 0.0;
-
-      if(mOdo > ref_odo){
+      det_navi_log = 2;
+      target_omega    = 0.0;
+      target_velocity = 0.2*(Jud_Clock->now() - ref_clock);
+      if(target_velocity >= 400){
+	target_velocity = 400;
 	TEST_MODE = MODE_03;
-	ref_angle = mYawangle + RAD_180_DEG;
       }
+
       break;
 
     case MODE_03:
-      	forward         = 100;
-	target_yaw_rate = RAD_45_DEG;
+      det_navi_log = 3;
+      target_velocity = 400;
+      target_omega    = 0.0;
 
-	if(mYawangle > ref_angle){
-	  TEST_MODE = MODE_02;
-	  ref_odo   = mOdo + 2000; // 3m
-	}
+      if(mOdo > ref_odo){
+	TEST_MODE = MODE_04;
+	ref_odo   = mOdo;
+      }
 
       break;
+
+    case MODE_04:
+      det_navi_log = 4;
+      target_velocity = 400;
+      target_omega    = 0.4 * PAI * (mOdo - ref_odo)/800.0;
+      if (target_omega >= 0.4 * PAI){
+	TEST_MODE = MODE_05;	
+	ref_odo = 3600;
+      }
+
+      break;
+
+    case MODE_05:
+      det_navi_log = 5;
+		target_velocity = 400;
+		target_omega = 0.4 * PAI;
+		
+		if (mOdo > ref_odo) {
+			TEST_MODE = MODE_06;
+			ref_odo = mOdo - 1800;
+		}
+      break;
+
+    case MODE_06:
+      det_navi_log = 6;
+		target_velocity = 400;
+		target_omega = 0.4 * PAI * (ref_odo - mOdo)/800.0;
+		if (target_omega <= 0) {
+			TEST_MODE = MODE_07;
+			ref_odo = 5200;
+		}
+
+      break;
+
+    case MODE_07:
+      det_navi_log = 7;
+		target_velocity = 400;
+		target_omega = 0;
+		if (mOdo > ref_odo) {
+			TEST_MODE = MODE_08;
+			ref_odo = mOdo + 400;
+			ref_clock = Jud_Clock->now() + 2000;
+		}
+
+      break;
+
+    case MODE_08:
+      det_navi_log = 8;
+		target_velocity = 0.2 * (ref_clock - Jud_Clock->now());
+		target_omega = 0;
+		if (target_velocity < 0) {
+			TEST_MODE = MODE_09;
+		}
+
+      break;
+
+    case MODE_09:
+      det_navi_log = 9;
+		target_velocity = 0;
+		target_omega = 0.0;
+
+      break;
+
+
+
 
     default:
       break;

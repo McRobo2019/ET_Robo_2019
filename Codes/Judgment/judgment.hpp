@@ -154,7 +154,14 @@ private:
     MODE_02,
     MODE_03,
     MODE_04,
-    MODE_05
+    MODE_05,
+    MODE_06,
+    MODE_07,
+    MODE_08,
+    MODE_09,
+
+
+
   };
 
 
