@@ -1,4 +1,5 @@
 
+
 //Hirojiren Proto System
 //Date:2019.4.13
 //Author:Kaoru Ota
@@ -94,9 +95,16 @@ static int   log_dat_10[LOG_SHORT_SIZE];
 static int   log_dat_11[LOG_SHORT_SIZE];
 static int   log_dat_12[LOG_SHORT_SIZE];
 static int   log_dat_13[LOG_SHORT_SIZE];
+/*
 static int   log_dat_14[LOG_SHORT_SIZE];
 static int   log_dat_15[LOG_SHORT_SIZE];
 static int   log_dat_16[LOG_SHORT_SIZE];
+*/
+
+static float   float_log_00[LOG_SHORT_SIZE];
+static float   float_log_01[LOG_SHORT_SIZE];
+static float   float_log_02[LOG_SHORT_SIZE];
+
 
 #endif
 
@@ -357,7 +365,7 @@ static void sys_destroy(){
 #ifdef LOG_RECORD
 static void log_dat( ){
   
-  float float_to_int_x1000;
+  //  float float_to_int_x1000;
 
   switch(SYS_MODE){
   case LINE_TRACE:
@@ -385,13 +393,18 @@ static void log_dat( ){
       log_dat_12[log_cnt]  = (int)gRecognition->yvalue;
       log_dat_13[log_cnt]  = (int)gRecognition->velocity;
 
+      /*
       float_to_int_x1000   = gRecognition->yawrate * 1000.0;
       log_dat_14[log_cnt]  =  (int)float_to_int_x1000;
 
-      log_dat_15[log_cnt]  = gRecognition->odo;
+      log_dat_15[log_cnt]  = 
       
       float_to_int_x1000   =  gRecognition->abs_angle*1000.0;
       log_dat_16[log_cnt]  =  (int)float_to_int_x1000;
+      */
+      float_log_00[log_cnt] = gRecognition->yawrate;
+      float_log_01[log_cnt] = gRecognition->abs_angle;
+      float_log_02[log_cnt] = gRecognition->odo;
 
     }
       
@@ -422,7 +435,7 @@ static void log_dat( ){
 	log_dat_06[log_cnt]  = gRecognition->encR;
 
 	log_dat_07[log_cnt]  = gJudgment->target_velocity;  //20190620 ota
-	log_dat_08[log_cnt]  = gJudgment->target_omega;
+	log_dat_08[log_cnt]  = gRecognition->odo;
 	log_dat_09[log_cnt]  = gOperation->target_left_velocity;
 	log_dat_10[log_cnt]  = gOperation->target_right_velocity;
 
@@ -430,6 +443,7 @@ static void log_dat( ){
 	log_dat_12[log_cnt]  = (int)gRecognition->left_wheel_velocity;
 	log_dat_13[log_cnt]  = (int)gRecognition->right_wheel_velocity;
 
+	/*
 	float_to_int_x1000   = gRecognition->yawrate * 1000.0;
 	log_dat_14[log_cnt]  =  (int)float_to_int_x1000;
 
@@ -437,6 +451,14 @@ static void log_dat( ){
       
 	float_to_int_x1000   =  gRecognition->abs_angle*1000.0;
 	log_dat_16[log_cnt]  =  (int)float_to_int_x1000;
+	*/
+	
+	float_log_00[log_cnt] = gRecognition->yawrate;
+	float_log_01[log_cnt] = gRecognition->abs_angle;
+	float_log_02[log_cnt] = gJudgment->target_omega;
+
+
+
       }
 #endif
 
@@ -475,6 +497,7 @@ static void log_dat( ){
 	log_dat_12[log_cnt]  = (int)gRecognition->left_wheel_velocity;
 	log_dat_13[log_cnt]  = (int)gRecognition->right_wheel_velocity;
 
+	/*
 	float_to_int_x1000   = gRecognition->yawrate * 1000.0;
 	log_dat_14[log_cnt]  =  (int)float_to_int_x1000;
 
@@ -482,6 +505,15 @@ static void log_dat( ){
       
 	float_to_int_x1000   =  gRecognition->abs_angle*1000.0;
 	log_dat_16[log_cnt]  =  (int)float_to_int_x1000;
+	*/
+	
+	float_log_00[log_cnt] = gRecognition->yawrate;
+	float_log_01[log_cnt] = gRecognition->abs_angle;
+	float_log_02[log_cnt] = gJudgment->target_omega;
+
+
+
+
       }
 
 #endif
@@ -561,11 +593,11 @@ static void export_log_dat( ){
   switch(SYS_MODE){
 #ifdef LOG_SHORT
     case LINE_TRACE:
-      fprintf(fp_wr, "clock, mV, mA, left_motor_pwm, right_motor_pwm, left_motor_enc, right_motor_enc, color_r, color_g, color_b, line_value, x, y, velocity, yaw_rate_x1000, odo, angle_x1000\n");   
+      fprintf(fp_wr, "clock, mV, mA, left_motor_pwm, right_motor_pwm, left_motor_enc, right_motor_enc, color_r, color_g, color_b, line_value, x, y, velocity, yaw_rate, angle, odo\n");   
       break;
 
     case TRACK:
-      fprintf(fp_wr, "clock, navi_log, mA, left_motor_pwm, right_motor_pwm, left_motor_enc, right_motor_enc, target_velocity, target_omega, target_vl, target_vr, velocity, left_wheel_velo, right_wheel_velo, yaw_rate_x1000, odo, angle_x1000\n");   
+      fprintf(fp_wr, "clock, navi_log, mA, left_motor_pwm, right_motor_pwm, left_motor_enc, right_motor_enc, target_velocity, odo, target_vl, target_vr, velocity, left_wheel_velo, right_wheel_velo, yaw_rate, angle, target_omega\n");   
       break;
 
     case DEBUG:
@@ -594,7 +626,7 @@ static void export_log_dat( ){
 
     for(cnt = 0; cnt < log_size ; cnt++){
 #ifdef LOG_SHORT
-      fprintf(fp_wr, "%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d\n",log_dat_00[cnt],log_dat_01[cnt], log_dat_02[cnt],log_dat_03[cnt],log_dat_04[cnt],log_dat_05[cnt],log_dat_06[cnt],log_dat_07[cnt],log_dat_08[cnt],log_dat_09[cnt],log_dat_10[cnt],log_dat_11[cnt],log_dat_12[cnt],log_dat_13[cnt],log_dat_14[cnt],log_dat_15[cnt],log_dat_16[cnt]);
+      fprintf(fp_wr, "%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%f,%f,%f\n",log_dat_00[cnt],log_dat_01[cnt], log_dat_02[cnt],log_dat_03[cnt],log_dat_04[cnt],log_dat_05[cnt],log_dat_06[cnt],log_dat_07[cnt],log_dat_08[cnt],log_dat_09[cnt],log_dat_10[cnt],log_dat_11[cnt],log_dat_12[cnt],log_dat_13[cnt],float_log_00[cnt], float_log_01[cnt], float_log_02[cnt]);
 #endif
 
 #ifdef LOG_LONG
