@@ -42,7 +42,7 @@ using ev3api::Clock;
 #define LOG_RECORD
 #define LOG_SHORT
 //#define LOG_LONG
-#define LOG_SHORT_SIZE 7500
+#define LOG_SHORT_SIZE 5000
 
 // Device objects
 // オブジェクトを静的に確保する
