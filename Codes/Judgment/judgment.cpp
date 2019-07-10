@@ -85,7 +85,7 @@ void Judgment::det_navigation() {
   //  float yaw_time;
 
   static float ref_odo;
-  static float ref_angle;
+  //  static float ref_angle;
   /*
   static float dif_odo;
 

@@ -104,6 +104,7 @@ static int   log_dat_16[LOG_SHORT_SIZE];
 static float   float_log_00[LOG_SHORT_SIZE];
 static float   float_log_01[LOG_SHORT_SIZE];
 static float   float_log_02[LOG_SHORT_SIZE];
+static float   float_log_03[LOG_SHORT_SIZE];
 
 
 #endif
@@ -405,6 +406,7 @@ static void log_dat( ){
       float_log_00[log_cnt] = gRecognition->yawrate;
       float_log_01[log_cnt] = gRecognition->abs_angle;
       float_log_02[log_cnt] = gRecognition->odo;
+      float_log_03[log_cnt] = gRecognition->omega;
 
     }
       
@@ -456,7 +458,7 @@ static void log_dat( ){
 	float_log_00[log_cnt] = gRecognition->yawrate;
 	float_log_01[log_cnt] = gRecognition->abs_angle;
 	float_log_02[log_cnt] = gJudgment->target_omega;
-
+	float_log_03[log_cnt] = gRecognition->omega;
 
 
       }
@@ -510,10 +512,7 @@ static void log_dat( ){
 	float_log_00[log_cnt] = gRecognition->yawrate;
 	float_log_01[log_cnt] = gRecognition->abs_angle;
 	float_log_02[log_cnt] = gJudgment->target_omega;
-
-
-
-
+	float_log_03[log_cnt] = gRecognition->omega;
       }
 
 #endif
@@ -593,15 +592,15 @@ static void export_log_dat( ){
   switch(SYS_MODE){
 #ifdef LOG_SHORT
     case LINE_TRACE:
-      fprintf(fp_wr, "clock, mV, mA, left_motor_pwm, right_motor_pwm, left_motor_enc, right_motor_enc, color_r, color_g, color_b, line_value, x, y, velocity, yaw_rate, angle, odo\n");   
+      fprintf(fp_wr, "clock, mV, mA, left_motor_pwm, right_motor_pwm, left_motor_enc, right_motor_enc, color_r, color_g, color_b, line_value, x, y, velocity, yaw_rate, angle, odo, omega\n");   
       break;
 
     case TRACK:
-      fprintf(fp_wr, "clock, navi_log, mA, left_motor_pwm, right_motor_pwm, left_motor_enc, right_motor_enc, target_velocity, odo, target_vl, target_vr, velocity, left_wheel_velo, right_wheel_velo, yaw_rate, angle, target_omega\n");   
+      fprintf(fp_wr, "clock, navi_log, mA, left_motor_pwm, right_motor_pwm, left_motor_enc, right_motor_enc, target_velocity, odo, target_vl, target_vr, velocity, left_wheel_velo, right_wheel_velo, yaw_rate, angle, target_omega, omega\n");   
       break;
 
     case DEBUG:
-      fprintf(fp_wr, "clock, navi_log, mA, left_motor_pwm, right_motor_pwm, left_motor_enc, right_motor_enc, target_velocity, target_omega, target_vl, target_vr, velocity, left_wheel_velo, right_wheel_velo, yaw_rate_x1000, odo, angle_x1000\n");   
+      fprintf(fp_wr, "clock, navi_log, mA, left_motor_pwm, right_motor_pwm, left_motor_enc, right_motor_enc, target_velocity, target_omega, target_vl, target_vr, velocity, left_wheel_velo, right_wheel_velo, yaw_rate, abs_angle, target_omega, omega\n");   
       break;
 #endif
 
@@ -626,7 +625,7 @@ static void export_log_dat( ){
 
     for(cnt = 0; cnt < log_size ; cnt++){
 #ifdef LOG_SHORT
-      fprintf(fp_wr, "%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%f,%f,%f\n",log_dat_00[cnt],log_dat_01[cnt], log_dat_02[cnt],log_dat_03[cnt],log_dat_04[cnt],log_dat_05[cnt],log_dat_06[cnt],log_dat_07[cnt],log_dat_08[cnt],log_dat_09[cnt],log_dat_10[cnt],log_dat_11[cnt],log_dat_12[cnt],log_dat_13[cnt],float_log_00[cnt], float_log_01[cnt], float_log_02[cnt]);
+      fprintf(fp_wr, "%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%f,%f,%f, %f\n",log_dat_00[cnt],log_dat_01[cnt], log_dat_02[cnt],log_dat_03[cnt],log_dat_04[cnt],log_dat_05[cnt],log_dat_06[cnt],log_dat_07[cnt],log_dat_08[cnt],log_dat_09[cnt],log_dat_10[cnt],log_dat_11[cnt],log_dat_12[cnt],log_dat_13[cnt],float_log_00[cnt], float_log_01[cnt], float_log_02[cnt], float_log_03[cnt]);
 #endif
 
 #ifdef LOG_LONG

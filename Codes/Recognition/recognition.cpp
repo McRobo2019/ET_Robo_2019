@@ -397,6 +397,8 @@ void Recognition::wheel_odometry(float dT) {
   pre_encR = encR;
 
 
+  omega = (right_wheel_velocity - left_wheel_velocity)/RoboTread;
+
   relative_angle =  ((float)WheelAngRdeg - (float)WheelAngLdeg) * RAD_1_DEG * real_wheel / RoboTread; //ロボのYaw角[rad]
   //  relative_angle = relative_angle + correction_angle; //20180701 kota
 

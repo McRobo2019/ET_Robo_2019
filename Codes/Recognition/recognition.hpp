@@ -55,7 +55,10 @@ public:
 
   float left_wheel_velocity  = 0.0;
   float right_wheel_velocity = 0.0;
+  float omega                = 0.0;
 
+
+  
   int   encR      = 0;//右側タイヤ角度
   int   encL      = 0;
   int   pre_encR  = 0;//右側タイヤ角度
