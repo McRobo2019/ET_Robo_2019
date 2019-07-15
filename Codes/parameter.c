@@ -30,7 +30,8 @@ float MAX_VELOCITY      = 400; /**** ADJ_PARAMETER ****/
 float dT_4ms   = 0.004;
 float dT_10ms   = 0.010;
 
-float PAI         =  3.1472;
+//float PAI         =  3.1472;
+float PAI         =  3.141592;
 
 float RAD_1_DEG    = 0.0175; //deg@1rad 
 float RAD_5_DEG    = 0.0873; //

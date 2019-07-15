@@ -53,11 +53,16 @@ public:
   float ave_accel        = 0.0;//Average_Acceleration
   float pre_velo_0p5sec  = 0.0;//prediction vekicity 0.5 sec latar
 
+  float left_wheel_velocity  = 0.0;
+  float right_wheel_velocity = 0.0;
+  float omega                = 0.0;
 
+
+  
   int   encR      = 0;//右側タイヤ角度
   int   encL      = 0;
-  int   old_encR  = 0;//右側タイヤ角度
-  int   old_encL  = 0;
+  int   pre_encR  = 0;//右側タイヤ角度
+  int   pre_encL  = 0;
 
   float wheel_rotational_speed = 0;
   float ave_wheel_rot_speed    = 0;
