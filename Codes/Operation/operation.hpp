@@ -54,7 +54,7 @@ private:
   PID *gForward  = new PID();
   Yawrate_Ctl *gYawrate_Ctl = new Yawrate_Ctl();
   motor_ctlModelClass *gLeft_Motor_ctlModelClass = new motor_ctlModelClass;
-    motor_ctlModelClass *gRight_Motor_ctlModelClass = new motor_ctlModelClass;
+  motor_ctlModelClass *gRight_Motor_ctlModelClass = new motor_ctlModelClass;
 
 
   enum Robo_Mode{
@@ -91,6 +91,15 @@ private:
   int right_wheel_enc        = 0;
   int left_wheel_enc         = 0;
 
+  int   checked_target_velocity = 0;
+  float checked_target_omega = 0;
+
+  int   pre_target_velocity = 0;
+  float pre_target_omega = 0;
+
+  bool  monitor_error = false;
+
+  void monitoring_cmd();
 
   void PWM_Gen(int mForward, float mTurn);
 
