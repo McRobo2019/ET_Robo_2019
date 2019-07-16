@@ -762,19 +762,19 @@ void main_task(intptr_t unused) {
   sys_initialize();
 
   //**********************************************************************************//
+  //Reset angle of arm
+  //**********************************************************************************//
+  gOperation->arm_reset();
+  gOperation->arm_line_trace();
+
+
+  //**********************************************************************************//
   //Color Sensor calibration
   //**********************************************************************************//
   gRecognition->color_sensor_calib(); //20180930 kota
-  //**********************************************************************************//
-  //Reset angle of tail
-  //**********************************************************************************//
+
+
   //REDAY for START
-
-  //---- it will be chaged ota 20190414
-  //gOperation->tail_reset();
-  //gOperation->tail_stand_up();
-  //it will be chaged ota 20190414 ----
-
   ev3_sta_cyc(REC_CYC);
 
   ev3_lcd_set_font(EV3_FONT_MEDIUM);

@@ -7,7 +7,7 @@ int SYS_CLK = 0;
 
 
 //Parameter of Robo
-int ARM_ANGLE_LT       = 30;
+int TAIL_ANGLE_STAND_UP       = 97; /* 完全停止時の角度[度]     */
 int TAIL_ANGLE_BALANCE_START  = 100;
 int TAIL_ANGLE_LAUNCH         = 105;
 

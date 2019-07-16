@@ -226,46 +226,44 @@ void Operation::tail_control(signed int angle)
 */
 
 
-/*
-void Operation::tail_reset(){
+void Operation::arm_reset(){
   int32_t angle    = 0;
   int32_t angle_1d = 0;
 
-  mTail_Motor.setPWM(-10);
+  mArm_Motor.setPWM(-10);
   angle = 0;
   angle_1d = 1;
 
   while(1){
     if(angle == angle_1d){
-      mTail_Motor.stop();
-      mTail_Motor.reset();
+      mArm_Motor.stop();
+      mArm_Motor.reset();
       break;
     }
     else{
       angle_1d = angle;
       tslp_tsk(1000);
-      angle = mTail_Motor.getCount();
+      angle = mArm_Motor.getCount();
     }
   }
-  mTail_Motor.stop();
-  mTail_Motor.reset();
+  mArm_Motor.stop();
+  mArm_Motor.reset();
 }
-*/
 
-/*
-void Operation::tail_stand_up(){
+
+void Operation::arm_line_trace(){
     while(1){
-      if(mTail_Motor.getCount() == TAIL_ANGLE_STAND_UP){
-	mTail_Motor.stop();
+      if(mArm_Motor.getCount() == ARM_ANGLE_LT){
+	mArm_Motor.stop();
 	break;
       }
       else{
-	mTail_Motor.setPWM(5);
+	mArm_Motor.setPWM(5);
       }
     }
-    mTail_Motor.stop();
-} //tail for gyro reset and color sensor calibration
-*/
+    mArm_Motor.stop();
+} //arm for gyro reset and color sensor calibration
+
 
 
 void Operation::PWM_Gen(int mForward, float mTurn){

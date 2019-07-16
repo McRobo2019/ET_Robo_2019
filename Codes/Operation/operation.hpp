@@ -34,6 +34,9 @@ public:
   void setCommand(float velocity, float left_wheel_velocity, float right_wheel_velocity, int forward, float target_yaw_rate, float yawrate, int target_velocity, float target_omega);
   void set_robo_mode_launch();
 
+  void arm_reset();
+  void arm_line_trace();
+
   void run();
 
   //190620 ota
