@@ -8,19 +8,12 @@
 #include <stdlib.h>
 #include "ev3api.h"
 #include "judgment.hpp"
-#include "Clock.h"
-
-using ev3api::Clock;
-Clock*       Jud_Clock;
-
 
 Judgment::Judgment() {
 
 }
 
 void Judgment::init() {
-
-  Jud_Clock       = new Clock();        
 
   ZONE               = START_ZONE;
   DRIVE_MODE         = LINE_TRACE;
@@ -92,7 +85,7 @@ void Judgment::det_navigation() {
   static int   ref_forward;
   static float acl_forward;
   */
-  static uint ref_clock;
+  static int ref_clock;
 
   if(DRIVE_MODE == LINE_TRACE){
     line_trace_mode = true;
@@ -116,7 +109,7 @@ void Judgment::det_navigation() {
       target_velocity = 0;
       target_omega    = 0.0;
 
-      ref_clock = Jud_Clock->now() + 499; //0.5sec
+      ref_clock = SYS_CLK + 499; //0.5sec
       ref_odo   = mOdo + 4399;
       TEST_MODE = MODE_01;
 
@@ -128,9 +121,9 @@ void Judgment::det_navigation() {
       target_velocity = 0;
       target_omega    = 0.0;
 
-      if(Jud_Clock->now() > ref_clock){
+      if(SYS_CLK > ref_clock){
 	TEST_MODE = MODE_02;
-	ref_clock = Jud_Clock->now();
+	ref_clock = SYS_CLK;
       }
       break;
 
@@ -138,8 +131,8 @@ void Judgment::det_navigation() {
       det_navi_log = 300000+ref_odo;
 
       target_omega    = 0.0;
-      //      target_velocity = 200*(Jud_Clock->now() - ref_clock);
-      target_velocity = 0.2*(Jud_Clock->now() - ref_clock);
+      //      target_velocity = 200*(SYS_CLK - ref_clock);
+      target_velocity = 0.2*(SYS_CLK - ref_clock);
       if(target_velocity > 399){
 	target_velocity = 400;
 	TEST_MODE = MODE_03;
@@ -194,7 +187,7 @@ void Judgment::det_navigation() {
       target_velocity = 0;
       target_omega    = 0.0;
 
-      ref_clock = Jud_Clock->now() + 500; //0.5sec
+      ref_clock = SYS_CLK + 500; //0.5sec
       ref_odo   = mOdo + 1200;
       TEST_MODE = MODE_01;
 
@@ -206,16 +199,16 @@ void Judgment::det_navigation() {
       target_velocity = 0;
       target_omega    = 0.0;
 
-      if(Jud_Clock->now() > ref_clock){
+      if(SYS_CLK > ref_clock){
 	TEST_MODE = MODE_02;
-	ref_clock = Jud_Clock->now();
+	ref_clock = SYS_CLK;
       }
       break;
 
     case MODE_02:
       det_navi_log = 2;
       target_omega    = 0.0;
-      target_velocity = 0.2*(Jud_Clock->now() - ref_clock);
+      target_velocity = 0.2*(SYS_CLK - ref_clock);
       if(target_velocity >= 400){
 	target_velocity = 400;
 	TEST_MODE = MODE_03;
@@ -275,14 +268,14 @@ void Judgment::det_navigation() {
 		if (mOdo > ref_odo) {
 			TEST_MODE = MODE_08;
 			ref_odo = mOdo + 400;
-			ref_clock = Jud_Clock->now() + 2000;
+			ref_clock = SYS_CLK + 2000;
 		}
 
       break;
 
     case MODE_08:
       det_navi_log = 8;
-		target_velocity = 0.2 * (ref_clock - Jud_Clock->now());
+		target_velocity = 0.2 * (ref_clock - SYS_CLK);
 		target_omega = 0;
 		if (target_velocity <= 0) {
 			TEST_MODE = MODE_09;

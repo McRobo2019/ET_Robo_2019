@@ -1,5 +1,12 @@
 #include "recognition.hpp"
 #include "math.h"
+#include "Clock.h"
+
+
+//using namespace ev3api;
+using ev3api::Clock;
+
+Clock* Sys_Clock;
 
 /**
  * コンストラクタ
@@ -24,6 +31,8 @@ Recognition::Recognition(const ev3api::ColorSensor& colorSensor,
 void Recognition::init(){
   //  int i;
 
+
+  Sys_Clock    = new Clock();
   mGyro.reset();
 
   //  real_wheel = WHEEL_R * cos(RAD_6_DEG);
@@ -103,6 +112,9 @@ void Recognition::init(){
 }
 
 void Recognition::run( ) {
+
+  SYS_CLK = Sys_Clock->now();
+
   det_line_rgb();
   //wheel_odometry(dT_4ms);
   wheel_odometry(dT_10ms);

@@ -18,7 +18,6 @@
 #include "ColorSensor.h"
 #include "GyroSensor.h"
 #include "Motor.h"
-#include "Clock.h"
 
 //sub systemp
 #include "recognition.hpp"
@@ -36,7 +35,6 @@ using ev3api::GyroSensor;
 using ev3api::TouchSensor;
 using ev3api::SonarSensor;
 using ev3api::Motor;
-using ev3api::Clock;
 
 //It will be moved to the class for log 190414 ota
 #define LOG_RECORD
@@ -65,8 +63,6 @@ enum Sys_Mode{
 };
 
 Sys_Mode SYS_MODE;
-
-Clock* Sys_Clock;
 
 static int32_t   bt_cmd = 0;      /* Bluetoothコマンド 1:リモートスタート */
 static FILE     *bt     = NULL;   /* Bluetoothファイルハンドル */
@@ -142,7 +138,7 @@ static void sys_initialize() {
   //**********************************************************************************//
   ev3_lcd_fill_rect(0, 0, EV3_LCD_WIDTH, EV3_LCD_HEIGHT, EV3_LCD_WHITE);
   ev3_lcd_set_font(EV3_FONT_MEDIUM);
-  ev3_lcd_draw_string("hirojiren_alpha_0525",0, 40);
+  ev3_lcd_draw_string("hirojiren_0715",0, 40);
   //**********************************************************************************//
   //New Object of Sub System(Class)
   //
@@ -152,8 +148,6 @@ static void sys_initialize() {
 
   
   // オブジェクトの作成
-  Sys_Clock       = new Clock();
-
   gRecognition = new Recognition(gColorSensor,
 				 gLeftMotor,
 				 gRightMotor,
@@ -372,7 +366,7 @@ static void log_dat( ){
   case LINE_TRACE:
 #ifdef LOG_SHORT
     if (log_cnt < log_size){    
-      log_dat_00[log_cnt]  = Sys_Clock->now();
+      log_dat_00[log_cnt]  = SYS_CLK;
 
       log_dat_01[log_cnt]  = ev3_battery_voltage_mV();
       log_dat_02[log_cnt]  = ev3_battery_current_mA();
@@ -425,7 +419,7 @@ static void log_dat( ){
     case TRACK:
 #ifdef LOG_SHORT
       if (log_cnt < log_size){
-	log_dat_00[log_cnt]  = Sys_Clock->now();
+	log_dat_00[log_cnt]  = SYS_CLK;
 
 	log_dat_01[log_cnt]  = gJudgment->det_navi_log;
 	log_dat_02[log_cnt]  = ev3_battery_current_mA();
@@ -479,7 +473,7 @@ static void log_dat( ){
 #ifdef LOG_SHORT
 
       if (log_cnt < log_size){
-	log_dat_00[log_cnt]  = Sys_Clock->now();
+	log_dat_00[log_cnt]  = SYS_CLK;
 
 	log_dat_01[log_cnt]  = gJudgment->det_navi_log;
 	log_dat_02[log_cnt]  = ev3_battery_current_mA();

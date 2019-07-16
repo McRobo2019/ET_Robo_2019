@@ -9,6 +9,10 @@ extern "C" {
 }
 #endif
 */
+
+//Parameter of System
+extern int SYS_CLK;
+
 //Parameter of Robo
 extern int TAIL_ANGLE_STAND_UP;  /* 完全停止時の角度[度] */
 extern int TAIL_ANGLE_BALANCE_START;

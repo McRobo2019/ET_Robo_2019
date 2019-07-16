@@ -1,6 +1,11 @@
 /**** SEE           ****/
 /**** ADJ_PARAMETER ****/
 
+
+//Parameter of System
+int SYS_CLK = 0;
+
+
 //Parameter of Robo
 int TAIL_ANGLE_STAND_UP       = 97; /* 完全停止時の角度[度]     */
 int TAIL_ANGLE_BALANCE_START  = 100;

@@ -3,12 +3,6 @@
  *****************************************************************************/
 
 #include "operation.hpp"
-#include "Clock.h"
-
-using ev3api::Clock;
-
-Clock*       robo_Clock;
-
 
 // 定数宣言
 const int Operation::LOW    = 30;    // 低速
@@ -41,8 +35,6 @@ Operation::Operation(const
 
 
 void Operation::init() {
-
-  robo_Clock       = new Clock();        
 
   mLeftWheel.reset();
   mRightWheel.reset();
