@@ -180,6 +180,7 @@ void Operation::run() {
     mLeftWheel.setPWM(left_motor_pwm);
     mRightWheel.setPWM(right_motor_pwm);
 
+
     break;
 
   case ROBO_DEBUG:
@@ -189,41 +190,7 @@ void Operation::run() {
 }
 
 
-//2017.07.28 k-ota copy from 3-apex
-//*****************************************************************************
-// 関数名 : tail_control
-// 引数 : angle (モータ目標角度[度])
-// 返り値 : 無し
-// 概要 : 走行体完全停止用モータの角度制御
-//*****************************************************************************
 
-/*
-void Operation::tail_control(signed int angle)
-{
-  tail_motor_pwm = gTail_pwm->calc_pid(angle, mTail_Motor.getCount());
-  tail_motor_pwm = tail_motor_pwm*0.1;
-
-  if (tail_motor_pwm > PWM_ABS_MAX)
-    {
-      tail_motor_pwm = PWM_ABS_MAX;
-    }
-  else if (tail_motor_pwm < -PWM_ABS_MAX)
-    {
-      tail_motor_pwm = -PWM_ABS_MAX;
-    }
-
-  if (tail_motor_pwm == 0)
-    {
-      //17.07.28 kota modify//        ev3_motor_stop(tail_motor, true);
-      mTail_Motor.stop();
-    }
-  else
-    {
-      //17.07.28 kota modify//        ev3_motor_set_power(tail_motor, (signed char)pwm);
-      mTail_Motor.setPWM((signed int)tail_motor_pwm);
-    }
-}
-*/
 
 
 void Operation::arm_reset(){
@@ -263,6 +230,45 @@ void Operation::arm_line_trace(){
     }
     mArm_Motor.stop();
 } //arm for gyro reset and color sensor calibration
+
+
+//2017.07.28 k-ota copy from 3-apex
+//*****************************************************************************
+// 関数名 : arm_control
+// 引数 : angle (モータ目標角度[度])
+// 返り値 : 無し
+// 概要 : 走行体完全停止用モータの角度制御
+//*****************************************************************************
+
+
+void Operation::arm_control(signed int angle)
+  
+{
+  arm_motor_pwm = gArm_pwm->calc_pid(angle, mArm_Motor.getCount());
+  arm_motor_pwm = arm_motor_pwm*0.1;
+
+  if (arm_motor_pwm > PWM_ABS_MAX)
+    {
+      arm_motor_pwm = PWM_ABS_MAX;
+    }
+  else if (arm_motor_pwm < -PWM_ABS_MAX)
+    {
+      arm_motor_pwm = -PWM_ABS_MAX;
+    }
+
+  if (arm_motor_pwm == 0)
+    {
+      //17.07.28 kota modify//        ev3_motor_stop(arm_motor, true);
+      mArm_Motor.stop();
+    }
+  else
+    {
+      //17.07.28 kota modify//        ev3_motor_set_power(arm_motor, (signed char)pwm);
+      mArm_Motor.setPWM((signed int)arm_motor_pwm);
+    }
+}
+
+
 
 
 
