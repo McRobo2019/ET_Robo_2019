@@ -1,5 +1,3 @@
-
-
 //Hirojiren Proto System
 //Date:2019.4.13
 //Author:Kaoru Ota
@@ -53,7 +51,6 @@ Motor       gRightMotor  (PORT_A);
 Motor       gTailMotor   (PORT_B);
 Motor       gArmMotor    (PORT_C);
 Motor       gLeftMotor   (PORT_D);
-
 
 
 enum Sys_Mode{
@@ -161,16 +158,6 @@ static void sys_initialize() {
 			       gRightMotor,
 			       gArmMotor,
 			       gTailMotor);
-
-  //**********************************************************************************//
-  //Set Tail Initial position
-  //
-  //**********************************************************************************//
-
-  //---- 190414 it will be changed later ota
-  //  gOperation->tail_reset();
-  //  gOperation->tail_stand_up();
-  //190414 it will be changed later ota ----
 
   //**********************************************************************************//
   //Display Robot Status
