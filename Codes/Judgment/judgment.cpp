@@ -290,7 +290,7 @@ void Judgment::det_navigation() {
       det_navi_log = 8;
 		target_velocity = 0.2 * (ref_clock - Jud_Clock->now());
 		target_omega = 0;
-		if (target_velocity < 0) {
+		if ((target_velocity < 5 ) || (target_velocity > 5000 ) {
 			TEST_MODE = MODE_09;
 		}
 
