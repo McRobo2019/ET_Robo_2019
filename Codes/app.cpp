@@ -403,7 +403,7 @@ static void log_dat( ){
       float_to_int_x1000   =  gRecognition->abs_angle*1000.0;
       log_dat_16[log_cnt]  =  (int)float_to_int_x1000;
       */
-      float_log_00[log_cnt] = gRecognition->yawrate;
+      float_log_00[log_cnt] = gJudgment->target_omega;
       float_log_01[log_cnt] = gRecognition->abs_angle;
       float_log_02[log_cnt] = gRecognition->odo;
       float_log_03[log_cnt] = gRecognition->omega;
@@ -592,7 +592,7 @@ static void export_log_dat( ){
   switch(SYS_MODE){
 #ifdef LOG_SHORT
     case LINE_TRACE:
-      fprintf(fp_wr, "clock, mV, mA, left_motor_pwm, right_motor_pwm, left_motor_enc, right_motor_enc, color_r, color_g, color_b, line_value, x, y, velocity, yaw_rate, angle, odo, omega\n");   
+      fprintf(fp_wr, "clock, mV, mA, left_motor_pwm, right_motor_pwm, left_motor_enc, right_motor_enc, color_r, color_g, color_b, line_value, x, y, velocity, target_omega, angle, odo, omega\n");   
       break;
 
     case TRACK:

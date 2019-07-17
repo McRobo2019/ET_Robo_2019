@@ -109,6 +109,11 @@ private:
   float mMax_Yawrate;
   float mMin_Yawrate;
 
+  float mRef_Omega;
+  float mMax_Omega;
+  float mMin_Omega;
+
+
   enum Zone{
     START_ZONE,
     START_BACK,

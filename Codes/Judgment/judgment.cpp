@@ -97,19 +97,13 @@ void Judgment::det_navigation() {
   if(DRIVE_MODE == LINE_TRACE){
     line_trace_mode = true;
 
-    forward    = 30;    
+    mRef_Omega = 0.0;
+    mMax_Omega = RAD_45_DEG;
+    mMin_Omega = MINUS_RAD_45_DEG;
 
-    mRef_Yawrate = 0.0;
-    mMax_Yawrate = RAD_45_DEG;
-    mMin_Yawrate = MINUS_RAD_45_DEG;
-
-    target_yaw_rate = gLine_Trace->line_trace_yaw_rate(mLinevalue, mRef_Yawrate, mMax_Yawrate, mMin_Yawrate);
+    target_omega = gLine_Trace->line_trace_yaw_rate(mLinevalue, mRef_Omega, mMax_Omega, mMin_Omega);
 
     target_velocity = 100;
-    target_omega    = 0.0;
-
-
-
     
   }
   else if(DRIVE_MODE == TRACK){
@@ -259,14 +253,14 @@ void Judgment::det_navigation() {
 		
 		if (mOdo > ref_odo) {
 			TEST_MODE = MODE_06;
-			ref_odo = mOdo - 1800;
+			ref_odo = mOdo + 800;
 		}
       break;
 
     case MODE_06:
       det_navi_log = 6;
 		target_velocity = 400;
-		target_omega = 0.4 * PAI * (ref_odo - mOdo)/800.0;
+		target_omega = 0.4 * PAI * (-mOdo + ref_odo)/800.0;
 		if (target_omega <= 0) {
 			TEST_MODE = MODE_07;
 			ref_odo = 5200;
@@ -290,7 +284,11 @@ void Judgment::det_navigation() {
       det_navi_log = 8;
 		target_velocity = 0.2 * (ref_clock - Jud_Clock->now());
 		target_omega = 0;
+<<<<<<< HEAD
 		if ((target_velocity < 5 ) || (target_velocity > 5000 ) {
+=======
+		if (target_velocity <= 0) {
+>>>>>>> 767d337e601e75e6eb5d6693c014f0e82f6bb644
 			TEST_MODE = MODE_09;
 		}
 

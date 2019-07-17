@@ -49,10 +49,21 @@ void Operation::init() {
 
   gLeft_Motor_ctlModelClass->initialize();
   gRight_Motor_ctlModelClass->initialize();
-  //  gForward->init_pid(0.05,0.01,0.001,dT_4ms);
+  //gForward->init_pid(0.05,0.01,0.001,dT_4ms);
   gForward->init_pid(0.05,0.01,0.001,dT_10ms);
 
   ROBO_MODE  = SET;
+
+  checked_target_velocity = 0;
+  checked_target_omega = 0;
+
+  pre_target_velocity = 0;
+  pre_target_omega = 0;
+
+  monitor_error = false;
+
+
+
 }
 
 /**
@@ -75,6 +86,42 @@ void Operation::setCommand(float velocity, float left_wheel_velocity, float righ
   mTarget_Omega       = target_omega;
 }
 
+void Operation::monitoring_cmd(){
+
+  int diff_velocity;
+  float diff_omega;
+
+  diff_velocity = mTarget_Velocity - pre_target_velocity;
+  if(diff_velocity < 0 ){
+    diff_velocity = -1 * diff_velocity;
+  }
+
+  if(diff_velocity > 1000){
+    checked_target_velocity = pre_target_velocity;
+    monitor_error = true;
+  }else{
+    checked_target_velocity = mTarget_Velocity;
+    pre_target_velocity     = mTarget_Velocity;
+    monitor_error = false;
+  }
+
+  diff_omega = mTarget_Omega - pre_target_omega;
+  if(diff_omega < 0 ){
+    diff_omega = -1.0 * diff_omega;
+  }
+
+  if(diff_omega > 100){
+    checked_target_omega = pre_target_omega;
+    monitor_error = true;
+  }else{
+    checked_target_omega = mTarget_Omega;
+    pre_target_omega     = mTarget_Omega;
+    monitor_error = false;
+  }
+}
+
+
+
 void Operation::set_robo_mode_launch(){
   ROBO_MODE = LAUNCH;
 }
@@ -85,63 +132,67 @@ void Operation::run() {
   float vr;
   float l_pwm;
   float r_pwm;
-    switch(ROBO_MODE){
 
-    case SET:
+  monitoring_cmd();
 
-      break;
+  switch(ROBO_MODE){
 
-    case READY:
+  case SET:
+    
+    break;
 
-      break;
+  case READY:
+
+    break;
 
 
-    case LAUNCH:
-	ROBO_MODE = RUN;
+  case LAUNCH:
+    ROBO_MODE = RUN;
 
-      break;
+    break;
+    
+  case RUN:
+    right_wheel_enc = mRightWheel.getCount();
+    left_wheel_enc  = mLeftWheel.getCount();             // 左モータ回転角度
 
-    case RUN:
-      right_wheel_enc = mRightWheel.getCount();
-      left_wheel_enc  = mLeftWheel.getCount();             // 左モータ回転角度
-
-      //190620 ota
-      vl = (float)mTarget_Velocity;
-      vr = vl;
-      vl = vl - (mTarget_Omega * HALF_TREAD);
-      vr = vr + (mTarget_Omega * HALF_TREAD);
-
-      /*
+    //190620 ota
+    //      vl = (float)mTarget_Velocity;
+    vl = (float)checked_target_velocity;
+    vr = vl;
+    vl = vl - (checked_target_omega * HALF_TREAD);
+    vr = vr + (checked_target_omega * HALF_TREAD);
+    
+    /*
       vl = vl + 0.5;
       vr = vr + 0.5;
-      */
-      gLeft_Motor_ctlModelClass->setIn1(vl);
-      gLeft_Motor_ctlModelClass->setIn2(mLeft_Wheel_Velocity);
-      gLeft_Motor_ctlModelClass->step();
-      l_pwm = gLeft_Motor_ctlModelClass->getOut1();
-      left_motor_pwm = (int)l_pwm;
+    */
+    gLeft_Motor_ctlModelClass->setIn1(vl);
+    gLeft_Motor_ctlModelClass->setIn2(mLeft_Wheel_Velocity);
+    gLeft_Motor_ctlModelClass->step();
+    l_pwm = gLeft_Motor_ctlModelClass->getOut1();
+    left_motor_pwm = (int)l_pwm;
+
+    
+    gRight_Motor_ctlModelClass->setIn1(vr);
+    gRight_Motor_ctlModelClass->setIn2(mRight_Wheel_Velocity);
+    gRight_Motor_ctlModelClass->step();
+    r_pwm = gRight_Motor_ctlModelClass->getOut1();
+    right_motor_pwm = (int)r_pwm;
 
 
-      gRight_Motor_ctlModelClass->setIn1(vr);
-      gRight_Motor_ctlModelClass->setIn2(mRight_Wheel_Velocity);
-      gRight_Motor_ctlModelClass->step();
-      r_pwm = gRight_Motor_ctlModelClass->getOut1();
-      right_motor_pwm = (int)r_pwm;
-
-
-      /*
+    /*
       mTurn = gYawrate_Ctl->YawrateController(mYawrate, mTarget_Yaw_Rate);
       PWM_Gen(mForward, mTurn);
-      */
+    */
       
-      mLeftWheel.setPWM(left_motor_pwm);
-      mRightWheel.setPWM(right_motor_pwm);
+    mLeftWheel.setPWM(left_motor_pwm);
+    mRightWheel.setPWM(right_motor_pwm);
 
-      break;
+    break;
 
-    case ROBO_DEBUG:
-      break;
-    }
+  case ROBO_DEBUG:
+    break;
+  }
 
 }
 

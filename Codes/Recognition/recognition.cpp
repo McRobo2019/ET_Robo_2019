@@ -104,9 +104,9 @@ void Recognition::init(){
 
 void Recognition::run( ) {
   det_line_rgb();
-  //  wheel_odometry(dT_4ms);
+  //wheel_odometry(dT_4ms);
   wheel_odometry(dT_10ms);
-  //  average_dat(dT_4ms);
+  //average_dat(dT_4ms);
   average_dat(dT_10ms);
   det_Movement(); //20180501
 }
