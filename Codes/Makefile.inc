@@ -9,6 +9,7 @@ APPL_CXXOBJS += \
     motor_ctl.o \
     line_tracer.o \
     util.o \
+    color_sensor_calib.o \
     recognition.o \
     judgment.o \
 
