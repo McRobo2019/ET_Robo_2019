@@ -15,8 +15,10 @@
 // Validation result: Not run
 //
 #include "motor_ctl.h"
+#include "parameter.h"
 
 // Model step function
+
 void motor_ctlModelClass::step()
 {
   real_T rtb_Sum3;
@@ -34,7 +36,8 @@ void motor_ctlModelClass::step()
   //   Gain: '<S2>/Ts'
   //   UnitDelay: '<S2>/Unit Delay1'
 
-  rtb_Sum1 = 0.01 * rtb_Sum3 * 0.47782874617737003 + rtDW.UnitDelay1_DSTATE;
+  //  rtb_Sum1 = 0.01 * rtb_Sum3 * 0.47782874617737003 + rtDW.UnitDelay1_DSTATE;
+    rtb_Sum1 = MOTOR_CTL_TS * rtb_Sum3 * MOTOR_CTL_KI + rtDW.UnitDelay1_DSTATE;
 
   // Update for UnitDelay: '<S2>/Unit Delay1'
   rtDW.UnitDelay1_DSTATE = rtb_Sum1;
@@ -42,7 +45,8 @@ void motor_ctlModelClass::step()
   // Sum: '<S2>/Sum3' incorporates:
   //   Gain: '<S2>/Kp'
 
-  rtb_Sum3 = 0.0382262996941896 * rtb_Sum3 + rtb_Sum1;
+  //  rtb_Sum3 = 0.0382262996941896 * rtb_Sum3 + rtb_Sum1;
+    rtb_Sum3 = MOTOR_CTL_KP * rtb_Sum3 + rtb_Sum1;
 
   // Saturate: '<S1>/Saturation'
   if (rtb_Sum3 > 100.0) {

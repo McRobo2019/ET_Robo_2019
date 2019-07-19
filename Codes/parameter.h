@@ -74,6 +74,12 @@ extern float MINUS_RAD_270_DEG;  //
 extern float YAW_LIMIT;
 extern float YAW_STEP;
 
+//Parameter of Motor CTL
+extern float MOTOR_CTL_TS;
+extern float MOTOR_CTL_KI;
+extern float MOTOR_CTL_KP;
+
+
 //LUG
 
 extern int   MAX_LUG_FORWARD;
@@ -98,6 +104,10 @@ extern float GARAGE_X_POS;
 
 extern float ACCEL_GAIN;
 extern float DECEL_GAIN;
+
+
+
+
 
 //Parameter of Area
 extern int START_FORWARD_VAL;

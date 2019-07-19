@@ -76,6 +76,13 @@ float MINUS_RAD_270_DEG  = -4.7124;
 float YAW_LIMIT    = 0.393;   //PI/8 see anago synario
 float YAW_STEP     = 0.00786; //YAW_LIMIT/50 see anago synario
 
+//Parameter of Motor CTL 20190719 ota add
+float MOTOR_CTL_TS = 0.01;
+float MOTOR_CTL_KI = 0.47782874617737003;
+float MOTOR_CTL_KP = 0.0382262996941896;
+
+
+
 //--LUG--LUG--LUG--LUG--LUG--LUG--LUG--LUG--LUG--LUG--LUG--LUG--LUG--LUG--LUG--LUG--
 //--LUG--LUG--LUG--LUG--LUG--LUG--LUG--LUG--LUG--LUG--LUG--LUG--LUG--LUG--LUG--LUG--
 
