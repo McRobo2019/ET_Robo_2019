@@ -89,10 +89,6 @@ public:
 
 
 private:
-
-  static const int8_t INITIAL_WHITE_THRESHOLD;
-  static const int8_t INITIAL_BLACK_THRESHOLD;
-
   const ev3api::ColorSensor& mColorSensor;
   ev3api::Motor& mLeftWheel;
   ev3api::Motor& mRightWheel;

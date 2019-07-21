@@ -37,8 +37,8 @@ using ev3api::Motor;
 
 //It will be moved to the class for log 190414 ota
 #define LOG_RECORD
-#define LOG_SHORT
-//#define LOG_LONG
+//#define LOG_SHORT
+#define LOG_LONG
 #define LOG_SHORT_SIZE 5000
 
 // Device objects
@@ -402,8 +402,9 @@ static void log_dat( ){
 #ifdef LOG_LONG
     if (log_cnt < log_size){
       log_dat_00[log_cnt]  = (int)gRecognition->xvalue;
-      log_dat_01[log_cnt]  = gJudgment->forward;
-      log_dat_03[log_cnt]  = gRecognition->velocity;
+      log_dat_01[log_cnt]  = (int)gRecognition->yvalue;
+      log_dat_02[log_cnt]  = gRecognition->velocity;
+      log_dat_03[log_cnt] =  (int)(gRecognition->abs_angle*1000.0);
     }
 #endif
       break;
@@ -593,7 +594,7 @@ static void export_log_dat( ){
 
 #ifdef LOG_LONG
     case LINE_TRACE:
-      fprintf(fp_wr, "x,ref_speed,forward,velocity\n");   
+      fprintf(fp_wr, "x,y,velocity,anglex1000\n");   
       break;
 
     case TRACK:
@@ -667,7 +668,7 @@ void rec_task(intptr_t exinf) {
     gRecognition->run();
 
     if(gJudgment->line_trace_mode){
-      gRecognition->correct_odometry();
+      //      gRecognition->correct_odometry();
     }
 
     gRecognition->setSonarDistance();

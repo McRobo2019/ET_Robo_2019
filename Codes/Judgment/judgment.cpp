@@ -59,22 +59,6 @@ void Judgment::set_drive_mode_DB(){
 
 
 void Judgment::run() {
-
-  ave_line_val = gAve_line_val->average_500(mLinevalue);
-  ave_yaw_angle_500 = gAve_yaw_angle_500->average_500(mYawangle);
-
-  //  det_on_line(); //it has not been completed yet, so it will not work well 20190414 ota
-
-  det_navigation();
-
-}
-
-/****************************************************************************************/
-//2018 04 21 Kaoru Ota
-//    //https://drive.google.com/open?id=1Ih-fZX68pgRuQWVPbCW-5Oj-Bgrn3pgo
-/****************************************************************************************/
-void Judgment::det_navigation() {
-
   //  float yaw_time;
 
   static float ref_odo;
@@ -86,6 +70,10 @@ void Judgment::det_navigation() {
   static float acl_forward;
   */
   static int ref_clock;
+
+  ave_line_val = gAve_line_val->average_500(mLinevalue);
+  ave_yaw_angle_500 = gAve_yaw_angle_500->average_500(mYawangle);
+
 
   if(DRIVE_MODE == LINE_TRACE){
     line_trace_mode = true;
@@ -298,6 +286,8 @@ void Judgment::det_navigation() {
     }
   }
 }
+
+
 
 /****************************************************************************************/
 //2018 04 21 Kaoru Ota

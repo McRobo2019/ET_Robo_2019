@@ -65,8 +65,6 @@ public:
   bool re_start; //20181112
 
 private:
-  void det_navigation();
-
   bool det_area(float x_left, float y_under, float x_right, float y_top, float x_value, float y_value);
 
   void det_on_line();

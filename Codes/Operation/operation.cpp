@@ -148,16 +148,12 @@ void Operation::run() {
     left_wheel_enc  = mLeftWheel.getCount();             // 左モータ回転角度
 
     //190620 ota
-    //      vl = (float)mTarget_Velocity;
     vl = (float)checked_target_velocity;
     vr = vl;
     vl = vl - (checked_target_omega * HALF_TREAD);
     vr = vr + (checked_target_omega * HALF_TREAD);
     
     /*
-      vl = vl + 0.5;
-      vr = vr + 0.5;
-    */
     gLeft_Motor_ctlModelClass->setIn1(vl);
     gLeft_Motor_ctlModelClass->setIn2(mLeft_Wheel_Velocity);
     gLeft_Motor_ctlModelClass->step();
@@ -170,13 +166,15 @@ void Operation::run() {
     gRight_Motor_ctlModelClass->step();
     r_pwm = gRight_Motor_ctlModelClass->getOut1();
     right_motor_pwm = (int)r_pwm;
-
-
-    /*
-      mTurn = gYawrate_Ctl->YawrateController(mYawrate, mTarget_Yaw_Rate);
-      PWM_Gen(mForward, mTurn);
     */
-      
+
+
+    l_pwm = (0.1*vl) + 0.5;
+    r_pwm = (0.1*vr) + 0.5;
+
+    left_motor_pwm = (int)l_pwm;    
+    right_motor_pwm = (int)r_pwm;
+
     mLeftWheel.setPWM(left_motor_pwm);
     mRightWheel.setPWM(right_motor_pwm);
 

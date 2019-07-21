@@ -71,6 +71,10 @@ extern float MINUS_RAD_180_DEG;  //
 extern float MINUS_RAD_225_DEG;  //
 extern float MINUS_RAD_270_DEG;  //
 
+//Odometry
+extern int X_POS_OFFSET;
+extern int Y_POS_OFFSET;
+
 extern float YAW_LIMIT;
 extern float YAW_STEP;
 

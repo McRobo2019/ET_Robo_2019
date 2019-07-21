@@ -27,18 +27,14 @@ Recognition::Recognition(const ev3api::ColorSensor& colorSensor,
 }
 
 void Recognition::init(){
-  //  int i;
-
-
   Sys_Clock    = new Clock();
   mGyro.reset();
 
   //  real_wheel = WHEEL_R * cos(RAD_6_DEG);
- 
   //real_wheel = WHEEL_R * 1.05; /*180630 temporary value*/
   real_wheel = WHEEL_R;
-  xvalue    = 360.0;
-  yvalue    = 160.0;
+  xvalue    = X_POS_OFFSET;
+  yvalue    = Y_POS_OFFSET;
 
   CORRECT_MODE = ST_1ST;
   pre_sonar_dis = 0;
@@ -47,8 +43,8 @@ void Recognition::init(){
   pre_50mm_x = 0.0;
   pre_50mm_y = 0.0;
 
-  ave_x     = 360.0; //average_x 20181008
-  ave_y     = 160.0; //average_y 20181008
+  ave_x      = X_POS_OFFSET; //average_x 20181008
+  ave_y      = Y_POS_OFFSET; //average_y 20181008
 
   ave_vel_x = 0;    //20181008
   ave_vel_y = 0;    //20181008
@@ -75,28 +71,19 @@ void Recognition::init(){
   abs_angle = 0;
   ave_angle = 0;
 
-  /*
- for (i=0; i<125; i++){
-    angle_dat_500ms[i]    = 0.0;
-    velocity_dat_500ms[i] = 0.0;
-    x_dat_500ms[i]        = 360.0;
-    y_dat_500ms[i]        = 160.0;
-  }
-  */
-  
   robo_stop       = 1;
   robo_forward    = 0;
   robo_back       = 0;
   robo_turn_left  = 0;
   robo_turn_right = 0;
 
-    gAve_angle_dat->init(0.0);          
+  gAve_angle_dat->init(0.0);          
 
-  gAve_x_dat->init(360.0);          
-  gAve_y_dat->init(160.0);
+  gAve_x_dat->init(X_POS_OFFSET);          
+  gAve_y_dat->init(Y_POS_OFFSET);
 
   gAve_vel_x_dat->init(0.0);
-  gAve_vel_y_dat ->init(0.0);
+  gAve_vel_y_dat->init(0.0);
 
   gAve_velo_dat->init(0.0);
   gAve_accel_dat->init(0.0);
@@ -168,9 +155,6 @@ void Recognition::wheel_odometry(float dT) {
   static float right_wheel_velo_input;
   static float right_wheel_velo_prev;
 
-
-
-
   //LPF 10[rad/s]/////////////////////////////////////
   static float Alpfd = 0.9391; // LPF
   static float Blpfd = 1; // LPF
@@ -184,11 +168,6 @@ void Recognition::wheel_odometry(float dT) {
 
   encR =  WheelAngRdeg;
   encL =  WheelAngLdeg;
-
-  //20190703 wheel velocity
-  //  left_wheel_velocity  = ((encL - pre_encL)*RAD_1_DEG*real_wheel)/dT;
-  //  right_wheel_velocity = ((encR - pre_encR)*RAD_1_DEG*real_wheel)/dT;
-  
   
   odo            = ((float)WheelAngLdeg + (float)WheelAngRdeg)/2.0 * RAD_1_DEG * real_wheel; //[mm]
 
@@ -211,8 +190,6 @@ void Recognition::wheel_odometry(float dT) {
   omega = (right_wheel_velocity - left_wheel_velocity)/RoboTread;
 
   relative_angle =  ((float)WheelAngRdeg - (float)WheelAngLdeg) * RAD_1_DEG * real_wheel / RoboTread; //ロボのYaw角[rad]
-  //  relative_angle = relative_angle + correction_angle; //20180701 kota
-
   abs_angle      = relative_angle + correction_angle;
 
   xvalue = xvalue+(odo-odo_prev)*cos(abs_angle);
@@ -226,11 +203,6 @@ void Recognition::wheel_odometry(float dT) {
 
   old_rel_angle=relative_angle;         //過去のYaw角[rad]
   odo_prev = odo;
-
-  //  average_dat(dT);
-  //  det_Movement(); //20180501
-
-  //  pre_velo_0p5sec  =  ave_velo + (ave_accel * 0.5);
 }
 
 void Recognition::average_dat(float dT) {
