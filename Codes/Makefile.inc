@@ -12,6 +12,7 @@ APPL_CXXOBJS += \
     color_sensor_calib.o \
     recognition.o \
     judgment.o \
+    navi.o \
 
 
 SRCLANG := c++

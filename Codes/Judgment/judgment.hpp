@@ -7,6 +7,7 @@
 #include "parameter.h"
 #include "util.hpp"
 #include "line_tracer.hpp"
+#include "navi.hpp"
 
 using namespace std;
 
@@ -72,6 +73,7 @@ private:
   //    StrategyDet *gStrategyDet = new StrategyDet();
   //  Motion_Ctl *gMotion_Ctl = new Motion_Ctl();
   Line_Trace *gLine_Trace = new Line_Trace();
+  Navi       *gNavi       = new Navi();
 
   int   Mmode;
   int   mLinevalue;   //ライン検出値

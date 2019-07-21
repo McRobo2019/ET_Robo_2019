@@ -26,17 +26,17 @@ void Judgment::init() {
   right_line         = false;
   lost_line          = false;
   line_to_map        = false; //181108
-
   line_trace_mode    = true;
+
+  mMax_Forward = 10;
+  det_navi_log = 0;
+  re_start     = false; //181112
+
 
   gAve_line_val->init();
   gAve_yaw_angle_500->init(); //20181108
+  gNavi->init();
 
-  mMax_Forward = 10;
-
-  det_navi_log = 0;
-
-  re_start     = false; //181112
 
 }
 
@@ -78,13 +78,16 @@ void Judgment::run() {
   if(DRIVE_MODE == LINE_TRACE){
     line_trace_mode = true;
 
-    mRef_Omega = 0.0;
-    mMax_Omega = RAD_45_DEG;
-    mMin_Omega = MINUS_RAD_45_DEG;
+    gNavi->run(mOdo, (int)mVelocity, mYawrate, mAve_yaw_angle, (int)mXvalue, (int)mYvalue, (int)mPre_50mm_x, (int)mPre_50mm_y);
+
+    mRef_Omega      = gNavi->ref_omega;
+    mMax_Omega      = gNavi->max_omega;
+    mMin_Omega      = gNavi->min_omega;
+    target_velocity = gNavi->target_velocity;
 
     target_omega = gLine_Trace->line_trace_yaw_rate(mLinevalue, mRef_Omega, mMax_Omega, mMin_Omega);
 
-    target_velocity = 100;
+
     
   }
   else if(DRIVE_MODE == TRACK){
