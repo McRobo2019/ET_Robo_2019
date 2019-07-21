@@ -155,8 +155,7 @@ static void sys_initialize() {
 				 gLeftMotor,
 				 gRightMotor,
 				 gGyroSensor,
-				 gSonarSensor,
-				 gTouchSensor);
+				 gSonarSensor);
 
   gJudgment    = new Judgment();
   gOperation   = new Operation(gGyroSensor,

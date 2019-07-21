@@ -7,7 +7,6 @@
 #include "Motor.h"
 #include "GyroSensor.h"
 #include "SonarSensor.h"
-#include "TouchSensor.h"
 #include "util.hpp"
 
 class Recognition {
@@ -16,12 +15,10 @@ public:
 		     ev3api::Motor& leftWheel,
 		     ev3api::Motor& rightWheel,
 		     ev3api::GyroSensor& gyro,
-		     ev3api::SonarSensor& sonar,
-		     ev3api::TouchSensor& touchSensor);
+		     ev3api::SonarSensor& sonar);
 
   void  init(); //17.0.28 k-ota add
   void  run();
-  void  color_sensor_calib();
   void  det_line_rgb();
 
   void  wheel_odometry(float dT);
@@ -101,7 +98,6 @@ private:
   ev3api::Motor& mRightWheel;
   ev3api::GyroSensor& mGyro;
   ev3api::SonarSensor& mSonar;
-  ev3api::TouchSensor& mTouch;
 
   Average_125_Data *gAve_angle_dat      = new Average_125_Data();
   Average_125_Data *gAve_x_dat          = new Average_125_Data();
@@ -115,18 +111,6 @@ private:
 
   Average_500_Data *gAve_angle_500_dat  = new Average_500_Data();
   
-  enum   Sensor_Calib_Mode{
-    LINE_100,
-    LINE_100_ERROR,
-    LINE_50,
-    LINE_50_ERROR,
-    LINE_0,
-    LINE_0_ERROR,
-    SET_DEFAULT,
-    SET_GAIN_OFFSET,
-    CALIB_DONE
-  };
-
   enum Correct_Mode{
     ST_1ST,
     CN_1ST,
@@ -138,18 +122,9 @@ private:
     DONE
   };
 
-  Sensor_Calib_Mode SENSOR_CALIB_MODE;
   Correct_Mode      CORRECT_MODE;
 
-
-  int    line_100_val;
-  int    line_50_val;
-  int    line_0_val;
-
   int8_t dColor_val[5]; //170814 ota signals for filter of color sensor value.
-  
-  int   line_val_offset = 0;
-  float line_val_gain   = 0.0;
 
   float real_wheel;
   float relative_angle;
