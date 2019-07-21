@@ -333,12 +333,15 @@ void Recognition::det_line_rgb(){
   color_g = (int)rgb_val.g;
   color_b = (int)rgb_val.b;
 
-  /*
+
   adj_brightness = rgb_val.b - COLOR_SENSOR_OFFSET;
   adj_brightness = adj_brightness/COLOR_SENSOR_GAIN;
-  */
+
+
+  /*
   adj_brightness = rgb_val.b - line_val_offset;
   adj_brightness = adj_brightness/line_val_gain;
+  */
 
   if(adj_brightness < 0){
     adj_brightness = 0;

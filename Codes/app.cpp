@@ -18,6 +18,7 @@
 #include "Motor.h"
 
 //sub systemp
+#include "color_sensor_calib.hpp"
 #include "recognition.hpp"
 #include "judgment.hpp"
 #include "operation.hpp"
@@ -64,9 +65,11 @@ Sys_Mode SYS_MODE;
 static int32_t   bt_cmd = 0;      /* Bluetoothコマンド 1:リモートスタート */
 static FILE     *bt     = NULL;   /* Bluetoothファイルハンドル */
 
-static Recognition *gRecognition;
-static Judgment    *gJudgment;
-static Operation   *gOperation;
+static Color_Sensor_Calib   *gColor_Sensor_Calib;
+static Recognition          *gRecognition;
+static Judgment             *gJudgment;
+static Operation            *gOperation;
+
 
 //It will be moved to log class 190414 ota ----
 #ifdef LOG_RECORD
@@ -145,6 +148,9 @@ static void sys_initialize() {
 
   
   // オブジェクトの作成
+  gColor_Sensor_Calib = new Color_Sensor_Calib(gColorSensor,
+				 gTouchSensor);
+
   gRecognition = new Recognition(gColorSensor,
 				 gLeftMotor,
 				 gRightMotor,
@@ -186,6 +192,7 @@ static void sys_initialize() {
 
   while(1){
     if (gTouchSensor.isPressed()){
+      gColor_Sensor_Calib->init();
       gRecognition->init();   //reset gyro
       gOperation->init();  //
       gJudgment->init(); //initialize mode
@@ -754,12 +761,12 @@ void main_task(intptr_t unused) {
   gOperation->arm_reset();
   gOperation->arm_line_trace();
 
-
   //**********************************************************************************//
-  //Color Sensor calibration
+  //Color Sensor calibration 
+  //20190721 move sensoor_calib functin from rec class to color_sensor_calib class
   //**********************************************************************************//
-  gRecognition->color_sensor_calib(); //20180930 kota
-
+  gColor_Sensor_Calib->color_sensor_calib();
+  delete gColor_Sensor_Calib; //delete the class after calib
 
   //REDAY for START
   ev3_sta_cyc(REC_CYC);

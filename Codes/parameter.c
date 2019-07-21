@@ -105,6 +105,8 @@ float GARAGE_X_POS          = 4990; /**** ADJ_PARAMETER   case GRAY_GARAGE:****/
 //int   TAIL_STD_LINE_DET      = 49; /**** ADJ_PARAMETER ****/
 int   TAIL_STD_LINE_DET      = 70;  /**** ADJ_PARAMETER ****/
 
+
+//Color Sensor Paramter
 /*
 int   CALIB_LINE_100_MAX_THRS = 20;
 int   CALIB_LINE_50_MAX_THRS  = 100;

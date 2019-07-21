@@ -16,6 +16,13 @@ Color_Sensor_Calib::Color_Sensor_Calib(const ev3api::ColorSensor& colorSensor,
 void Color_Sensor_Calib::init(){
 
   SENSOR_CALIB_MODE = LINE_100;
+
+  CALIB_LINE_100_MAX_THRS = 20;
+  CALIB_LINE_50_MAX_THRS  = 100;
+  CALIB_LINE_50_MIN_THRS  = 40;
+  CALIB_LINE_0_MIN_THRS   = 50;
+  COLOR_SENSOR_OFFSET    = 18;  /**** ADJ_PARAMETER ****/
+  COLOR_SENSOR_GAIN      = 3.0; /**** ADJ_PARAMETER ****/
 }
 
 void Color_Sensor_Calib::color_sensor_calib( ) {
@@ -195,6 +202,12 @@ void Color_Sensor_Calib::color_sensor_calib( ) {
       sprintf(s,"gain: %f ", line_val_gain);
       ev3_lcd_draw_string(s, 0, 60);
       SENSOR_CALIB_MODE = CALIB_DONE;
+
+      COLOR_SENSOR_OFFSET = line_val_offset;
+      COLOR_SENSOR_GAIN   = line_val_gain;
+
+      
+
       tslp_tsk(1000);
       break;
 

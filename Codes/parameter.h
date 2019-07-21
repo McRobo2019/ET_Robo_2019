@@ -95,6 +95,7 @@ extern int   CALIB_LINE_50_MAX_THRS;
 extern int   CALIB_LINE_50_MIN_THRS;
 extern int   CALIB_LINE_0_MIN_THRS;
 
+//Color Sensor Parameter
 extern int   COLOR_SENSOR_OFFSET;
 extern float COLOR_SENSOR_GAIN;
 
