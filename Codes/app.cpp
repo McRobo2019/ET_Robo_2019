@@ -37,8 +37,8 @@ using ev3api::Motor;
 
 //It will be moved to the class for log 190414 ota
 #define LOG_RECORD
-//#define LOG_SHORT
-#define LOG_LONG
+#define LOG_SHORT
+//#define LOG_LONG
 #define LOG_SHORT_SIZE 5000
 
 // Device objects

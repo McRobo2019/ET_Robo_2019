@@ -153,7 +153,9 @@ void Operation::run() {
     vl = vl - (checked_target_omega * HALF_TREAD);
     vr = vr + (checked_target_omega * HALF_TREAD);
     
-    /*
+
+    //Motor PI CTL
+
     gLeft_Motor_ctlModelClass->setIn1(vl);
     gLeft_Motor_ctlModelClass->setIn2(mLeft_Wheel_Velocity);
     gLeft_Motor_ctlModelClass->step();
@@ -166,14 +168,15 @@ void Operation::run() {
     gRight_Motor_ctlModelClass->step();
     r_pwm = gRight_Motor_ctlModelClass->getOut1();
     right_motor_pwm = (int)r_pwm;
-    */
 
 
+    /*PWM GEN witout CTL
     l_pwm = (0.1*vl) + 0.5;
     r_pwm = (0.1*vr) + 0.5;
 
     left_motor_pwm = (int)l_pwm;    
     right_motor_pwm = (int)r_pwm;
+    */
 
     mLeftWheel.setPWM(left_motor_pwm);
     mRightWheel.setPWM(right_motor_pwm);
