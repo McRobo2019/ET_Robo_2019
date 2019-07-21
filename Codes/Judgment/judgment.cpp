@@ -84,8 +84,8 @@ void Judgment::run() {
     mMax_Omega      = gNavi->max_omega;
     mMin_Omega      = gNavi->min_omega;
     target_velocity = gNavi->target_velocity;
-
-    target_omega = gLine_Trace->line_trace_yaw_rate(mLinevalue, mRef_Omega, mMax_Omega, mMin_Omega);
+    
+    target_omega = gLine_Trace->line_trace_omega(mLinevalue, mRef_Omega, mMax_Omega, mMin_Omega);
 
 
     
