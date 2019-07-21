@@ -505,18 +505,6 @@ void Navi::run(int odo, int velocity, float yaw_angle, float ave_yaw_angle, int 
     }
 }
 
-/****************************************************************************************/
-//2018 04 21 Kaoru Ota
-//
-/****************************************************************************************/
-
-bool Navi::det_area(float x_left, float y_under, float x_right, float y_top, float x_value, float y_value){
-  if(x_left < x_value && x_value <= x_right && y_under < y_value && y_value <= y_top){
-    return true;
-  }else{
-    return false;
-  }
-}
 
 
 

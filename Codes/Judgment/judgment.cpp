@@ -290,50 +290,25 @@ void Judgment::run() {
   }
 }
 
-
-
-/****************************************************************************************/
-//2018 04 21 Kaoru Ota
-//
-/****************************************************************************************/
-
-bool Judgment::det_area(float x_left, float y_under, float x_right, float y_top, float x_value, float y_value){
-  if(x_left < x_value && x_value <= x_right && y_under < y_value && y_value <= y_top){
-    return true;
-  }else{
-    return false;
-  }
-}
-
-/****************************************************************************************/
-//2018 11 07 Kaoru Ota
-//it has not been completed, it do not work well.
-/****************************************************************************************/
-void Judgment::det_on_line(){
-
-}
-
-
-
-void Judgment::setEyeCommand(int     linevalue,
-			      bool    green_flag,
-			      float   xvalue,
-			      float   yvalue,
-			      float   pre_50mm_x, //20180512 kota
-			      float   pre_50mm_y,
-			      float   odo,
-			      float   velocity,
-                              float   pre_velo_0p5sec,
-			      float   yawrate,
-			      float   abs_angle,
-			      float   ave_angle,
-			      int     robo_tail_angle,
-			      bool    robo_stop,
-			      bool    robo_forward,
-			      bool    robo_back,
-			      bool    robo_turn_left,
-			      bool    robo_turn_right,
-                              int16_t sonar_dis){
+void Judgment::set_in_data(int     linevalue,
+			   bool    green_flag,
+			   float   xvalue,
+			   float   yvalue,
+			   float   pre_50mm_x, //20180512 kota
+			   float   pre_50mm_y,
+			   float   odo,
+			   float   velocity,
+			   float   pre_velo_0p5sec,
+			   float   yawrate,
+			   float   abs_angle,
+			   float   ave_angle,
+			   int     robo_tail_angle,
+			   bool    robo_stop,
+			   bool    robo_forward,
+			   bool    robo_back,
+			   bool    robo_turn_left,
+			   bool    robo_turn_right,
+			   int16_t sonar_dis){
 
   mLinevalue       = linevalue;
   mGreen_flag      = green_flag;

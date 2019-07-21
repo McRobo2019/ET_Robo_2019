@@ -673,26 +673,26 @@ void rec_task(intptr_t exinf) {
 
     gRecognition->setSonarDistance();
 
-    gJudgment->setEyeCommand(gRecognition->linevalue,
-                              gRecognition->green_flag,
-                              gRecognition->xvalue,
-                              gRecognition->yvalue,
-			      gRecognition->pre_50mm_x,
-			      gRecognition->pre_50mm_y,
-                              gRecognition->odo,
-                              gRecognition->velocity,
-                              gRecognition->pre_velo_0p5sec, 
-                              gRecognition->yawrate,
-                              gRecognition->abs_angle,
-                              gRecognition->ave_angle,
-			      gTailMotor.getCount(),             //it will be modified later 20190420 ota
-			      gRecognition->robo_stop,
-			      gRecognition->robo_forward,
-			      gRecognition->robo_back,
-			      gRecognition->robo_turn_left,
-			      gRecognition->robo_turn_right,
-			      gRecognition->sonarDistance);
-
+    gJudgment->set_in_data(gRecognition->linevalue,
+			   gRecognition->green_flag,
+			   gRecognition->xvalue,
+			   gRecognition->yvalue,
+			   gRecognition->pre_50mm_x,
+			   gRecognition->pre_50mm_y,
+			   gRecognition->odo,
+			   gRecognition->velocity,
+			   gRecognition->pre_velo_0p5sec, 
+			   gRecognition->yawrate,
+			   gRecognition->abs_angle,
+			   gRecognition->ave_angle,
+			   gTailMotor.getCount(),             //it will be modified later 20190420 ota
+			   gRecognition->robo_stop,
+			   gRecognition->robo_forward,
+			   gRecognition->robo_back,
+			   gRecognition->robo_turn_left,
+			   gRecognition->robo_turn_right,
+			   gRecognition->sonarDistance);
+    
   ext_tsk();
 }
 

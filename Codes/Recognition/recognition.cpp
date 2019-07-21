@@ -36,7 +36,6 @@ void Recognition::init(){
   xvalue    = X_POS_OFFSET;
   yvalue    = Y_POS_OFFSET;
 
-  CORRECT_MODE = ST_1ST;
   pre_sonar_dis = 0;
 
 
@@ -190,7 +189,7 @@ void Recognition::wheel_odometry(float dT) {
   omega = (right_wheel_velocity - left_wheel_velocity)/RoboTread;
 
   relative_angle =  ((float)WheelAngRdeg - (float)WheelAngLdeg) * RAD_1_DEG * real_wheel / RoboTread; //ロボのYaw角[rad]
-  abs_angle      = relative_angle + correction_angle;
+  abs_angle      = relative_angle;
 
   xvalue = xvalue+(odo-odo_prev)*cos(abs_angle);
   yvalue = yvalue+(odo-odo_prev)*sin(abs_angle);
@@ -232,125 +231,6 @@ void Recognition::average_dat(float dT) {
  
   pre_velo_0p5sec  =  ave_velo + (ave_accel * 0.5);
   
-}
-
-void Recognition::correct_odometry( ) {
-
-  /* 2018 LEFT */
-  int   dif_sonar_dis;
-  float correct_x;
-  float correct_y;
-
-  static float x_min;
-  static float x_max;
-  static float ref_y;
-
-
-  switch(CORRECT_MODE){
-  case ST_1ST:
-    if((xvalue > (FIRST_STRAIGHT_AREA[2] - 300))&&(robo_forward == 1)){
-      correction_angle = 0.0 - ave_angle;
-      yvalue = 160.0;
-      CORRECT_MODE = ST_2ND;
-    }
-    
-    break;
-    
-  case ST_2ND:
-    if((yvalue > (SECOND_STRAIGHT_AREA[3] - 300))&&(robo_forward == 1)){
-      correction_angle = RAD_90_DEG - ave_angle;
-      xvalue = 3770.0;
-      CORRECT_MODE = ST_3RD;
-    }
-
-    x_max = 0;
-    break;
-
-  case ST_3RD:
-    if((xvalue > (THIRD_STRAIGHT_AREA[0] + 200))&&(robo_forward == 1)){
-      correction_angle = 0.0 - ave_angle;
-      yvalue = 3270;
-      x_min  = xvalue;
-  //	 CORRECT_MODE = DONE;
-      //      CORRECT_MODE = CN_4TH;
-      CORRECT_MODE = ST_4TH;
-    }
-    
-    if(xvalue > x_max){
-      x_max = xvalue;
-    }
-
-    break;
-
-  case ST_4TH:
-
-    if(xvalue > x_max){
-      x_max = xvalue;
-    }
-
-    if( yvalue < 2000 ){
-      correct_x = 5020 - x_max;
-      xvalue = xvalue + correct_x;
-      CORRECT_MODE = CN_4TH;
-    }
-
-    break;
-
-
-
-  case CN_4TH:
-
-    if(xvalue < x_min){
-      x_min = xvalue;
-      ref_y = yvalue;
-    }
-
-    if( yvalue < 280 ){
-      correct_x = 3580 - x_min;
-      xvalue = xvalue + correct_x;
-
-      correct_y = 450 - ref_y;
-      yvalue = yvalue + correct_y;
-      CORRECT_MODE = LUG;
-      pre_sonar_dis = sonarDistance;
-    }
-
-    /*
-    if((yvalue < FIRST_GRAY_AREA[3]) && (ave_angle > MINUS_RAD_5_DEG)){
-
-    if( (xvalue > 3770 )&&( xvalue < 3970) ){
-    xvalue = 3870;
-    yvalue = 160;
-    }
-
-    CORRECT_MODE = LUG;
-    pre_sonar_dis = sonarDistance;
-
-    }*/
-
-
-
-    break;
-
-  case LUG:
-    dif_sonar_dis = sonarDistance - pre_sonar_dis;
-   
-    if( (dif_sonar_dis > 100) && (pre_sonar_dis < 20) && (xvalue > 4100) ){
-      xvalue       = BACK_LUG_AREA[0] - (pre_sonar_dis * 10);
-      CORRECT_MODE = DONE;
-    }
-
-    pre_sonar_dis = sonarDistance;
-
-    break;
-    
-  case DONE:
-
-    break;
-
-  default:
-    break;
-    }
 }
 
 

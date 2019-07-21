@@ -23,7 +23,6 @@ public:
 
   void  wheel_odometry(float dT);
   void  average_dat(float dT); //20181008
-  void  correct_odometry( );
   void  det_Movement();
   void  setSonarDistance(void);
 
@@ -83,8 +82,6 @@ public:
   int    pre_sonar_dis = 0; // 距離 [cm]
   bool   sonar_stop  = false;
 
-  float correction_angle = 0.0;
-  
   int color_r, color_b, color_g;
 
 
@@ -107,19 +104,6 @@ private:
 
   Average_500_Data *gAve_angle_500_dat  = new Average_500_Data();
   
-  enum Correct_Mode{
-    ST_1ST,
-    CN_1ST,
-    ST_2ND,
-    ST_3RD,
-    CN_4TH,
-    ST_4TH,
-    LUG,
-    DONE
-  };
-
-  Correct_Mode      CORRECT_MODE;
-
   int8_t dColor_val[5]; //170814 ota signals for filter of color sensor value.
 
   float real_wheel;

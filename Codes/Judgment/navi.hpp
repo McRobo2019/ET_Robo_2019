@@ -29,8 +29,6 @@ public:
   bool  lost_line;
 
 private:
-  bool det_area(float x_left, float y_under, float x_right, float y_top, float x_value, float y_value);
-
   enum Zone{
     START_ZONE,
     START_BACK,
