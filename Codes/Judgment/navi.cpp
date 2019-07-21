@@ -34,7 +34,7 @@ void Navi::run(int odo, int velocity, float yaw_angle, float ave_yaw_angle, int 
 
   switch(ZONE){
 
-    /** LEFT 2018 **********************************************************LINE TRACE **/      
+    /** LEFT 2019 ***********************************************************************/      
   case START_ZONE:
     det_navi_log = 1000;
 
@@ -89,7 +89,7 @@ void Navi::run(int odo, int velocity, float yaw_angle, float ave_yaw_angle, int 
     break;
 
 
-/** LEFT 2018 **********************************************************LINE TRACE **/
+/** LEFT 2019 ***********************************************************************/
     case START_BACK:
       det_navi_log = 1010;
       target_velocity = 70;
@@ -100,7 +100,7 @@ void Navi::run(int odo, int velocity, float yaw_angle, float ave_yaw_angle, int 
       break;
 
 
-/** LEFT 2018 **********************************************************LINE TRACE **/
+/** LEFT 2019 ***********************************************************************/
     case FIRST_STRAIGHT_ZONE:
       det_navi_log = 1020;
 
@@ -118,7 +118,6 @@ void Navi::run(int odo, int velocity, float yaw_angle, float ave_yaw_angle, int 
 	target_velocity =  FIRST_STRAIGHT_VELOCITY_VAL;
       }
       //--------------------------------------------------------------TARGET_VELOCITY GEN
-
 
       //REF YAW RATE GEN-------------------------------------------------------------
       min_omega = MINUS_RAD_22P5_DEG;
@@ -144,7 +143,7 @@ void Navi::run(int odo, int velocity, float yaw_angle, float ave_yaw_angle, int 
       break;
 
 
-/** LEFT 2018 **********************************************************LINE TRACE **/
+/** LEFT 2019 ***********************************************************************/
     case ENTER_1ST_CORNER_ZONE:
       det_navi_log = 1030;
       dif_odo = odo - ref_odo;
@@ -177,7 +176,7 @@ void Navi::run(int odo, int velocity, float yaw_angle, float ave_yaw_angle, int 
       }
       break;
 
-/** LEFT 2018 **********************************************************LINE TRACE **/
+/** LEFT 2019 ***********************************************************************/
     case FIRST_CORNER_ZONE:
       det_navi_log = 1040;
 
@@ -212,7 +211,7 @@ void Navi::run(int odo, int velocity, float yaw_angle, float ave_yaw_angle, int 
       }
       break;
 
-/** LEFT 2018 **********************************************************LINE TRACE **/
+/** LEFT 2019 ***********************************************************************/
     case SECOND_STRAIGHT_ZONE:
       det_navi_log = 1050;
 
@@ -246,7 +245,7 @@ void Navi::run(int odo, int velocity, float yaw_angle, float ave_yaw_angle, int 
       }
       break;
       
-/** LEFT 2018 **********************************************************LINE TRACE **/
+/** LEFT 2019 ***********************************************************************/
     case ENTER_2ND_CORNER_ZONE:
       det_navi_log = 1060;
 
@@ -279,7 +278,7 @@ void Navi::run(int odo, int velocity, float yaw_angle, float ave_yaw_angle, int 
       }
       break;
 
-/** LEFT 2018 **********************************************************LINE TRACE **/
+/** LEFT 2019 ***********************************************************************/
     case SECOND_CORNER_ZONE:
       det_navi_log = 1070;
       dif_odo = odo - ref_odo;
@@ -300,9 +299,10 @@ void Navi::run(int odo, int velocity, float yaw_angle, float ave_yaw_angle, int 
       ref_omega = 0;
       max_omega = ref_omega + RAD_22P5_DEG;
 
-      if (pre_50mm_x > THIRD_STRAIGHT_AREA[0]){
-
-	ZONE = THIRD_STRAIGHT_ZONE;
+      //      if (pre_50mm_x > THIRD_STRAIGHT_AREA[0]){
+      //	ZONE = THIRD_STRAIGHT_ZONE;
+      if (pre_50mm_x < THIRD_CORNER_AREA[2]){
+	ZONE = THIRD_CORNER_ZONE;
 	ref_velocity = target_velocity;
 	ref_odo     = odo;
       }else if ((ave_yaw_angle < MINUS_RAD_22P5_DEG) || (ave_yaw_angle > RAD_120_DEG)){ //LOST THE LINE -> MAP TRACE MODE
@@ -313,7 +313,7 @@ void Navi::run(int odo, int velocity, float yaw_angle, float ave_yaw_angle, int 
       }
       break;
 
-/** LEFT 2018 **********************************************************LINE TRACE **/
+/** LEFT 2019 ***********************************************************************/
     case THIRD_STRAIGHT_ZONE:
       det_navi_log = 1080;
       dif_odo = odo - ref_odo;
@@ -349,7 +349,7 @@ void Navi::run(int odo, int velocity, float yaw_angle, float ave_yaw_angle, int 
       break;
 
 
-/** LEFT 2018 **********************************************************LINE TRACE **/
+/** LEFT 2019 ***********************************************************************/
     case THIRD_CORNER_ZONE:
       det_navi_log = 1090;
 
@@ -372,8 +372,10 @@ void Navi::run(int odo, int velocity, float yaw_angle, float ave_yaw_angle, int 
       ref_omega = 0;
       max_omega = ref_omega + RAD_22P5_DEG;
 
-      if (pre_50mm_y < (FOURTH_STRAIGHT_AREA[3] - 110 )){
-	ZONE = FOURTH_STRAIGHT_ZONE;
+      //      if (pre_50mm_y < (FOURTH_STRAIGHT_AREA[3] - 110 )){
+      //	ZONE = FOURTH_STRAIGHT_ZONE;
+      if (pre_50mm_y < FOURTH_CORNER_AREA[3]){
+
 	ref_velocity = target_velocity;
 	ref_odo     = odo;
       }else if ((ave_yaw_angle < MINUS_RAD_145_DEG ) || (ave_yaw_angle > RAD_22P5_DEG)){ //LOST THE LINE -> MAP TRACE MODE
@@ -385,7 +387,7 @@ void Navi::run(int odo, int velocity, float yaw_angle, float ave_yaw_angle, int 
       break;
 
 
-/** LEFT 2018 **********************************************************LINE TRACE **/
+/** LEFT 2019 ***********************************************************************/
     case FOURTH_STRAIGHT_ZONE:
       det_navi_log = 1100;
 
@@ -422,7 +424,7 @@ void Navi::run(int odo, int velocity, float yaw_angle, float ave_yaw_angle, int 
       break;
 
 
-/** LEFT 2018 **********************************************************LINE TRACE **/
+/** LEFT 2019 ***********************************************************************/
       case FOURTH_CORNER_ZONE:
 	det_navi_log = 1110;
 	target_velocity = FOURTH_CORNER_VELOCITY_VAL;
@@ -450,7 +452,7 @@ void Navi::run(int odo, int velocity, float yaw_angle, float ave_yaw_angle, int 
 	break;
 
 
-/** LEFT 2018 **********************************************************LINE TRACE **/
+/** LEFT 2019 ***********************************************************************/
     case FIRST_GRAY_ZONE:
       det_navi_log = 1120;
       target_velocity = FIRST_GRAY_VELOCITY_VAL;
@@ -470,24 +472,24 @@ void Navi::run(int odo, int velocity, float yaw_angle, float ave_yaw_angle, int 
       break;
 
 
-/** LEFT 2018 **********************************************************LINE TRACE **/
+/** LEFT 2019 ***********************************************************************/
     case LUG_ZONE:
       det_navi_log = 1130;
       target_velocity = 0;
       break;
 
 
-/** LEFT 2018 **********************************************************LINE TRACE **/
+/** LEFT 2019 ***********************************************************************/
     case SECOND_GRAY_ZONE:
       det_navi_log = 1140;
       break;
 
-/** LEFT 2018 **********************************************************LINE TRACE **/
+/** LEFT 2019 ***********************************************************************/
     case GARAGE_ZONE:
       det_navi_log = 1150;
       break;
 
-/** LEFT 2018 **********************************************************LINE TRACE **/
+/** LEFT 2019 ***********************************************************************/
     case LOST:
       det_navi_log = 1160;
       target_velocity = 0;
