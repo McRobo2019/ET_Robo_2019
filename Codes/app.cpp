@@ -39,7 +39,7 @@ using ev3api::Motor;
 #define LOG_RECORD
 #define LOG_SHORT
 //#define LOG_LONG
-#define LOG_SHORT_SIZE 5000
+#define LOG_SHORT_SIZE 10000
 
 // Device objects
 // オブジェクトを静的に確保する
@@ -138,7 +138,7 @@ static void sys_initialize() {
   //**********************************************************************************//
   ev3_lcd_fill_rect(0, 0, EV3_LCD_WIDTH, EV3_LCD_HEIGHT, EV3_LCD_WHITE);
   ev3_lcd_set_font(EV3_FONT_MEDIUM);
-  ev3_lcd_draw_string("hirojiren_0715",0, 40);
+  ev3_lcd_draw_string("Line_Trace",0, 40);
   //**********************************************************************************//
   //New Object of Sub System(Class)
   //
@@ -359,42 +359,38 @@ static void log_dat( ){
   case LINE_TRACE:
 #ifdef LOG_SHORT
     if (log_cnt < log_size){    
-      log_dat_00[log_cnt]  = SYS_CLK;
+	log_dat_00[log_cnt]  = SYS_CLK;
 
-      log_dat_01[log_cnt]  = ev3_battery_voltage_mV();
-      log_dat_02[log_cnt]  = ev3_battery_current_mA();
+	log_dat_01[log_cnt]  = LOG_NAVI;
+	log_dat_02[log_cnt]  = gRecognition->linevalue;	    
 
-      log_dat_03[log_cnt]  = gOperation->left_motor_pwm;
-      log_dat_04[log_cnt]  = gOperation->right_motor_pwm;
+	//	log_dat_03[log_cnt]  = gOperation->left_motor_pwm;
+	//	log_dat_04[log_cnt]  = gOperation->right_motor_pwm;
 
-      log_dat_05[log_cnt]  = gRecognition->encL;
-      log_dat_06[log_cnt]  = gRecognition->encR;
+	log_dat_03[log_cnt]  = (int)gRecognition->xvalue;
+	log_dat_04[log_cnt]  = (int)gRecognition->yvalue;
 
-      log_dat_07[log_cnt]  = gRecognition->color_r;
-      log_dat_08[log_cnt]  = gRecognition->color_g;
-      log_dat_09[log_cnt]  = gRecognition->color_b;
+	log_dat_05[log_cnt]  = gRecognition->encL;
+	log_dat_06[log_cnt]  = gRecognition->encR;
 
+	log_dat_07[log_cnt]  = gJudgment->target_velocity;  //20190620 ota
+	log_dat_08[log_cnt]  = gRecognition->odo;
+	log_dat_09[log_cnt]  = gOperation->target_left_velocity;
+	log_dat_10[log_cnt]  = gOperation->target_right_velocity;
 
-      log_dat_10[log_cnt]  = gRecognition->linevalue;	    
+	log_dat_11[log_cnt]  = (int)gRecognition->velocity;
+	log_dat_12[log_cnt]  = (int)gRecognition->left_wheel_velocity;
+	log_dat_13[log_cnt]  = (int)gRecognition->right_wheel_velocity;
+	
+	float_log_00[log_cnt] = gRecognition->yawrate;
+	float_log_01[log_cnt] = gRecognition->abs_angle;
+	float_log_02[log_cnt] = gJudgment->target_omega;
+	float_log_03[log_cnt] = gRecognition->omega;
 
-      log_dat_11[log_cnt]  = (int)gRecognition->xvalue;
-      log_dat_12[log_cnt]  = (int)gRecognition->yvalue;
-      log_dat_13[log_cnt]  = (int)gRecognition->velocity;
-
-      /*
-      float_to_int_x1000   = gRecognition->yawrate * 1000.0;
-      log_dat_14[log_cnt]  =  (int)float_to_int_x1000;
-
-      log_dat_15[log_cnt]  = 
-      
-      float_to_int_x1000   =  gRecognition->abs_angle*1000.0;
-      log_dat_16[log_cnt]  =  (int)float_to_int_x1000;
-      */
-      float_log_00[log_cnt] = gJudgment->target_omega;
-      float_log_01[log_cnt] = gRecognition->abs_angle;
-      float_log_02[log_cnt] = gRecognition->odo;
-      float_log_03[log_cnt] = gRecognition->omega;
-
+	//      log_dat_01[log_cnt]  = ev3_battery_voltage_mV();
+	//	log_dat_07[log_cnt]  = gRecognition->color_r;
+	//      log_dat_08[log_cnt]  = gRecognition->color_g;
+	//      log_dat_09[log_cnt]  = gRecognition->color_b;
     }
       
 #endif
@@ -580,7 +576,7 @@ static void export_log_dat( ){
   switch(SYS_MODE){
 #ifdef LOG_SHORT
     case LINE_TRACE:
-      fprintf(fp_wr, "clock, mV, mA, left_motor_pwm, right_motor_pwm, left_motor_enc, right_motor_enc, color_r, color_g, color_b, line_value, x, y, velocity, target_omega, angle, odo, omega\n");   
+      fprintf(fp_wr, "clock, log_navi, line, x, y, left_motor_enc, right_motor_enc, target_velocity, odo, target_vl, target_vr, velocity, left_wheel_velo, right_wheel_velo, yaw_rate, abs_angle, target_omega, omega\n");   
       break;
 
     case TRACK:

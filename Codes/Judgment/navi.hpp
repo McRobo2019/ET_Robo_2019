@@ -21,7 +21,6 @@ public:
   Average_500_Data *gAve_yaw_angle_500 = new Average_500_Data(); //20181108
 
   float ave_yaw_angle_500; //20181108
-  int   det_navi_log;
   int   target_velocity;
   float min_omega;
   float ref_omega;
@@ -45,6 +44,12 @@ private:
     FOURTH_CORNER_ZONE,
     ENTER_5TH_CORNER_ZONE,
     FIFTH_CORNER_ZONE,
+    SIXTH_CORNER_ZONE,
+    SEVENTH_CORNER_ZONE,
+    EIGHTH_CORNER_ZONE,
+    NINTH_CORNER_ZONE,
+    TENTH_CORNER_ZONE,
+    FIFTH_STRAIGHT_ZONE,
     FIRST_GRAY_ZONE,
     LUG_ZONE,
     BACK_LUG_ZONE,

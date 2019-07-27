@@ -90,17 +90,13 @@ float MOTOR_CTL_TS = 0.01;
 //float MOTOR_CTL_KI = 1.911314984709480; // A
 //float MOTOR_CTL_KI = 2.645418663957758; // B
 //float MOTOR_CTL_KI = 3.397893306150187; // C
-<<<<<<< HEAD
-float MOTOR_CTL_KI = 0.012; // test 
-=======
 float MOTOR_CTL_KI = 0.9; // test 
->>>>>>> fa3f16be6b69556d3e49eadc8816894b340322e5
 
 //float MOTOR_CTL_KP = 0.0382262996941896;
 //float MOTOR_CTL_KP = 0.229357798165138; // A 
 //float MOTOR_CTL_KP = 0.296815974096060; // B
 //float MOTOR_CTL_KP = 0.356778797145770; // C
-float MOTOR_CTL_KP = 0.4013; //test
+float MOTOR_CTL_KP = 0.1; //test
 
 
 //--LUG--LUG--LUG--LUG--LUG--LUG--LUG--LUG--LUG--LUG--LUG--LUG--LUG--LUG--LUG--LUG--
@@ -195,41 +191,26 @@ int FIRST_CORNER_AREA[4]     = {1140,    0, 1745,  605};
 int SECOND_STRAIGHT_AREA[4]  = {1400,  605, 1745,  900};
 int ENTER_2ND_CORNER_AREA[4] = {1400,  900, 1745, 1150};
 int SECOND_CORNER_AREA[4]    = { 950, 1150, 1745, 1800};
-
 //int THIRD_STRAIGHT_AREA[4]   = {0, 0, 0, 0};
-
 int THIRD_CORNER_AREA[4]     = {500, 1100, 950, 1800};
-
 //int FOURTH_STRAIGHT_AREA[4]  = {0,  0, 0, 0};
-
 int FOURTH_CORNER_AREA[4]    = {500, 420, 950,  1100};
-
-
 int ENTER_5TH_CORNER_AREA[4] = {   0,    0,    0,    0};
-
-
-int FIFTH_CORNER_AREA[4]     = {  0, 420, 500,  890};
-int THIRD_STRAIGHT_AREA[4]   = {  0, 890, 500, 1000};
-
-int SIXTH_CORNER_AREA[4]     = {  0, 890, 605, 1800};
-
+int FIFTH_CORNER_AREA[4]     = {  0,   420, 500,  890};
+int THIRD_STRAIGHT_AREA[4]   = {  0,   890, 500, 1100};
+int SIXTH_CORNER_AREA[4]     = {  0,  1100, 605, 1800};
 int FOURTH_STRAIGHT_AREA[4]  = { 605, 1450, 1625, 1800};
-
 int SEVENTH_CORNER_AREA[4]   = {1625, 1090, 2215, 1800};
 int EIGHTH_CORNER_AREA[4]    = {1625,  840, 2215, 1090};
 int NINTH_CORNER_AREA[4]     = {1625,    0, 2075,  840};
 int TENTH_CORNER_AREA[4]     = {2075,    0, 2700,  540};
-
 int FIFTH_STRAIGHT_AREA[4]   = {2120,   540, 2700, 2630};
-
-
 int FIRST_GRAY_AREA[4]       = {3920,    0, 4020,  270};
 int LUG_AREA[4]              = {4020,    0, 4765,  320}; //lug + back lug area 180624 kota
 int BACK_LUG_AREA[4]         = {4390,    0, 4765,  320}; // may not be used
 int SECOND_GRAY_AREA[4]      = {4765,    0, 4915,  320};
 int SEESAW_AREA[4]           = {   0,    0,    0,    0};
 int GARAGE_AREA[4]           = {4915,    0, 5200,  320};
-
 
 //straigt (x0,y0) - (x1,y1)
 //circle (x0,y0,r)
@@ -275,3 +256,4 @@ int CIRCLE_05_LENGTH = 0;
 float CIRCLE_05_ANGLE  = 0;
 
 
+int LOG_NAVI = 0;
