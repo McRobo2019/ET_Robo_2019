@@ -89,8 +89,11 @@ void Judgment::run() {
 
 
     mRef_Omega      = 0.0;
-    mMax_Omega      = RAD_90_DEG;
-    mMin_Omega      = MINUS_RAD_90_DEG;
+    //mMax_Omega      = RAD_90_DEG;
+    //mMin_Omega      = MINUS_RAD_90_DEG;
+    
+    mMax_Omega      = RAD_45_DEG;
+    mMin_Omega      = MINUS_RAD_45_DEG;    
     target_velocity = 200;
 
     target_omega = gLine_Trace->line_trace_omega(mLinevalue, mRef_Omega, mMax_Omega, mMin_Omega);

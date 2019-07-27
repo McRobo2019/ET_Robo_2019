@@ -6,3 +6,5 @@
 *.hpp#
 Documents/~$hirojiren_設計ノート.pptx
 *.c#
+*.cpp#
+Codes/.#parameter.c
