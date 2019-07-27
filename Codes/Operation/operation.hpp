@@ -34,6 +34,9 @@ public:
   void setCommand(float velocity, float left_wheel_velocity, float right_wheel_velocity, int forward, float target_yaw_rate, float yawrate, int target_velocity, float target_omega);
   void set_robo_mode_launch();
 
+  void arm_reset();
+  void arm_line_trace();
+  void arm_control(signed int angle);
   void run();
 
   //190620 ota
@@ -50,6 +53,8 @@ private:
   ev3api::Motor& mRightWheel;
   ev3api::Motor& mArm_Motor;
   ev3api::Motor& mTail_Motor;
+
+  PID *gArm_pwm = new PID();
 
   PID *gForward  = new PID();
   Yawrate_Ctl *gYawrate_Ctl = new Yawrate_Ctl();
@@ -88,6 +93,8 @@ private:
 
   bool  mForward_curve_mode;
    
+  float arm_motor_pwm;
+
   int right_wheel_enc        = 0;
   int left_wheel_enc         = 0;
 
@@ -96,6 +103,8 @@ private:
 
   int   pre_target_velocity = 0;
   float pre_target_omega = 0;
+
+
 
   bool  monitor_error = false;
 

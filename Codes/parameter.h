@@ -9,8 +9,12 @@ extern "C" {
 }
 #endif
 */
+
+//Parameter of System
+extern int SYS_CLK;
+
 //Parameter of Robo
-extern int TAIL_ANGLE_STAND_UP;  /* 完全停止時の角度[度] */
+extern int ARM_ANGLE_LT;
 extern int TAIL_ANGLE_BALANCE_START;
 extern int TAIL_ANGLE_LAUNCH;
 extern int TAIL_ANGLE_RUN;     /* バランス走行時の角度[度] */
@@ -67,8 +71,18 @@ extern float MINUS_RAD_180_DEG;  //
 extern float MINUS_RAD_225_DEG;  //
 extern float MINUS_RAD_270_DEG;  //
 
+//Odometry
+extern int X_POS_OFFSET;
+extern int Y_POS_OFFSET;
+
 extern float YAW_LIMIT;
 extern float YAW_STEP;
+
+//Parameter of Motor CTL
+extern float MOTOR_CTL_TS;
+extern float MOTOR_CTL_KI;
+extern float MOTOR_CTL_KP;
+
 
 //LUG
 
@@ -85,6 +99,7 @@ extern int   CALIB_LINE_50_MAX_THRS;
 extern int   CALIB_LINE_50_MIN_THRS;
 extern int   CALIB_LINE_0_MIN_THRS;
 
+//Color Sensor Parameter
 extern int   COLOR_SENSOR_OFFSET;
 extern float COLOR_SENSOR_GAIN;
 
@@ -96,71 +111,93 @@ extern float ACCEL_GAIN;
 extern float DECEL_GAIN;
 
 //Parameter of Area
-extern int START_FORWARD_VAL;
-extern int FIRST_STRAIGHT_FORWARD_VAL;
-extern int ENTER_1ST_CORNER_FORWARD_VAL;
-extern int FIRST_CORNER_FORWARD_VAL;
-extern int SECOND_STRAIGHT_FORWARD_VAL;
-extern int ENTER_2ND_CORNER_FORWARD_VAL;
-extern int SECOND_CORNER_FORWARD_VAL;
-extern int THIRD_STRAIGHT_FORWARD_VAL;
-extern int THIRD_CORNER_FORWARD_VAL;
-extern int S_CORNER_FORWARD_VAL;
-extern int FOURTH_STRAIGHT_FORWARD_VAL;
-extern int FOURTH_CORNER_FORWARD_VAL;
-extern int ENTER_5TH_CORNER_FORWARD_VAL;
-extern int FIFTH_CORNER_FORWARD_VAL;
-extern int FIRST_GRAY_FORWARD_VAL;
-extern int LUG_FORWARD_VAL;
-extern int BACK_LUG_FORWARD_VAL;
-extern int SECOND_GRAY_FORWARD_VAL;
-extern int SEESAW_FORWARD_VAL;
-extern int GARAGE_FORWARD_VAL;
+extern int START_VELOCITY_VAL;
+extern int FIRST_STRAIGHT_VELOCITY_VAL;
+extern int ENTER_1ST_CORNER_VELOCITY_VAL;
+extern int FIRST_CORNER_VELOCITY_VAL;
+extern int SECOND_STRAIGHT_VELOCITY_VAL;
+extern int ENTER_2ND_CORNER_VELOCITY_VAL;
+extern int SECOND_CORNER_VELOCITY_VAL;
+extern int THIRD_STRAIGHT_VELOCITY_VAL;
+extern int THIRD_CORNER_VELOCITY_VAL;
+extern int S_CORNER_VELOCITY_VAL;
+extern int FOURTH_STRAIGHT_VELOCITY_VAL;
+extern int FOURTH_CORNER_VELOCITY_VAL;
+extern int ENTER_5TH_CORNER_VELOCITY_VAL;
+extern int FIFTH_CORNER_VELOCITY_VAL;
+extern int SIXTH_CORNER_VELOCITY_VAL;
+extern int SEVENTH_CORNER_VELOCITY_VAL;
+extern int EIGHTH_CORNER_VELOCITY_VAL;
+extern int NINTH_CORNER_VELOCITY_VAL;
+extern int TENTH_CORNER_VELOCITY_VAL;
+
+
+extern int FIRST_GRAY_VELOCITY_VAL;
+extern int LUG_VELOCITY_VAL;
+extern int BACK_LUG_VELOCITY_VAL;
+extern int SECOND_GRAY_VELOCITY_VAL;
+extern int SEESAW_VELOCITY_VAL;
+extern int GARAGE_VELOCITY_VAL;
 extern int GOAL_VAL;
 
-extern float START_AREA[4];
-extern float FIRST_STRAIGHT_AREA[4];
-extern float ENTER_1ST_CORNER_AREA[4];
-extern float FIRST_CORNER_AREA[4];
-extern float SECOND_STRAIGHT_AREA[4];
-extern float ENTER_2ND_CORNER_AREA[4];
-extern float SECOND_CORNER_AREA[4];
-extern float THIRD_STRAIGHT_AREA[4];
-extern float THIRD_CORNER_AREA[4];
-extern float S_CORNER_AREA[4];
-extern float FOURTH_STRAIGHT_AREA[4];
-extern float FOURTH_CORNER_AREA[4];
-extern float ENTER_5TH_CORNER_AREA[4];
-extern float FIFTH_CORNER_AREA[4];
-extern float FIRST_GRAY_AREA[4];
-extern float LUG_AREA[4];
-extern float BACK_LUG_AREA[4];
-extern float SECOND_GRAY_AREA[4];
-extern float SEESAW_AREA[4];
-extern float GARAGE_AREA[4];
+extern int START_AREA[4];
+extern int FIRST_STRAIGHT_AREA[4];
+extern int ENTER_1ST_CORNER_AREA[4];
+extern int FIRST_CORNER_AREA[4];
+extern int SECOND_STRAIGHT_AREA[4];
+extern int ENTER_2ND_CORNER_AREA[4];
+extern int SECOND_CORNER_AREA[4];
+extern int THIRD_STRAIGHT_AREA[4];
+extern int THIRD_CORNER_AREA[4];
+extern int S_CORNER_AREA[4];
+extern int FOURTH_STRAIGHT_AREA[4];
+extern int FOURTH_CORNER_AREA[4];
+extern int ENTER_5TH_CORNER_AREA[4];
+extern int FIFTH_CORNER_AREA[4];
+extern int SIXTH_CORNER_AREA[4];
+extern int SEVENTH_CORNER_AREA[4];
+extern int EIGHTH_CORNER_AREA[4];
+extern int NINTH_CORNER_AREA[4];
+extern int TENTH_CORNER_AREA[4];
 
-extern float STRAIGT_01[4];
-extern float CIRCLE_01[3];
-extern float STRAIGT_02[4];
-extern float CIRCLE_02[3];
-extern float STRAIGT_03[4];
-extern float CIRCLE_03[3];
-extern float STRAIGT_04[4];
-extern float CIRCLE_04[3];
-extern float STRAIGT_05[4];
-extern float CIRCLE_05[3];
+extern int FIFTH_STRAIGHT_AREA[4];
 
-extern float CIRCLE_01_LENGTH;
+extern int FIRST_GRAY_AREA[4];
+extern int LUG_AREA[4];
+extern int BACK_LUG_AREA[4];
+extern int SECOND_GRAY_AREA[4];
+extern int SEESAW_AREA[4];
+extern int GARAGE_AREA[4];
+
+extern int STRAIGT_01[4];
+extern int CIRCLE_01[3];
+extern int STRAIGT_02[4];
+extern int CIRCLE_02[3];
+extern int STRAIGT_03[4];
+extern int CIRCLE_03[3];
+extern int STRAIGT_04[4];
+extern int CIRCLE_04[3];
+extern int STRAIGT_05[4];
+extern int CIRCLE_05[3];
+extern int CIRCLE_06[3];
+extern int CIRCLE_07[3];
+extern int CIRCLE_08[3];
+extern int CIRCLE_09[3];
+extern int CIRCLE_10[3];
+
+extern int CIRCLE_01_LENGTH;
 extern float CIRCLE_01_ANGLE;
 
-extern float CIRCLE_02_LENGTH;
+extern int CIRCLE_02_LENGTH;
 extern float CIRCLE_02_ANGLE;
 
-extern float CIRCLE_03_LENGTH;
+extern int CIRCLE_03_LENGTH;
 extern float CIRCLE_03_ANGLE;
 
-extern float CIRCLE_04_LENGTH;
+extern int CIRCLE_04_LENGTH;
 extern float CIRCLE_04_ANGLE;
 
-extern float CIRCLE_05_LENGTH;
+extern int CIRCLE_05_LENGTH;
 extern float CIRCLE_05_ANGLE;
+
+extern int LOG_NAVI;

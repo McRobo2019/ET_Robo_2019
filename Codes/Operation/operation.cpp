@@ -3,12 +3,6 @@
  *****************************************************************************/
 
 #include "operation.hpp"
-#include "Clock.h"
-
-using ev3api::Clock;
-
-Clock*       robo_Clock;
-
 
 // 定数宣言
 const int Operation::LOW    = 30;    // 低速
@@ -41,8 +35,6 @@ Operation::Operation(const
 
 
 void Operation::init() {
-
-  robo_Clock       = new Clock();        
 
   mLeftWheel.reset();
   mRightWheel.reset();
@@ -156,16 +148,14 @@ void Operation::run() {
     left_wheel_enc  = mLeftWheel.getCount();             // 左モータ回転角度
 
     //190620 ota
-    //      vl = (float)mTarget_Velocity;
     vl = (float)checked_target_velocity;
     vr = vl;
     vl = vl - (checked_target_omega * HALF_TREAD);
     vr = vr + (checked_target_omega * HALF_TREAD);
     
-    /*
-      vl = vl + 0.5;
-      vr = vr + 0.5;
-    */
+
+    //Motor PI CTL
+
     gLeft_Motor_ctlModelClass->setIn1(vl);
     gLeft_Motor_ctlModelClass->setIn2(mLeft_Wheel_Velocity);
     gLeft_Motor_ctlModelClass->step();
@@ -180,13 +170,17 @@ void Operation::run() {
     right_motor_pwm = (int)r_pwm;
 
 
-    /*
-      mTurn = gYawrate_Ctl->YawrateController(mYawrate, mTarget_Yaw_Rate);
-      PWM_Gen(mForward, mTurn);
+    /*PWM GEN witout CTL
+    l_pwm = (0.1*vl) + 0.5;
+    r_pwm = (0.1*vr) + 0.5;
+
+    left_motor_pwm = (int)l_pwm;    
+    right_motor_pwm = (int)r_pwm;
     */
-      
+
     mLeftWheel.setPWM(left_motor_pwm);
     mRightWheel.setPWM(right_motor_pwm);
+
 
     break;
 
@@ -197,83 +191,86 @@ void Operation::run() {
 }
 
 
-//2017.07.28 k-ota copy from 3-apex
-//*****************************************************************************
-// 関数名 : tail_control
-// 引数 : angle (モータ目標角度[度])
-// 返り値 : 無し
-// 概要 : 走行体完全停止用モータの角度制御
-//*****************************************************************************
-
-/*
-void Operation::tail_control(signed int angle)
-{
-  tail_motor_pwm = gTail_pwm->calc_pid(angle, mTail_Motor.getCount());
-  tail_motor_pwm = tail_motor_pwm*0.1;
-
-  if (tail_motor_pwm > PWM_ABS_MAX)
-    {
-      tail_motor_pwm = PWM_ABS_MAX;
-    }
-  else if (tail_motor_pwm < -PWM_ABS_MAX)
-    {
-      tail_motor_pwm = -PWM_ABS_MAX;
-    }
-
-  if (tail_motor_pwm == 0)
-    {
-      //17.07.28 kota modify//        ev3_motor_stop(tail_motor, true);
-      mTail_Motor.stop();
-    }
-  else
-    {
-      //17.07.28 kota modify//        ev3_motor_set_power(tail_motor, (signed char)pwm);
-      mTail_Motor.setPWM((signed int)tail_motor_pwm);
-    }
-}
-*/
 
 
-/*
-void Operation::tail_reset(){
+
+void Operation::arm_reset(){
   int32_t angle    = 0;
   int32_t angle_1d = 0;
 
-  mTail_Motor.setPWM(-10);
+  mArm_Motor.setPWM(-10);
   angle = 0;
   angle_1d = 1;
 
   while(1){
     if(angle == angle_1d){
-      mTail_Motor.stop();
-      mTail_Motor.reset();
+      mArm_Motor.stop();
+      mArm_Motor.reset();
       break;
     }
     else{
       angle_1d = angle;
       tslp_tsk(1000);
-      angle = mTail_Motor.getCount();
+      angle = mArm_Motor.getCount();
     }
   }
-  mTail_Motor.stop();
-  mTail_Motor.reset();
+  mArm_Motor.stop();
+  mArm_Motor.reset();
 }
-*/
 
-/*
-void Operation::tail_stand_up(){
+
+void Operation::arm_line_trace(){
     while(1){
-      if(mTail_Motor.getCount() == TAIL_ANGLE_STAND_UP){
-	mTail_Motor.stop();
+      if(mArm_Motor.getCount() == ARM_ANGLE_LT){
+	mArm_Motor.stop();
 	break;
       }
       else{
-	mTail_Motor.setPWM(5);
+	mArm_Motor.setPWM(5);
       }
     }
-    mTail_Motor.stop();
-} //tail for gyro reset and color sensor calibration
-*/
+    mArm_Motor.stop();
+} //arm for gyro reset and color sensor calibration
+
+
+//2017.07.28 k-ota copy from 3-apex
+//*****************************************************************************
+// 関数名 : arm_control
+// 引数 : angle (モータ目標角度[度])
+// 返り値 : 無し
+// 概要 : 走行体完全停止用モータの角度制御
+//*****************************************************************************
+
+
+void Operation::arm_control(signed int angle)
+  
+{
+  arm_motor_pwm = gArm_pwm->calc_pid(angle, mArm_Motor.getCount());
+  arm_motor_pwm = arm_motor_pwm*0.1;
+
+  if (arm_motor_pwm > PWM_ABS_MAX)
+    {
+      arm_motor_pwm = PWM_ABS_MAX;
+    }
+  else if (arm_motor_pwm < -PWM_ABS_MAX)
+    {
+      arm_motor_pwm = -PWM_ABS_MAX;
+    }
+
+  if (arm_motor_pwm == 0)
+    {
+      //17.07.28 kota modify//        ev3_motor_stop(arm_motor, true);
+      mArm_Motor.stop();
+    }
+  else
+    {
+      //17.07.28 kota modify//        ev3_motor_set_power(arm_motor, (signed char)pwm);
+      mArm_Motor.setPWM((signed int)arm_motor_pwm);
+    }
+}
+
+
+
 
 
 void Operation::PWM_Gen(int mForward, float mTurn){

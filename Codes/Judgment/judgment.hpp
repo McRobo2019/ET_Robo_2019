@@ -7,6 +7,7 @@
 #include "parameter.h"
 #include "util.hpp"
 #include "line_tracer.hpp"
+#include "navi.hpp"
 
 using namespace std;
 
@@ -18,25 +19,25 @@ public:
 	void set_drive_mode_TK();
 	void set_drive_mode_DB();
 	void run();
-	void setEyeCommand(int     linevalue,
-			   bool    green_flag,
-			   float   xvalue,
-			   float   yvalue,
-			   float   pre_50mm_x,
-			   float   pre_50mm_y,
-			   float   odo,
-                           float   velocity,
-                           float   pre_velo_0p5sec,
-			   float   yawrate,
-			   float   abs_angle,
-			   float   ave_angle,
-			   int     robo_tail_angle,
-			   bool    robo_stop,
-			   bool    robo_forward,
-			   bool    robo_back,
-			   bool    robo_turn_left,
-			   bool    robo_turn_right,
-			   int16_t sonar_dis);
+	void set_in_data(int     linevalue,
+			 bool    green_flag,
+			 float   xvalue,
+			 float   yvalue,
+			 float   pre_50mm_x,
+			 float   pre_50mm_y,
+			 float   odo,
+			 float   velocity,
+			 float   pre_velo_0p5sec,
+			 float   yawrate,
+			 float   abs_angle,
+			 float   ave_angle,
+			 int     robo_tail_angle,
+			 bool    robo_stop,
+			 bool    robo_forward,
+			 bool    robo_back,
+			 bool    robo_turn_left,
+			 bool    robo_turn_right,
+			 int16_t sonar_dis);
 
   Average_500_Data *gAve_line_val      = new Average_500_Data();
   Average_500_Data *gAve_yaw_angle_500 = new Average_500_Data(); //20181108
@@ -65,15 +66,10 @@ public:
   bool re_start; //20181112
 
 private:
-  void det_navigation();
-
-  bool det_area(float x_left, float y_under, float x_right, float y_top, float x_value, float y_value);
-
-  void det_on_line();
-  
   //    StrategyDet *gStrategyDet = new StrategyDet();
   //  Motion_Ctl *gMotion_Ctl = new Motion_Ctl();
   Line_Trace *gLine_Trace = new Line_Trace();
+  Navi       *gNavi       = new Navi();
 
   int   Mmode;
   int   mLinevalue;   //ライン検出値

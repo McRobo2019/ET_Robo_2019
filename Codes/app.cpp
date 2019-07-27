@@ -1,5 +1,3 @@
-
-
 //Hirojiren Proto System
 //Date:2019.4.13
 //Author:Kaoru Ota
@@ -18,9 +16,9 @@
 #include "ColorSensor.h"
 #include "GyroSensor.h"
 #include "Motor.h"
-#include "Clock.h"
 
 //sub systemp
+#include "color_sensor_calib.hpp"
 #include "recognition.hpp"
 #include "judgment.hpp"
 #include "operation.hpp"
@@ -36,13 +34,12 @@ using ev3api::GyroSensor;
 using ev3api::TouchSensor;
 using ev3api::SonarSensor;
 using ev3api::Motor;
-using ev3api::Clock;
 
 //It will be moved to the class for log 190414 ota
 #define LOG_RECORD
 #define LOG_SHORT
 //#define LOG_LONG
-#define LOG_SHORT_SIZE 5000
+#define LOG_SHORT_SIZE 10000
 
 // Device objects
 // オブジェクトを静的に確保する
@@ -57,7 +54,6 @@ Motor       gArmMotor    (PORT_C);
 Motor       gLeftMotor   (PORT_D);
 
 
-
 enum Sys_Mode{
   LINE_TRACE,
   TRACK,
@@ -66,14 +62,14 @@ enum Sys_Mode{
 
 Sys_Mode SYS_MODE;
 
-Clock* Sys_Clock;
-
 static int32_t   bt_cmd = 0;      /* Bluetoothコマンド 1:リモートスタート */
 static FILE     *bt     = NULL;   /* Bluetoothファイルハンドル */
 
-static Recognition *gRecognition;
-static Judgment    *gJudgment;
-static Operation   *gOperation;
+static Color_Sensor_Calib   *gColor_Sensor_Calib;
+static Recognition          *gRecognition;
+static Judgment             *gJudgment;
+static Operation            *gOperation;
+
 
 //It will be moved to log class 190414 ota ----
 #ifdef LOG_RECORD
@@ -142,7 +138,7 @@ static void sys_initialize() {
   //**********************************************************************************//
   ev3_lcd_fill_rect(0, 0, EV3_LCD_WIDTH, EV3_LCD_HEIGHT, EV3_LCD_WHITE);
   ev3_lcd_set_font(EV3_FONT_MEDIUM);
-  ev3_lcd_draw_string("hirojiren_alpha_0525",0, 40);
+  ev3_lcd_draw_string("Line_Trace",0, 40);
   //**********************************************************************************//
   //New Object of Sub System(Class)
   //
@@ -152,14 +148,14 @@ static void sys_initialize() {
 
   
   // オブジェクトの作成
-  Sys_Clock       = new Clock();
+  gColor_Sensor_Calib = new Color_Sensor_Calib(gColorSensor,
+				 gTouchSensor);
 
   gRecognition = new Recognition(gColorSensor,
 				 gLeftMotor,
 				 gRightMotor,
 				 gGyroSensor,
-				 gSonarSensor,
-				 gTouchSensor);
+				 gSonarSensor);
 
   gJudgment    = new Judgment();
   gOperation   = new Operation(gGyroSensor,
@@ -167,16 +163,6 @@ static void sys_initialize() {
 			       gRightMotor,
 			       gArmMotor,
 			       gTailMotor);
-
-  //**********************************************************************************//
-  //Set Tail Initial position
-  //
-  //**********************************************************************************//
-
-  //---- 190414 it will be changed later ota
-  //  gOperation->tail_reset();
-  //  gOperation->tail_stand_up();
-  //190414 it will be changed later ota ----
 
   //**********************************************************************************//
   //Display Robot Status
@@ -205,6 +191,7 @@ static void sys_initialize() {
 
   while(1){
     if (gTouchSensor.isPressed()){
+      gColor_Sensor_Calib->init();
       gRecognition->init();   //reset gyro
       gOperation->init();  //
       gJudgment->init(); //initialize mode
@@ -372,42 +359,38 @@ static void log_dat( ){
   case LINE_TRACE:
 #ifdef LOG_SHORT
     if (log_cnt < log_size){    
-      log_dat_00[log_cnt]  = Sys_Clock->now();
+	log_dat_00[log_cnt]  = SYS_CLK;
 
-      log_dat_01[log_cnt]  = ev3_battery_voltage_mV();
-      log_dat_02[log_cnt]  = ev3_battery_current_mA();
+	log_dat_01[log_cnt]  = LOG_NAVI;
+	log_dat_02[log_cnt]  = gRecognition->linevalue;	    
 
-      log_dat_03[log_cnt]  = gOperation->left_motor_pwm;
-      log_dat_04[log_cnt]  = gOperation->right_motor_pwm;
+	//	log_dat_03[log_cnt]  = gOperation->left_motor_pwm;
+	//	log_dat_04[log_cnt]  = gOperation->right_motor_pwm;
 
-      log_dat_05[log_cnt]  = gRecognition->encL;
-      log_dat_06[log_cnt]  = gRecognition->encR;
+	log_dat_03[log_cnt]  = (int)gRecognition->xvalue;
+	log_dat_04[log_cnt]  = (int)gRecognition->yvalue;
 
-      log_dat_07[log_cnt]  = gRecognition->color_r;
-      log_dat_08[log_cnt]  = gRecognition->color_g;
-      log_dat_09[log_cnt]  = gRecognition->color_b;
+	log_dat_05[log_cnt]  = gRecognition->encL;
+	log_dat_06[log_cnt]  = gRecognition->encR;
 
+	log_dat_07[log_cnt]  = gJudgment->target_velocity;  //20190620 ota
+	log_dat_08[log_cnt]  = gRecognition->odo;
+	log_dat_09[log_cnt]  = gOperation->target_left_velocity;
+	log_dat_10[log_cnt]  = gOperation->target_right_velocity;
 
-      log_dat_10[log_cnt]  = gRecognition->linevalue;	    
+	log_dat_11[log_cnt]  = (int)gRecognition->velocity;
+	log_dat_12[log_cnt]  = (int)gRecognition->left_wheel_velocity;
+	log_dat_13[log_cnt]  = (int)gRecognition->right_wheel_velocity;
+	
+	float_log_00[log_cnt] = gRecognition->yawrate;
+	float_log_01[log_cnt] = gRecognition->abs_angle;
+	float_log_02[log_cnt] = gJudgment->target_omega;
+	float_log_03[log_cnt] = gRecognition->omega;
 
-      log_dat_11[log_cnt]  = (int)gRecognition->xvalue;
-      log_dat_12[log_cnt]  = (int)gRecognition->yvalue;
-      log_dat_13[log_cnt]  = (int)gRecognition->velocity;
-
-      /*
-      float_to_int_x1000   = gRecognition->yawrate * 1000.0;
-      log_dat_14[log_cnt]  =  (int)float_to_int_x1000;
-
-      log_dat_15[log_cnt]  = 
-      
-      float_to_int_x1000   =  gRecognition->abs_angle*1000.0;
-      log_dat_16[log_cnt]  =  (int)float_to_int_x1000;
-      */
-      float_log_00[log_cnt] = gJudgment->target_omega;
-      float_log_01[log_cnt] = gRecognition->abs_angle;
-      float_log_02[log_cnt] = gRecognition->odo;
-      float_log_03[log_cnt] = gRecognition->omega;
-
+	//      log_dat_01[log_cnt]  = ev3_battery_voltage_mV();
+	//	log_dat_07[log_cnt]  = gRecognition->color_r;
+	//      log_dat_08[log_cnt]  = gRecognition->color_g;
+	//      log_dat_09[log_cnt]  = gRecognition->color_b;
     }
       
 #endif
@@ -415,8 +398,9 @@ static void log_dat( ){
 #ifdef LOG_LONG
     if (log_cnt < log_size){
       log_dat_00[log_cnt]  = (int)gRecognition->xvalue;
-      log_dat_01[log_cnt]  = gJudgment->forward;
-      log_dat_03[log_cnt]  = gRecognition->velocity;
+      log_dat_01[log_cnt]  = (int)gRecognition->yvalue;
+      log_dat_02[log_cnt]  = gRecognition->velocity;
+      log_dat_03[log_cnt] =  (int)(gRecognition->abs_angle*1000.0);
     }
 #endif
       break;
@@ -425,7 +409,7 @@ static void log_dat( ){
     case TRACK:
 #ifdef LOG_SHORT
       if (log_cnt < log_size){
-	log_dat_00[log_cnt]  = Sys_Clock->now();
+	log_dat_00[log_cnt]  = SYS_CLK;
 
 	log_dat_01[log_cnt]  = gJudgment->det_navi_log;
 	log_dat_02[log_cnt]  = ev3_battery_current_mA();
@@ -479,7 +463,7 @@ static void log_dat( ){
 #ifdef LOG_SHORT
 
       if (log_cnt < log_size){
-	log_dat_00[log_cnt]  = Sys_Clock->now();
+	log_dat_00[log_cnt]  = SYS_CLK;
 
 	log_dat_01[log_cnt]  = gJudgment->det_navi_log;
 	log_dat_02[log_cnt]  = ev3_battery_current_mA();
@@ -592,7 +576,7 @@ static void export_log_dat( ){
   switch(SYS_MODE){
 #ifdef LOG_SHORT
     case LINE_TRACE:
-      fprintf(fp_wr, "clock, mV, mA, left_motor_pwm, right_motor_pwm, left_motor_enc, right_motor_enc, color_r, color_g, color_b, line_value, x, y, velocity, target_omega, angle, odo, omega\n");   
+      fprintf(fp_wr, "clock, log_navi, line, x, y, left_motor_enc, right_motor_enc, target_velocity, odo, target_vl, target_vr, velocity, left_wheel_velo, right_wheel_velo, yaw_rate, abs_angle, target_omega, omega\n");   
       break;
 
     case TRACK:
@@ -606,7 +590,7 @@ static void export_log_dat( ){
 
 #ifdef LOG_LONG
     case LINE_TRACE:
-      fprintf(fp_wr, "x,ref_speed,forward,velocity\n");   
+      fprintf(fp_wr, "x,y,velocity,anglex1000\n");   
       break;
 
     case TRACK:
@@ -680,31 +664,31 @@ void rec_task(intptr_t exinf) {
     gRecognition->run();
 
     if(gJudgment->line_trace_mode){
-      gRecognition->correct_odometry();
+      //      gRecognition->correct_odometry();
     }
 
     gRecognition->setSonarDistance();
 
-    gJudgment->setEyeCommand(gRecognition->linevalue,
-                              gRecognition->green_flag,
-                              gRecognition->xvalue,
-                              gRecognition->yvalue,
-			      gRecognition->pre_50mm_x,
-			      gRecognition->pre_50mm_y,
-                              gRecognition->odo,
-                              gRecognition->velocity,
-                              gRecognition->pre_velo_0p5sec, 
-                              gRecognition->yawrate,
-                              gRecognition->abs_angle,
-                              gRecognition->ave_angle,
-			      gTailMotor.getCount(),             //it will be modified later 20190420 ota
-			      gRecognition->robo_stop,
-			      gRecognition->robo_forward,
-			      gRecognition->robo_back,
-			      gRecognition->robo_turn_left,
-			      gRecognition->robo_turn_right,
-			      gRecognition->sonarDistance);
-
+    gJudgment->set_in_data(gRecognition->linevalue,
+			   gRecognition->green_flag,
+			   gRecognition->xvalue,
+			   gRecognition->yvalue,
+			   gRecognition->pre_50mm_x,
+			   gRecognition->pre_50mm_y,
+			   gRecognition->odo,
+			   gRecognition->velocity,
+			   gRecognition->pre_velo_0p5sec, 
+			   gRecognition->yawrate,
+			   gRecognition->abs_angle,
+			   gRecognition->ave_angle,
+			   gTailMotor.getCount(),             //it will be modified later 20190420 ota
+			   gRecognition->robo_stop,
+			   gRecognition->robo_forward,
+			   gRecognition->robo_back,
+			   gRecognition->robo_turn_left,
+			   gRecognition->robo_turn_right,
+			   gRecognition->sonarDistance);
+    
   ext_tsk();
 }
 
@@ -768,19 +752,19 @@ void main_task(intptr_t unused) {
   sys_initialize();
 
   //**********************************************************************************//
-  //Color Sensor calibration
+  //Reset angle of arm
   //**********************************************************************************//
-  gRecognition->color_sensor_calib(); //20180930 kota
+  gOperation->arm_reset();
+  gOperation->arm_line_trace();
+
   //**********************************************************************************//
-  //Reset angle of tail
+  //Color Sensor calibration 
+  //20190721 move sensoor_calib functin from rec class to color_sensor_calib class
   //**********************************************************************************//
+  gColor_Sensor_Calib->color_sensor_calib();
+  delete gColor_Sensor_Calib; //delete the class after calib
+
   //REDAY for START
-
-  //---- it will be chaged ota 20190414
-  //gOperation->tail_reset();
-  //gOperation->tail_stand_up();
-  //it will be chaged ota 20190414 ----
-
   ev3_sta_cyc(REC_CYC);
 
   ev3_lcd_set_font(EV3_FONT_MEDIUM);

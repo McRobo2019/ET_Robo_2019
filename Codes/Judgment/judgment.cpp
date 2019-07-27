@@ -8,19 +8,12 @@
 #include <stdlib.h>
 #include "ev3api.h"
 #include "judgment.hpp"
-#include "Clock.h"
-
-using ev3api::Clock;
-Clock*       Jud_Clock;
-
 
 Judgment::Judgment() {
 
 }
 
 void Judgment::init() {
-
-  Jud_Clock       = new Clock();        
 
   ZONE               = START_ZONE;
   DRIVE_MODE         = LINE_TRACE;
@@ -33,17 +26,17 @@ void Judgment::init() {
   right_line         = false;
   lost_line          = false;
   line_to_map        = false; //181108
-
   line_trace_mode    = true;
+
+  mMax_Forward = 10;
+  det_navi_log = 0;
+  re_start     = false; //181112
+
 
   gAve_line_val->init();
   gAve_yaw_angle_500->init(); //20181108
+  gNavi->init();
 
-  mMax_Forward = 10;
-
-  det_navi_log = 0;
-
-  re_start     = false; //181112
 
 }
 
@@ -66,22 +59,6 @@ void Judgment::set_drive_mode_DB(){
 
 
 void Judgment::run() {
-
-  ave_line_val = gAve_line_val->average_500(mLinevalue);
-  ave_yaw_angle_500 = gAve_yaw_angle_500->average_500(mYawangle);
-
-  //  det_on_line(); //it has not been completed yet, so it will not work well 20190414 ota
-
-  det_navigation();
-
-}
-
-/****************************************************************************************/
-//2018 04 21 Kaoru Ota
-//    //https://drive.google.com/open?id=1Ih-fZX68pgRuQWVPbCW-5Oj-Bgrn3pgo
-/****************************************************************************************/
-void Judgment::det_navigation() {
-
   //  float yaw_time;
 
   static float ref_odo;
@@ -92,19 +69,24 @@ void Judgment::det_navigation() {
   static int   ref_forward;
   static float acl_forward;
   */
-  static uint ref_clock;
+  static int ref_clock;
+
+  ave_line_val = gAve_line_val->average_500(mLinevalue);
+  ave_yaw_angle_500 = gAve_yaw_angle_500->average_500(mYawangle);
+
 
   if(DRIVE_MODE == LINE_TRACE){
     line_trace_mode = true;
 
-    mRef_Omega = 0.0;
-    mMax_Omega = RAD_45_DEG;
-    mMin_Omega = MINUS_RAD_45_DEG;
+    gNavi->run(mOdo, (int)mVelocity, mYawrate, mAve_yaw_angle, (int)mXvalue, (int)mYvalue, (int)mPre_50mm_x, (int)mPre_50mm_y);
 
-    target_omega = gLine_Trace->line_trace_yaw_rate(mLinevalue, mRef_Omega, mMax_Omega, mMin_Omega);
 
-    target_velocity = 100;
-    
+    mRef_Omega      = gNavi->ref_omega;
+    mMax_Omega      = gNavi->max_omega;
+    mMin_Omega      = gNavi->min_omega;
+    target_velocity = gNavi->target_velocity;
+
+    target_omega = gLine_Trace->line_trace_omega(mLinevalue, mRef_Omega, mMax_Omega, mMin_Omega);
   }
   else if(DRIVE_MODE == TRACK){
     line_trace_mode    = false;
@@ -116,7 +98,7 @@ void Judgment::det_navigation() {
       target_velocity = 0;
       target_omega    = 0.0;
 
-      ref_clock = Jud_Clock->now() + 499; //0.5sec
+      ref_clock = SYS_CLK + 499; //0.5sec
       ref_odo   = mOdo + 4399;
       TEST_MODE = MODE_01;
 
@@ -128,9 +110,9 @@ void Judgment::det_navigation() {
       target_velocity = 0;
       target_omega    = 0.0;
 
-      if(Jud_Clock->now() > ref_clock){
+      if(SYS_CLK > ref_clock){
 	TEST_MODE = MODE_02;
-	ref_clock = Jud_Clock->now();
+	ref_clock = SYS_CLK;
       }
       break;
 
@@ -138,8 +120,8 @@ void Judgment::det_navigation() {
       det_navi_log = 300000+ref_odo;
 
       target_omega    = 0.0;
-      //      target_velocity = 200*(Jud_Clock->now() - ref_clock);
-      target_velocity = 0.2*(Jud_Clock->now() - ref_clock);
+      //      target_velocity = 200*(SYS_CLK - ref_clock);
+      target_velocity = 0.2*(SYS_CLK - ref_clock);
       if(target_velocity > 399){
 	target_velocity = 400;
 	TEST_MODE = MODE_03;
@@ -194,7 +176,7 @@ void Judgment::det_navigation() {
       target_velocity = 0;
       target_omega    = 0.0;
 
-      ref_clock = Jud_Clock->now() + 500; //0.5sec
+      ref_clock = SYS_CLK + 500; //0.5sec
       ref_odo   = mOdo + 1200;
       TEST_MODE = MODE_01;
 
@@ -206,16 +188,16 @@ void Judgment::det_navigation() {
       target_velocity = 0;
       target_omega    = 0.0;
 
-      if(Jud_Clock->now() > ref_clock){
+      if(SYS_CLK > ref_clock){
 	TEST_MODE = MODE_02;
-	ref_clock = Jud_Clock->now();
+	ref_clock = SYS_CLK;
       }
       break;
 
     case MODE_02:
       det_navi_log = 2;
       target_omega    = 0.0;
-      target_velocity = 0.2*(Jud_Clock->now() - ref_clock);
+      target_velocity = 0.2*(SYS_CLK - ref_clock);
       if(target_velocity >= 400){
 	target_velocity = 400;
 	TEST_MODE = MODE_03;
@@ -275,14 +257,14 @@ void Judgment::det_navigation() {
 		if (mOdo > ref_odo) {
 			TEST_MODE = MODE_08;
 			ref_odo = mOdo + 400;
-			ref_clock = Jud_Clock->now() + 2000;
+			ref_clock = SYS_CLK + 2000;
 		}
 
       break;
 
     case MODE_08:
       det_navi_log = 8;
-		target_velocity = 0.2 * (ref_clock - Jud_Clock->now());
+		target_velocity = 0.2 * (ref_clock - SYS_CLK);
 		target_omega = 0;
 		if (target_velocity <= 0) {
 			TEST_MODE = MODE_09;
@@ -306,48 +288,25 @@ void Judgment::det_navigation() {
   }
 }
 
-/****************************************************************************************/
-//2018 04 21 Kaoru Ota
-//
-/****************************************************************************************/
-
-bool Judgment::det_area(float x_left, float y_under, float x_right, float y_top, float x_value, float y_value){
-  if(x_left < x_value && x_value <= x_right && y_under < y_value && y_value <= y_top){
-    return true;
-  }else{
-    return false;
-  }
-}
-
-/****************************************************************************************/
-//2018 11 07 Kaoru Ota
-//it has not been completed, it do not work well.
-/****************************************************************************************/
-void Judgment::det_on_line(){
-
-}
-
-
-
-void Judgment::setEyeCommand(int     linevalue,
-			      bool    green_flag,
-			      float   xvalue,
-			      float   yvalue,
-			      float   pre_50mm_x, //20180512 kota
-			      float   pre_50mm_y,
-			      float   odo,
-			      float   velocity,
-                              float   pre_velo_0p5sec,
-			      float   yawrate,
-			      float   abs_angle,
-			      float   ave_angle,
-			      int     robo_tail_angle,
-			      bool    robo_stop,
-			      bool    robo_forward,
-			      bool    robo_back,
-			      bool    robo_turn_left,
-			      bool    robo_turn_right,
-                              int16_t sonar_dis){
+void Judgment::set_in_data(int     linevalue,
+			   bool    green_flag,
+			   float   xvalue,
+			   float   yvalue,
+			   float   pre_50mm_x, //20180512 kota
+			   float   pre_50mm_y,
+			   float   odo,
+			   float   velocity,
+			   float   pre_velo_0p5sec,
+			   float   yawrate,
+			   float   abs_angle,
+			   float   ave_angle,
+			   int     robo_tail_angle,
+			   bool    robo_stop,
+			   bool    robo_forward,
+			   bool    robo_back,
+			   bool    robo_turn_left,
+			   bool    robo_turn_right,
+			   int16_t sonar_dis){
 
   mLinevalue       = linevalue;
   mGreen_flag      = green_flag;
