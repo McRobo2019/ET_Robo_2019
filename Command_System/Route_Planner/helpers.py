@@ -2,7 +2,8 @@ import networkx as nx
 import pickle
 import plotly.plotly as py
 import random
-from plotly.graph_objs import *
+#from plotly.graph_objs import *
+from plotly.graph_objs import Scatter, Layout, Figure, Data,Stream, YAxis, Marker, Line
 from plotly.offline import init_notebook_mode, plot, iplot
 import plotly
 init_notebook_mode(connected=True)
