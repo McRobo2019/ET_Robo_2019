@@ -45,6 +45,7 @@ float RAD_15_DEG   = 0.2618; //
 float RAD_22P5_DEG = 0.3927; //
 float RAD_30_DEG   = 0.5236; //
 float RAD_45_DEG   = 0.7854; //
+float RAD_60_DEG   = 1.0472; //
 float RAD_89_DEG   = 1.5533; //
 float RAD_88p5_DEG = 1.5446; //
 float RAD_87_DEG   = 1.5184; //
@@ -54,7 +55,7 @@ float RAD_135_DEG  = 2.3562; //
 float RAD_150_DEG  = 2.6180; //
 float RAD_180_DEG  = 3.1472; //
 float RAD_225_DEG  = 3.9270; //
-float RAD_270_DEG  = 4.7124;
+float RAD_270_DEG  = 4.7124; //
 float RAD_315_DEG  = 5.4978; //
 float RAD_345_DEG  = 6.0214; //
 float RAD_360_DEG  = 6.2832; //
@@ -87,14 +88,15 @@ float MOTOR_CTL_TS = 0.01;
 
 //float MOTOR_CTL_KI = 0.47782874617737003;
 //float MOTOR_CTL_KI = 1.911314984709480; // A
-float MOTOR_CTL_KI = 2.645418663957758; // B
+//float MOTOR_CTL_KI = 2.645418663957758; // B
 //float MOTOR_CTL_KI = 3.397893306150187; // C
+float MOTOR_CTL_KI = 0.8; // test 
 
 //float MOTOR_CTL_KP = 0.0382262996941896;
-//float MOTOR_CTL_KP = 0.229357798165138; // A
-float MOTOR_CTL_KP = 0.296815974096060; // B
+//float MOTOR_CTL_KP = 0.229357798165138; // A 
+//float MOTOR_CTL_KP = 0.296815974096060; // B
 //float MOTOR_CTL_KP = 0.356778797145770; // C
-
+float MOTOR_CTL_KP = 0.1; //test
 
 
 //--LUG--LUG--LUG--LUG--LUG--LUG--LUG--LUG--LUG--LUG--LUG--LUG--LUG--LUG--LUG--LUG--
