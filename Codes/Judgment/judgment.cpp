@@ -80,18 +80,17 @@ void Judgment::run() {
 
     gNavi->run(mOdo, (int)mVelocity, mYawrate, mAve_yaw_angle, (int)mXvalue, (int)mYvalue, (int)mPre_50mm_x, (int)mPre_50mm_y);
 
-    /*
+
     mRef_Omega      = gNavi->ref_omega;
     mMax_Omega      = gNavi->max_omega;
     mMin_Omega      = gNavi->min_omega;
     target_velocity = gNavi->target_velocity;
-    */
-
-
+    /*
     mRef_Omega      = 0.0;
     mMax_Omega      = RAD_90_DEG;
     mMin_Omega      = MINUS_RAD_90_DEG;
     target_velocity = 200;
+    */
 
     target_omega = gLine_Trace->line_trace_omega(mLinevalue, mRef_Omega, mMax_Omega, mMin_Omega);
 
