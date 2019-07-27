@@ -76,8 +76,8 @@ float MINUS_RAD_270_DEG  = -4.7124;
 
 
 //Odometry
-int X_POS_OFFSET = 0;
-int Y_POS_OFFSET = 0;
+int X_POS_OFFSET = 480;
+int Y_POS_OFFSET = 165;
 
 
 float YAW_LIMIT    = 0.393;   //PI/8 see anago synario
@@ -90,7 +90,7 @@ float MOTOR_CTL_TS = 0.01;
 //float MOTOR_CTL_KI = 1.911314984709480; // A
 //float MOTOR_CTL_KI = 2.645418663957758; // B
 //float MOTOR_CTL_KI = 3.397893306150187; // C
-float MOTOR_CTL_KI = 0.8; // test 
+float MOTOR_CTL_KI = 0.9; // test 
 
 //float MOTOR_CTL_KP = 0.0382262996941896;
 //float MOTOR_CTL_KP = 0.229357798165138; // A 
