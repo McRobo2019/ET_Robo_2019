@@ -87,6 +87,7 @@ void Judgment::run() {
     target_velocity = gNavi->target_velocity;
 
     target_omega = gLine_Trace->line_trace_omega(mLinevalue, mRef_Omega, mMax_Omega, mMin_Omega);
+    //    target_omega = gLine_Trace->line_trace_omega(50, mRef_Omega, mMax_Omega, mMin_Omega);
   }
   else if(DRIVE_MODE == TRACK){
     line_trace_mode    = false;

@@ -154,6 +154,10 @@ void Operation::run() {
     vr = vr + (checked_target_omega * HALF_TREAD);
     
 
+    target_left_velocity  = vl;
+    target_right_velocity = vr;
+
+
     //Motor PI CTL
 
     gLeft_Motor_ctlModelClass->setIn1(vl);

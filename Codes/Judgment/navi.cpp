@@ -91,9 +91,9 @@ void Navi::run(int odo, int velocity, float yaw_angle, float ave_yaw_angle, int 
       //--------------------------------------------------------------TARGET_VELOCITY GEN
 
       //REF YAW RATE GEN-------------------------------------------------------------
-      min_omega = MINUS_RAD_5_DEG;
+      min_omega = MINUS_RAD_22P5_DEG;
       ref_omega = 0;
-      max_omega = MINUS_RAD_5_DEG;
+      max_omega = RAD_22P5_DEG;
       //-------------------------------------------------------------REF YAW RATE GEN
 
       //DET RUNNING ARE-------------------------------------------------------------
@@ -202,7 +202,7 @@ void Navi::run(int odo, int velocity, float yaw_angle, float ave_yaw_angle, int 
 	target_velocity = ENTER_2ND_CORNER_VELOCITY_VAL;
       }
 
-      min_omega = MINUS_RAD_5_DEG;
+      min_omega = RAD_22P5_DEG;
       ref_omega = 0.0;
       max_omega = RAD_22P5_DEG;
 
