@@ -368,10 +368,10 @@ static void log_dat( ){
 	//	log_dat_04[log_cnt]  = gOperation->right_motor_pwm;
 
 	log_dat_03[log_cnt]  = X_POS;
-	log_dat_04[log_cnt]  = gRecognition->xvalue;	    
+	log_dat_04[log_cnt]  = Y_POS;	    
 
-	log_dat_05[log_cnt]  = gRecognition->encL;
-	log_dat_06[log_cnt]  = gRecognition->encR;
+	log_dat_05[log_cnt]  = gRecognition->xvalue;
+	log_dat_06[log_cnt]  = gRecognition->yvalue;
 
 	log_dat_07[log_cnt]  = gJudgment->target_velocity;  //20190620 ota
 	log_dat_08[log_cnt]  = gRecognition->odo;
@@ -671,9 +671,6 @@ void rec_task(intptr_t exinf) {
 
     gJudgment->set_in_data(gRecognition->linevalue,
 			   gRecognition->green_flag,
-			   gRecognition->pre_50mm_x,
-			   gRecognition->pre_50mm_y,
-			   gRecognition->odo,
 			   gRecognition->velocity,
 			   gRecognition->pre_velo_0p5sec, 
 			   gRecognition->yawrate,

@@ -108,8 +108,8 @@ void Navi::run(int line_val, int odo, int velocity, float yaw_angle, int x, int 
       if (pre_50mm_x > ENTER_1ST_CORNER_AREA[0]){
 
 	//CORRECT Y YAW ANGLE-------------------------------------------------------------
-	Y_POS_OFFSET     = Y_POS_OFFSET + (165 - ave_y);	
-	YAW_ANGLE_OFFSET = YAW_ANGLE_OFFSET + (0.0 - ave_yaw_angle);
+	//	Y_POS            = Y_POS + (165 - ave_y);	
+	//	YAW_ANGLE_OFFSET = 0.0 - ave_yaw_angle;
 
 	gAve_yaw_angle_500->init(); //20181108
 	gAve_x_500->init();
@@ -208,8 +208,8 @@ void Navi::run(int line_val, int odo, int velocity, float yaw_angle, int x, int 
       if (pre_50mm_y > ENTER_2ND_CORNER_AREA[1]){
 
 	//CORRECT Y YAW ANGLE-------------------------------------------------------------
-	X_POS_OFFSET     = X_POS_OFFSET + (1580 - ave_x);	
-	YAW_ANGLE_OFFSET = YAW_ANGLE_OFFSET + (RAD_90_DEG - ave_yaw_angle);
+	//	X_POS     = X_POS + (1580 - ave_x);	
+	//	YAW_ANGLE_OFFSET = RAD_90_DEG - ave_yaw_angle;
 
 	gAve_yaw_angle_500->init(); //20181108
 	gAve_x_500->init();
