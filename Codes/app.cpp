@@ -367,8 +367,8 @@ static void log_dat( ){
 	//	log_dat_03[log_cnt]  = gOperation->left_motor_pwm;
 	//	log_dat_04[log_cnt]  = gOperation->right_motor_pwm;
 
-	log_dat_03[log_cnt]  = (int)gRecognition->xvalue;
-	log_dat_04[log_cnt]  = (int)gRecognition->yvalue;
+	log_dat_03[log_cnt]  = X_POS;
+	log_dat_04[log_cnt]  = gRecognition->xvalue;	    
 
 	log_dat_05[log_cnt]  = gRecognition->encL;
 	log_dat_06[log_cnt]  = gRecognition->encR;
@@ -383,7 +383,7 @@ static void log_dat( ){
 	log_dat_13[log_cnt]  = (int)gRecognition->right_wheel_velocity;
 	
 	float_log_00[log_cnt] = gRecognition->yawrate;
-	float_log_01[log_cnt] = gRecognition->abs_angle;
+	float_log_01[log_cnt] = YAW_ANGLE;
 	float_log_02[log_cnt] = gJudgment->target_omega;
 	float_log_03[log_cnt] = gRecognition->omega;
 
@@ -397,8 +397,8 @@ static void log_dat( ){
 
 #ifdef LOG_LONG
     if (log_cnt < log_size){
-      log_dat_00[log_cnt]  = (int)gRecognition->xvalue;
-      log_dat_01[log_cnt]  = (int)gRecognition->yvalue;
+      log_dat_00[log_cnt]  = X_POS;
+      log_dat_01[log_cnt]  = Y_POS;
       log_dat_02[log_cnt]  = gRecognition->velocity;
       log_dat_03[log_cnt] =  (int)(gRecognition->abs_angle*1000.0);
     }
@@ -450,7 +450,7 @@ static void log_dat( ){
 
 #ifdef LOG_LONG
       if (log_cnt < log_size){
-	log_dat_00[log_cnt]  = (int)gRecognition->xvalue;
+	log_dat_00[log_cnt]  = X_POS;
 	log_dat_01[log_cnt]  = gJudgment->forward;
 	log_dat_03[log_cnt]  = gRecognition->velocity;
       }
@@ -503,7 +503,7 @@ static void log_dat( ){
 
 #ifdef LOG_LONG
       if (log_cnt < log_size){
-	log_dat_00[log_cnt]  = (int)gRecognition->xvalue;
+	log_dat_00[log_cnt]  = X_POS;
 	log_dat_01[log_cnt]  = gJudgment->forward;
 	log_dat_03[log_cnt]  = gRecognition->velocity;
       }
@@ -671,15 +671,12 @@ void rec_task(intptr_t exinf) {
 
     gJudgment->set_in_data(gRecognition->linevalue,
 			   gRecognition->green_flag,
-			   gRecognition->xvalue,
-			   gRecognition->yvalue,
 			   gRecognition->pre_50mm_x,
 			   gRecognition->pre_50mm_y,
 			   gRecognition->odo,
 			   gRecognition->velocity,
 			   gRecognition->pre_velo_0p5sec, 
 			   gRecognition->yawrate,
-			   gRecognition->abs_angle,
 			   gRecognition->ave_angle,
 			   gTailMotor.getCount(),             //it will be modified later 20190420 ota
 			   gRecognition->robo_stop,

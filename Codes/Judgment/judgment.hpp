@@ -21,15 +21,12 @@ public:
 	void run();
 	void set_in_data(int     linevalue,
 			 bool    green_flag,
-			 float   xvalue,
-			 float   yvalue,
 			 float   pre_50mm_x,
 			 float   pre_50mm_y,
 			 float   odo,
 			 float   velocity,
 			 float   pre_velo_0p5sec,
 			 float   yawrate,
-			 float   abs_angle,
 			 float   ave_angle,
 			 int     robo_tail_angle,
 			 bool    robo_stop,
@@ -77,9 +74,6 @@ private:
   int   mLinevalue;   //ライン検出値
   bool  mGreen_flag;  //ライン検出値
 
-  float mXvalue;      //x座標
-  float mYvalue;      //y座標
-
   float mPre_50mm_x;  //50mm saki 20180512 kota
   float mPre_50mm_y;  //50mm saki 20180512 kota
 
@@ -88,7 +82,6 @@ private:
   float mVelocity;        //速度
   float mPre_velo_0p5sec; //prediction vekicity 0.5 sec latar
   float mYawrate;       //ヨーレート
-  float mYawangle;        //ヨー角
   float mAve_yaw_angle;
 
   int   mTail_angle;

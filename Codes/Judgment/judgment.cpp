@@ -72,15 +72,15 @@ void Judgment::run() {
   static int ref_clock;
 
   ave_line_val = gAve_line_val->average_500(mLinevalue);
-  ave_yaw_angle_500 = gAve_yaw_angle_500->average_500(mYawangle);
+  ave_yaw_angle_500 = gAve_yaw_angle_500->average_500(YAW_ANGLE);
 
 
   if(DRIVE_MODE == LINE_TRACE){
     line_trace_mode = true;
 
-    gNavi->run(mLinevalue, mOdo, (int)mVelocity, mYawrate, mAve_yaw_angle, (int)mXvalue, (int)mYvalue, (int)mPre_50mm_x, (int)mPre_50mm_y);
-
-
+    //    gNavi->run(mLinevalue, mOdo, (int)mVelocity, mYawrate, mAve_yaw_angle, X_POS, Y_POS, (int)mPre_50mm_x, (int)mPre_50mm_y);
+    gNavi->run(mLinevalue, mOdo, (int)mVelocity, YAW_ANGLE, X_POS, Y_POS, (int)mPre_50mm_x, (int)mPre_50mm_y);
+    
     mRef_Omega      = gNavi->ref_omega;
     mMax_Omega      = gNavi->max_omega;
     mMin_Omega      = gNavi->min_omega;
@@ -291,15 +291,12 @@ void Judgment::run() {
 
 void Judgment::set_in_data(int     linevalue,
 			   bool    green_flag,
-			   float   xvalue,
-			   float   yvalue,
 			   float   pre_50mm_x, //20180512 kota
 			   float   pre_50mm_y,
 			   float   odo,
 			   float   velocity,
 			   float   pre_velo_0p5sec,
 			   float   yawrate,
-			   float   abs_angle,
 			   float   ave_angle,
 			   int     robo_tail_angle,
 			   bool    robo_stop,
@@ -311,15 +308,12 @@ void Judgment::set_in_data(int     linevalue,
 
   mLinevalue       = linevalue;
   mGreen_flag      = green_flag;
-  mXvalue          = xvalue + X_POS_OFFSET;
-  mYvalue          = yvalue + Y_POS_OFFSET;
-  mPre_50mm_x      = pre_50mm_x + X_POS_OFFSET;
-  mPre_50mm_y      = pre_50mm_y + Y_POS_OFFSET;
+  mPre_50mm_x      = pre_50mm_x;
+  mPre_50mm_y      = pre_50mm_y;
   mOdo             = odo; 
   mVelocity        = velocity;
   mPre_velo_0p5sec = pre_velo_0p5sec;
   mYawrate         = yawrate;
-  mYawangle        = abs_angle + YAW_ANGLE_OFFSET;
   mAve_yaw_angle   = ave_angle + YAW_ANGLE_OFFSET;
 
   mTail_angle      = robo_tail_angle;

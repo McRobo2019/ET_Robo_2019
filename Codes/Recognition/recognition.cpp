@@ -33,9 +33,17 @@ void Recognition::init(){
   //  real_wheel = WHEEL_R * cos(RAD_6_DEG);
   //real_wheel = WHEEL_R * 1.05; /*180630 temporary value*/
   real_wheel = WHEEL_R;
+  /*
   xvalue    = 0;
   yvalue    = 0;
+  */
 
+  xvalue    = X_POS_OFFSET;
+  yvalue    = Y_POS_OFFSET;
+
+  X_POS_OFFSET = 0;
+  Y_POS_OFFSET = 0;
+  
   pre_sonar_dis = 0;
 
 
@@ -194,15 +202,23 @@ void Recognition::wheel_odometry(float dT) {
   xvalue = xvalue+(odo-odo_prev)*cos(abs_angle);
   yvalue = yvalue+(odo-odo_prev)*sin(abs_angle);
 
+  xvalue = xvalue + 0.5;
+  yvalue = yvalue + 0.5;
   
-  pre_50mm_x = xvalue + 50.0*cos(abs_angle);//20180512 kota
-  pre_50mm_y = yvalue + 50.0*sin(abs_angle);
-
+  X_POS     = (int)xvalue + X_POS_OFFSET;
+  Y_POS     = (int)yvalue + Y_POS_OFFSET;
+  YAW_ANGLE = abs_angle + YAW_ANGLE_OFFSET;
+  
+  //  pre_50mm_x = xvalue + 50.0*cos(abs_angle);//20180512 kota
+  pre_50mm_x = X_POS + 50.0*cos(abs_angle);//20180512 kota
+  //  pre_50mm_y = yvalue + 50.0*sin(abs_angle);
+    pre_50mm_y = Y_POS + 50.0*sin(abs_angle);
 
   yawrate  =(relative_angle-old_rel_angle)/dT;           //ロボのYawレート[rad/s]
 
   old_rel_angle=relative_angle;         //過去のYaw角[rad]
   odo_prev = odo;
+
 }
 
 void Recognition::average_dat(float dT) {
