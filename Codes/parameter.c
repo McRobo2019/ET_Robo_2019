@@ -78,6 +78,8 @@ float MINUS_RAD_270_DEG  = -4.7124;
 //Odometry
 int X_POS_OFFSET = 480;
 int Y_POS_OFFSET = 165;
+float YAW_ANGLE_OFFSET = 0.0;
+
 
 
 float YAW_LIMIT    = 0.393;   //PI/8 see anago synario

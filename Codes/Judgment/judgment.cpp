@@ -78,7 +78,7 @@ void Judgment::run() {
   if(DRIVE_MODE == LINE_TRACE){
     line_trace_mode = true;
 
-    gNavi->run(mOdo, (int)mVelocity, mYawrate, mAve_yaw_angle, (int)mXvalue, (int)mYvalue, (int)mPre_50mm_x, (int)mPre_50mm_y);
+    gNavi->run(mLinevalue, mOdo, (int)mVelocity, mYawrate, mAve_yaw_angle, (int)mXvalue, (int)mYvalue, (int)mPre_50mm_x, (int)mPre_50mm_y);
 
 
     mRef_Omega      = gNavi->ref_omega;
@@ -311,16 +311,16 @@ void Judgment::set_in_data(int     linevalue,
 
   mLinevalue       = linevalue;
   mGreen_flag      = green_flag;
-  mXvalue          = xvalue;
-  mYvalue          = yvalue;
-  mPre_50mm_x      = pre_50mm_x;//50mm saki 20180512 kota
-  mPre_50mm_y      = pre_50mm_y;//50mm saki 20180512 kota
+  mXvalue          = xvalue + X_POS_OFFSET;
+  mYvalue          = yvalue + Y_POS_OFFSET;
+  mPre_50mm_x      = pre_50mm_x + X_POS_OFFSET;
+  mPre_50mm_y      = pre_50mm_y + Y_POS_OFFSET;
   mOdo             = odo; 
   mVelocity        = velocity;
   mPre_velo_0p5sec = pre_velo_0p5sec;
   mYawrate         = yawrate;
-  mYawangle        = abs_angle;
-  mAve_yaw_angle   = ave_angle;
+  mYawangle        = abs_angle + YAW_ANGLE_OFFSET;
+  mAve_yaw_angle   = ave_angle + YAW_ANGLE_OFFSET;
 
   mTail_angle      = robo_tail_angle;
   mRobo_stop       = robo_stop;

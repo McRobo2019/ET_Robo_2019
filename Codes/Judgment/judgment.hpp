@@ -41,6 +41,8 @@ public:
 
   Average_500_Data *gAve_line_val      = new Average_500_Data();
   Average_500_Data *gAve_yaw_angle_500 = new Average_500_Data(); //20181108
+  Average_500_Data *gAve_x_500 = new Average_500_Data();
+  Average_500_Data *gAve_y_500 = new Average_500_Data();
 
   float ave_line_val;
   float ave_yaw_angle_500; //20181108

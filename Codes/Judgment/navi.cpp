@@ -15,12 +15,15 @@ void Navi::init() {
   target_velocity = 10;
   lost_line       = false;
   gAve_yaw_angle_500->init(); //20181108
+  gAve_x_500->init();
+  gAve_y_500->init();
+
 }
 
 
 /****************************************************************************************/
 /****************************************************************************************/
-void Navi::run(int odo, int velocity, float yaw_angle, float ave_yaw_angle, int x, int y, int pre_50mm_x, int pre_50mm_y) {
+void Navi::run(int line_val, int odo, int velocity, float yaw_angle, float ave_yaw_angle, int x, int y, int pre_50mm_x, int pre_50mm_y) {
   static float ref_odo;
   static float dif_odo;
 

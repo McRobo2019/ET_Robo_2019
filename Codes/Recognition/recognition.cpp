@@ -33,8 +33,8 @@ void Recognition::init(){
   //  real_wheel = WHEEL_R * cos(RAD_6_DEG);
   //real_wheel = WHEEL_R * 1.05; /*180630 temporary value*/
   real_wheel = WHEEL_R;
-  xvalue    = X_POS_OFFSET;
-  yvalue    = Y_POS_OFFSET;
+  xvalue    = 0;
+  yvalue    = 0;
 
   pre_sonar_dis = 0;
 
@@ -42,8 +42,8 @@ void Recognition::init(){
   pre_50mm_x = 0.0;
   pre_50mm_y = 0.0;
 
-  ave_x      = X_POS_OFFSET; //average_x 20181008
-  ave_y      = Y_POS_OFFSET; //average_y 20181008
+  ave_x      = 0; //average_x 20181008
+  ave_y      = 0; //average_y 20181008
 
   ave_vel_x = 0;    //20181008
   ave_vel_y = 0;    //20181008
@@ -78,8 +78,8 @@ void Recognition::init(){
 
   gAve_angle_dat->init(0.0);          
 
-  gAve_x_dat->init(X_POS_OFFSET);          
-  gAve_y_dat->init(Y_POS_OFFSET);
+  gAve_x_dat->init(0);          
+  gAve_y_dat->init(0);
 
   gAve_vel_x_dat->init(0.0);
   gAve_vel_y_dat->init(0.0);
@@ -194,6 +194,7 @@ void Recognition::wheel_odometry(float dT) {
   xvalue = xvalue+(odo-odo_prev)*cos(abs_angle);
   yvalue = yvalue+(odo-odo_prev)*sin(abs_angle);
 
+  
   pre_50mm_x = xvalue + 50.0*cos(abs_angle);//20180512 kota
   pre_50mm_y = yvalue + 50.0*sin(abs_angle);
 
