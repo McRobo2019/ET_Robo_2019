@@ -30,8 +30,8 @@ public:
   int   linevalue  = 0;
   bool  green_flag = 0;
 
-  int   xvalue    = 0.0;//x座標推定値
-  int   yvalue    = 0.0;//y座標推定値
+  float xvalue   = 0.0;//x座標推定値
+  float yvalue   = 0.0;//y座標推定値
 
   float pre_50mm_x = 0.0;//50mm saki 20180512 kota
   float pre_50mm_y = 0.0;//50mm saki 20180512 kota

@@ -19,8 +19,7 @@ public:
 	void set_drive_mode_TK();
 	void set_drive_mode_DB();
 	void run();
-	void set_in_data(int     linevalue,
-			 bool    green_flag,
+	void set_in_data(bool    green_flag,
 			 float   velocity,
 			 float   pre_velo_0p5sec,
 			 float   yawrate,
@@ -68,7 +67,6 @@ private:
   Navi       *gNavi       = new Navi();
 
   int   Mmode;
-  int   mLinevalue;   //ライン検出値
   bool  mGreen_flag;  //ライン検出値
   float mVelocity;        //速度
   float mPre_velo_0p5sec; //prediction vekicity 0.5 sec latar

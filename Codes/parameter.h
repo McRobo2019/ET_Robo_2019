@@ -72,20 +72,22 @@ extern float MINUS_RAD_225_DEG;  //
 extern float MINUS_RAD_270_DEG;  //
 
 //Odometry
-extern int   ODO;
-extern int   X_POS;
-extern int   Y_POS;
+extern int  LINE_VAL;
+
+extern float ODO;
+extern float X_POS;
+extern float Y_POS;
 extern float X_UNIT_VEC;
 extern float Y_UNIT_VEC;
 extern float YAW_ANGLE;
 
-extern int   D_ODO;
-extern int   D_X_POS;
-extern int   D_Y_POS;
+extern float D_ODO;
+extern float D_X_POS;
+extern float D_Y_POS;
 extern float D_YAW_ANGLE;
 
-extern int   PRE_X_POS;
-extern int   PRE_Y_POS;
+extern float   PRE_X_POS;
+extern float   PRE_Y_POS;
 
 
 //extern int   X_POS_INIT;
@@ -219,4 +221,5 @@ extern float CIRCLE_04_ANGLE;
 extern int CIRCLE_05_LENGTH;
 extern float CIRCLE_05_ANGLE;
 
-extern int LOG_NAVI;
+extern int   LOG_NAVI;
+extern float FL_LOG;

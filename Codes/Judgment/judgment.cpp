@@ -71,7 +71,9 @@ void Judgment::run() {
   */
   static int ref_clock;
 
-  ave_line_val = gAve_line_val->average_500(mLinevalue);
+
+  //  LINE_VAL = 50; //for debug
+  ave_line_val = gAve_line_val->average_500(LINE_VAL);
   ave_yaw_angle_500 = gAve_yaw_angle_500->average_500(YAW_ANGLE);
 
 
@@ -79,15 +81,14 @@ void Judgment::run() {
     line_trace_mode = true;
 
     //    gNavi->run(mLinevalue, mOdo, (int)mVelocity, mYawrate, mAve_yaw_angle, X_POS, Y_POS, (int)mPre_50mm_x, (int)mPre_50mm_y);
-   gNavi->run(mLinevalue, ODO, (int)mVelocity, YAW_ANGLE, X_POS, Y_POS, PRE_X_POS, PRE_Y_POS);
+   gNavi->run(LINE_VAL, ODO, (int)mVelocity, YAW_ANGLE, X_POS, Y_POS, PRE_X_POS, PRE_Y_POS);
     
     mRef_Omega      = gNavi->ref_omega;
     mMax_Omega      = gNavi->max_omega;
     mMin_Omega      = gNavi->min_omega;
     target_velocity = gNavi->target_velocity;
 
-    // target_omega = gLine_Trace->line_trace_omega(mLinevalue, mRef_Omega, mMax_Omega, mMin_Omega);
-    target_omega = gLine_Trace->line_trace_omega(50, mRef_Omega, mMax_Omega, mMin_Omega);
+    target_omega = gLine_Trace->line_trace_omega(LINE_VAL, mRef_Omega, mMax_Omega, mMin_Omega);
   }
   else if(DRIVE_MODE == TRACK){
     line_trace_mode    = false;
@@ -289,8 +290,7 @@ void Judgment::run() {
   }
 }
 
-void Judgment::set_in_data(int     linevalue,
-			   bool    green_flag,
+void Judgment::set_in_data(bool    green_flag,
 			   float   velocity,
 			   float   pre_velo_0p5sec,
 			   float   yawrate,
@@ -303,7 +303,6 @@ void Judgment::set_in_data(int     linevalue,
 			   bool    robo_turn_right,
 			   int16_t sonar_dis){
 
-  mLinevalue       = linevalue;
   mGreen_flag      = green_flag;
   mVelocity        = velocity;
   mPre_velo_0p5sec = pre_velo_0p5sec;
