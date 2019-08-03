@@ -71,23 +71,24 @@ void Judgment::run() {
   */
   static int ref_clock;
 
-  ave_line_val = gAve_line_val->average_500(mLinevalue);
-  ave_yaw_angle_500 = gAve_yaw_angle_500->average_500(mYawangle);
+
+  //  LINE_VAL = 50; //for debug
+  ave_line_val = gAve_line_val->average_500(LINE_VAL);
+  ave_yaw_angle_500 = gAve_yaw_angle_500->average_500(YAW_ANGLE);
 
 
   if(DRIVE_MODE == LINE_TRACE){
     line_trace_mode = true;
 
-    gNavi->run(mLinevalue, mOdo, (int)mVelocity, mYawrate, mAve_yaw_angle, (int)mXvalue, (int)mYvalue, (int)mPre_50mm_x, (int)mPre_50mm_y);
-
-
+    //    gNavi->run(mLinevalue, mOdo, (int)mVelocity, mYawrate, mAve_yaw_angle, X_POS, Y_POS, (int)mPre_50mm_x, (int)mPre_50mm_y);
+   gNavi->run(LINE_VAL, ODO, (int)mVelocity, YAW_ANGLE, X_POS, Y_POS, PRE_X_POS, PRE_Y_POS);
+    
     mRef_Omega      = gNavi->ref_omega;
     mMax_Omega      = gNavi->max_omega;
     mMin_Omega      = gNavi->min_omega;
     target_velocity = gNavi->target_velocity;
 
-    target_omega = gLine_Trace->line_trace_omega(mLinevalue, mRef_Omega, mMax_Omega, mMin_Omega);
-    //    target_omega = gLine_Trace->line_trace_omega(50, mRef_Omega, mMax_Omega, mMin_Omega);
+    target_omega = gLine_Trace->line_trace_omega(LINE_VAL, mRef_Omega, mMax_Omega, mMin_Omega);
   }
   else if(DRIVE_MODE == TRACK){
     line_trace_mode    = false;
@@ -100,7 +101,7 @@ void Judgment::run() {
       target_omega    = 0.0;
 
       ref_clock = SYS_CLK + 499; //0.5sec
-      ref_odo   = mOdo + 4399;
+      ref_odo   = ODO + 4399;
       TEST_MODE = MODE_01;
 
       det_navi_log = ref_odo;
@@ -133,15 +134,15 @@ void Judgment::run() {
       det_navi_log = 300000+ref_odo;
       target_velocity = 400;
       target_omega    = 0.0;
-      if(mOdo > ref_odo){
+      if(ODO > ref_odo){
 	TEST_MODE = MODE_04;
-	ref_odo   = mOdo + 401;
+	ref_odo   = ODO + 401;
       }
       break;
 
     case MODE_04:
       det_navi_log = 400000+ref_odo;
-      target_velocity = ref_odo - mOdo;
+      target_velocity = ref_odo - ODO;
       target_omega    = 0.0;
 
       if(target_velocity > 400){
@@ -150,7 +151,7 @@ void Judgment::run() {
 	target_velocity = 0;
       }
 
-      if(mOdo > ref_odo){
+      if(ODO > ref_odo){
 	TEST_MODE = MODE_05;
       }
       break;
@@ -178,7 +179,7 @@ void Judgment::run() {
       target_omega    = 0.0;
 
       ref_clock = SYS_CLK + 500; //0.5sec
-      ref_odo   = mOdo + 1200;
+      ref_odo   = ODO + 1200;
       TEST_MODE = MODE_01;
 
       det_navi_log = ref_odo;
@@ -211,9 +212,9 @@ void Judgment::run() {
       target_velocity = 400;
       target_omega    = 0.0;
 
-      if(mOdo > ref_odo){
+      if(ODO > ref_odo){
 	TEST_MODE = MODE_04;
-	ref_odo   = mOdo;
+	ref_odo   = ODO;
       }
 
       break;
@@ -221,7 +222,7 @@ void Judgment::run() {
     case MODE_04:
       det_navi_log = 4;
       target_velocity = 400;
-      target_omega    = 0.4 * PAI * (mOdo - ref_odo)/800.0;
+      target_omega    = 0.4 * PAI * (ODO - ref_odo)/800.0;
       if (target_omega >= 0.4 * PAI){
 	TEST_MODE = MODE_05;	
 	ref_odo = 3600;
@@ -234,16 +235,16 @@ void Judgment::run() {
 		target_velocity = 400;
 		target_omega = 0.4 * PAI;
 		
-		if (mOdo > ref_odo) {
+		if (ODO > ref_odo) {
 			TEST_MODE = MODE_06;
-			ref_odo = mOdo + 800;
+			ref_odo = ODO + 800;
 		}
       break;
 
     case MODE_06:
       det_navi_log = 6;
 		target_velocity = 400;
-		target_omega = 0.4 * PAI * (-mOdo + ref_odo)/800.0;
+		target_omega = 0.4 * PAI * (-ODO + ref_odo)/800.0;
 		if (target_omega <= 0) {
 			TEST_MODE = MODE_07;
 			ref_odo = 5200;
@@ -255,9 +256,9 @@ void Judgment::run() {
       det_navi_log = 7;
 		target_velocity = 400;
 		target_omega = 0;
-		if (mOdo > ref_odo) {
+		if (ODO > ref_odo) {
 			TEST_MODE = MODE_08;
-			ref_odo = mOdo + 400;
+			ref_odo = ODO + 400;
 			ref_clock = SYS_CLK + 2000;
 		}
 
@@ -289,17 +290,10 @@ void Judgment::run() {
   }
 }
 
-void Judgment::set_in_data(int     linevalue,
-			   bool    green_flag,
-			   float   xvalue,
-			   float   yvalue,
-			   float   pre_50mm_x, //20180512 kota
-			   float   pre_50mm_y,
-			   float   odo,
+void Judgment::set_in_data(bool    green_flag,
 			   float   velocity,
 			   float   pre_velo_0p5sec,
 			   float   yawrate,
-			   float   abs_angle,
 			   float   ave_angle,
 			   int     robo_tail_angle,
 			   bool    robo_stop,
@@ -309,18 +303,11 @@ void Judgment::set_in_data(int     linevalue,
 			   bool    robo_turn_right,
 			   int16_t sonar_dis){
 
-  mLinevalue       = linevalue;
   mGreen_flag      = green_flag;
-  mXvalue          = xvalue + X_POS_OFFSET;
-  mYvalue          = yvalue + Y_POS_OFFSET;
-  mPre_50mm_x      = pre_50mm_x + X_POS_OFFSET;
-  mPre_50mm_y      = pre_50mm_y + Y_POS_OFFSET;
-  mOdo             = odo; 
   mVelocity        = velocity;
   mPre_velo_0p5sec = pre_velo_0p5sec;
   mYawrate         = yawrate;
-  mYawangle        = abs_angle + YAW_ANGLE_OFFSET;
-  mAve_yaw_angle   = ave_angle + YAW_ANGLE_OFFSET;
+  mAve_yaw_angle   = ave_angle;
 
   mTail_angle      = robo_tail_angle;
   mRobo_stop       = robo_stop;

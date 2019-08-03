@@ -76,11 +76,26 @@ float MINUS_RAD_270_DEG  = -4.7124;
 
 
 //Odometry
-int X_POS_OFFSET = 480;
-int Y_POS_OFFSET = 165;
+int   LINE_VAL   = 0;
+float ODO        = 0.0;
+float X_POS      = 480.0;
+float Y_POS      = 165.0;
+float X_UNIT_VEC = 0.0;
+float Y_UNIT_VEC = 0.0;
+float YAW_ANGLE  = 0.0;
+
+float D_ODO       = 0.0;
+float D_X_POS     = 0.0;
+float D_Y_POS     = 0.0;
+float D_YAW_ANGLE = 0.0;
+
+float PRE_X_POS   = 0.0;
+float PRE_Y_POS   = 0.0;
+
+//int X_POS_INIT       = 480;
+//int Y_POS_INIT       = 165;
+float YAW_ANGLE_INIT   = 0.0;
 float YAW_ANGLE_OFFSET = 0.0;
-
-
 
 float YAW_LIMIT    = 0.393;   //PI/8 see anago synario
 float YAW_STEP     = 0.00786; //YAW_LIMIT/50 see anago synario
@@ -259,3 +274,4 @@ float CIRCLE_05_ANGLE  = 0;
 
 
 int LOG_NAVI = 0;
+float FL_LOG = 0.0;

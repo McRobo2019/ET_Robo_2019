@@ -23,14 +23,13 @@ void Navi::init() {
 
 /****************************************************************************************/
 /****************************************************************************************/
-void Navi::run(int line_val, int odo, int velocity, float yaw_angle, float ave_yaw_angle, int x, int y, int pre_50mm_x, int pre_50mm_y) {
+//void Navi::run(int line_val, int odo, int velocity, float yaw_angle, float ave_yaw_angle, int x, int y, int pre_50mm_x, int pre_50mm_y) {
+void Navi::run(int line_val, int odo, int velocity, float yaw_angle, int x, int y, int pre_50mm_x, int pre_50mm_y) {
   static float ref_odo;
   static float dif_odo;
 
   static int   ref_velocity;
   static float acl_velocity;
-
-  ave_yaw_angle_500 = gAve_yaw_angle_500->average_500(yaw_angle);
 
   switch(ZONE){
 
@@ -99,8 +98,24 @@ void Navi::run(int line_val, int odo, int velocity, float yaw_angle, float ave_y
       max_omega = RAD_22P5_DEG;
       //-------------------------------------------------------------REF YAW RATE GEN
 
+      //CORRECT Y & YAW ANGLE-------------------------------------------------------------
+      if( (line_val > 40) && (line_val < 60) ){
+	Y_POS         = 165.0;
+	ave_yaw_angle =gAve_yaw_angle_500->average_500(yaw_angle);
+      }
+      
       //DET RUNNING ARE-------------------------------------------------------------
       if (pre_50mm_x > ENTER_1ST_CORNER_AREA[0]){
+
+	//CORRECT Y YAW ANGLE-------------------------------------------------------------
+	//	Y_POS            = 165.0;
+	YAW_ANGLE_OFFSET = 0.0 - ave_yaw_angle;
+
+	gAve_yaw_angle_500->init(); //20181108
+	gAve_x_500->init();
+	gAve_y_500->init();
+
+
 	ZONE = ENTER_1ST_CORNER_ZONE;
 	//FOR TARGET_VELOCITY GEN--------------------------------------------------------
 	ref_velocity = target_velocity;
@@ -184,8 +199,25 @@ void Navi::run(int line_val, int odo, int velocity, float yaw_angle, float ave_y
       max_omega = RAD_5_DEG;
 
 
+      //CORRECT X YAW ANGLE-------------------------------------------------------------
+      if( (line_val > 40) && (line_val < 60) ){
+	X_POS  = 1580;
+	ave_yaw_angle = gAve_yaw_angle_500->average_500(yaw_angle);
+	FL_LOG        =	ave_yaw_angle;
+      }
+
       if (pre_50mm_y > ENTER_2ND_CORNER_AREA[1]){
-      	ZONE = ENTER_2ND_CORNER_ZONE;
+
+	//CORRECT Y YAW ANGLE-------------------------------------------------------------
+	YAW_ANGLE_OFFSET = RAD_90_DEG - ave_yaw_angle;
+
+	gAve_yaw_angle_500->init(); //20181108
+	gAve_x_500->init();
+	gAve_y_500->init();
+
+
+
+	ZONE = ENTER_2ND_CORNER_ZONE;
 	ref_velocity = target_velocity;
 	ref_odo      = odo;
       }

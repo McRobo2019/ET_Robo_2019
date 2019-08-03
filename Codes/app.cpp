@@ -362,19 +362,19 @@ static void log_dat( ){
 	log_dat_00[log_cnt]  = SYS_CLK;
 
 	log_dat_01[log_cnt]  = LOG_NAVI;
-	log_dat_02[log_cnt]  = gRecognition->linevalue;	    
+	log_dat_02[log_cnt]  = LINE_VAL;	    
 
 	//	log_dat_03[log_cnt]  = gOperation->left_motor_pwm;
 	//	log_dat_04[log_cnt]  = gOperation->right_motor_pwm;
 
-	log_dat_03[log_cnt]  = (int)gRecognition->xvalue;
-	log_dat_04[log_cnt]  = (int)gRecognition->yvalue;
+	log_dat_03[log_cnt]  = (int)X_POS;
+	log_dat_04[log_cnt]  = (int)Y_POS;	    
 
-	log_dat_05[log_cnt]  = gRecognition->encL;
-	log_dat_06[log_cnt]  = gRecognition->encR;
+	log_dat_05[log_cnt]  = gRecognition->xvalue;
+	log_dat_06[log_cnt]  = gRecognition->yvalue;
 
 	log_dat_07[log_cnt]  = gJudgment->target_velocity;  //20190620 ota
-	log_dat_08[log_cnt]  = gRecognition->odo;
+	log_dat_08[log_cnt]  = (int)ODO;
 	log_dat_09[log_cnt]  = gOperation->target_left_velocity;
 	log_dat_10[log_cnt]  = gOperation->target_right_velocity;
 
@@ -382,8 +382,8 @@ static void log_dat( ){
 	log_dat_12[log_cnt]  = (int)gRecognition->left_wheel_velocity;
 	log_dat_13[log_cnt]  = (int)gRecognition->right_wheel_velocity;
 	
-	float_log_00[log_cnt] = gRecognition->yawrate;
-	float_log_01[log_cnt] = gRecognition->abs_angle;
+	float_log_00[log_cnt] = FL_LOG;
+	float_log_01[log_cnt] = YAW_ANGLE;
 	float_log_02[log_cnt] = gJudgment->target_omega;
 	float_log_03[log_cnt] = gRecognition->omega;
 
@@ -397,10 +397,10 @@ static void log_dat( ){
 
 #ifdef LOG_LONG
     if (log_cnt < log_size){
-      log_dat_00[log_cnt]  = (int)gRecognition->xvalue;
-      log_dat_01[log_cnt]  = (int)gRecognition->yvalue;
+      log_dat_00[log_cnt]  = (int)X_POS;
+      log_dat_01[log_cnt]  = (int)Y_POS;
       log_dat_02[log_cnt]  = gRecognition->velocity;
-      log_dat_03[log_cnt] =  (int)(gRecognition->abs_angle*1000.0);
+      log_dat_03[log_cnt] =  (int)(YAW_ANGLE*1000.0);
     }
 #endif
       break;
@@ -421,7 +421,7 @@ static void log_dat( ){
 	log_dat_06[log_cnt]  = gRecognition->encR;
 
 	log_dat_07[log_cnt]  = gJudgment->target_velocity;  //20190620 ota
-	log_dat_08[log_cnt]  = gRecognition->odo;
+	log_dat_08[log_cnt]  = (int)ODO;
 	log_dat_09[log_cnt]  = gOperation->target_left_velocity;
 	log_dat_10[log_cnt]  = gOperation->target_right_velocity;
 
@@ -435,12 +435,12 @@ static void log_dat( ){
 
 	log_dat_15[log_cnt]  = gRecognition->odo;
       
-	float_to_int_x1000   =  gRecognition->abs_angle*1000.0;
+	float_to_int_x1000   =  YAW_ANGLE*1000.0;
 	log_dat_16[log_cnt]  =  (int)float_to_int_x1000;
 	*/
 	
 	float_log_00[log_cnt] = gRecognition->yawrate;
-	float_log_01[log_cnt] = gRecognition->abs_angle;
+	float_log_01[log_cnt] = YAW_ANGLE;
 	float_log_02[log_cnt] = gJudgment->target_omega;
 	float_log_03[log_cnt] = gRecognition->omega;
 
@@ -450,7 +450,7 @@ static void log_dat( ){
 
 #ifdef LOG_LONG
       if (log_cnt < log_size){
-	log_dat_00[log_cnt]  = (int)gRecognition->xvalue;
+	log_dat_00[log_cnt]  = (int)X_POS;
 	log_dat_01[log_cnt]  = gJudgment->forward;
 	log_dat_03[log_cnt]  = gRecognition->velocity;
       }
@@ -489,12 +489,12 @@ static void log_dat( ){
 
 	log_dat_15[log_cnt]  = gRecognition->odo;
       
-	float_to_int_x1000   =  gRecognition->abs_angle*1000.0;
+	float_to_int_x1000   =  YAW_ANGLE*1000.0;
 	log_dat_16[log_cnt]  =  (int)float_to_int_x1000;
 	*/
 	
 	float_log_00[log_cnt] = gRecognition->yawrate;
-	float_log_01[log_cnt] = gRecognition->abs_angle;
+	float_log_01[log_cnt] = YAW_ANGLE;
 	float_log_02[log_cnt] = gJudgment->target_omega;
 	float_log_03[log_cnt] = gRecognition->omega;
       }
@@ -503,7 +503,7 @@ static void log_dat( ){
 
 #ifdef LOG_LONG
       if (log_cnt < log_size){
-	log_dat_00[log_cnt]  = (int)gRecognition->xvalue;
+	log_dat_00[log_cnt]  = (int)X_POS;
 	log_dat_01[log_cnt]  = gJudgment->forward;
 	log_dat_03[log_cnt]  = gRecognition->velocity;
       }
@@ -576,7 +576,7 @@ static void export_log_dat( ){
   switch(SYS_MODE){
 #ifdef LOG_SHORT
     case LINE_TRACE:
-      fprintf(fp_wr, "clock, log_navi, line, x, y, left_motor_enc, right_motor_enc, target_velocity, odo, target_vl, target_vr, velocity, left_wheel_velo, right_wheel_velo, yaw_rate, abs_angle, target_omega, omega\n");   
+      fprintf(fp_wr, "clock, log_navi, line, x, y, left_motor_enc, right_motor_enc, target_velocity, odo, target_vl, target_vr, velocity, left_wheel_velo, right_wheel_velo, fl_log, abs_angle, target_omega, omega\n");   
       break;
 
     case TRACK:
@@ -669,17 +669,10 @@ void rec_task(intptr_t exinf) {
 
     gRecognition->setSonarDistance();
 
-    gJudgment->set_in_data(gRecognition->linevalue,
-			   gRecognition->green_flag,
-			   gRecognition->xvalue,
-			   gRecognition->yvalue,
-			   gRecognition->pre_50mm_x,
-			   gRecognition->pre_50mm_y,
-			   gRecognition->odo,
+    gJudgment->set_in_data(gRecognition->green_flag,
 			   gRecognition->velocity,
 			   gRecognition->pre_velo_0p5sec, 
 			   gRecognition->yawrate,
-			   gRecognition->abs_angle,
 			   gRecognition->ave_angle,
 			   gTailMotor.getCount(),             //it will be modified later 20190420 ota
 			   gRecognition->robo_stop,
