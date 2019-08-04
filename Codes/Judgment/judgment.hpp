@@ -8,6 +8,7 @@
 #include "util.hpp"
 #include "line_tracer.hpp"
 #include "navi.hpp"
+#include "map_trace.hpp"
 
 using namespace std;
 
@@ -65,6 +66,7 @@ private:
   //  Motion_Ctl *gMotion_Ctl = new Motion_Ctl();
   Line_Trace *gLine_Trace = new Line_Trace();
   Navi       *gNavi       = new Navi();
+  Map_Trace  *gMap_Trace  = new Map_Trace();
 
   int   Mmode;
   bool  mGreen_flag;  //ライン検出値

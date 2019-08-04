@@ -36,6 +36,7 @@ void Judgment::init() {
   gAve_line_val->init();
   gAve_yaw_angle_500->init(); //20181108
   gNavi->init();
+  gMap_Trace->init();
 
 
 }
@@ -80,8 +81,7 @@ void Judgment::run() {
   if(DRIVE_MODE == LINE_TRACE){
     line_trace_mode = true;
 
-    //    gNavi->run(mLinevalue, mOdo, (int)mVelocity, mYawrate, mAve_yaw_angle, X_POS, Y_POS, (int)mPre_50mm_x, (int)mPre_50mm_y);
-   gNavi->run(LINE_VAL, ODO, (int)mVelocity, YAW_ANGLE, X_POS, Y_POS, PRE_X_POS, PRE_Y_POS);
+    gNavi->run(LINE_VAL, ODO, (int)mVelocity, YAW_ANGLE, X_POS, Y_POS, PRE_X_POS, PRE_Y_POS);
     
     mRef_Omega      = gNavi->ref_omega;
     mMax_Omega      = gNavi->max_omega;
@@ -93,81 +93,14 @@ void Judgment::run() {
   else if(DRIVE_MODE == TRACK){
     line_trace_mode    = false;
 
-    switch(TEST_MODE){
-
-    case MODE_00:
-      det_navi_log = 0;
-      target_velocity = 0;
-      target_omega    = 0.0;
-
-      ref_clock = SYS_CLK + 499; //0.5sec
-      ref_odo   = ODO + 4399;
-      TEST_MODE = MODE_01;
-
-      det_navi_log = ref_odo;
-      break;
-
-    case MODE_01:
-      det_navi_log = 100000+ref_odo;
-      target_velocity = 0;
-      target_omega    = 0.0;
-
-      if(SYS_CLK > ref_clock){
-	TEST_MODE = MODE_02;
-	ref_clock = SYS_CLK;
-      }
-      break;
-
-    case MODE_02:
-      det_navi_log = 300000+ref_odo;
-
-      target_omega    = 0.0;
-      //      target_velocity = 200*(SYS_CLK - ref_clock);
-      target_velocity = 0.2*(SYS_CLK - ref_clock);
-      if(target_velocity > 399){
-	target_velocity = 400;
-	TEST_MODE = MODE_03;
-      }
-      break;
-
-    case MODE_03:
-      det_navi_log = 300000+ref_odo;
-      target_velocity = 400;
-      target_omega    = 0.0;
-      if(ODO > ref_odo){
-	TEST_MODE = MODE_04;
-	ref_odo   = ODO + 401;
-      }
-      break;
-
-    case MODE_04:
-      det_navi_log = 400000+ref_odo;
-      target_velocity = ref_odo - ODO;
-      target_omega    = 0.0;
-
-      if(target_velocity > 400){
-	target_velocity = 400;
-      }else if(target_velocity < 0){
-	target_velocity = 0;
-      }
-
-      if(ODO > ref_odo){
-	TEST_MODE = MODE_05;
-      }
-      break;
-
-    case MODE_05:
-      det_navi_log = 500000+ref_odo;
-      target_velocity = 0;
-      target_omega    = 0.0;
-      break;
-
-    default:
-      break;
-    }
-
-
+    gMap_Trace->run(LINE_VAL, ODO, (int)mVelocity, YAW_ANGLE, X_POS, Y_POS, PRE_X_POS, PRE_Y_POS);
     
+    mRef_Omega      = gMap_Trace->ref_omega;
+    mMax_Omega      = gMap_Trace->max_omega;
+    mMin_Omega      = gMap_Trace->min_omega;
+    target_velocity = gMap_Trace->target_velocity;
+
+    target_omega = gLine_Trace->line_trace_omega(LINE_VAL, mRef_Omega, mMax_Omega, mMin_Omega);
   }
   else if(DRIVE_MODE == DEBUG){
     line_trace_mode    = false;

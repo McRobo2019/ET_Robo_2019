@@ -290,7 +290,8 @@ void Navi::run(int line_val, int odo, int velocity, float yaw_angle, int x, int 
   case FOURTH_CORNER_ZONE:
     LOG_NAVI = 1110;
     target_velocity = FOURTH_CORNER_VELOCITY_VAL;
-    ref_omega= -1.0 * (float)velocity/CIRCLE_04[2];
+    //    ref_omega= -1.0 * (float)velocity/CIRCLE_04[2];
+    ref_omega= (float)velocity/CIRCLE_04[2];
     min_omega= ref_omega - RAD_15_DEG;
     max_omega= ref_omega + RAD_15_DEG;
     if (pre_50mm_x < FIFTH_CORNER_AREA[2]){ZONE = FIFTH_CORNER_ZONE;
@@ -304,7 +305,8 @@ void Navi::run(int line_val, int odo, int velocity, float yaw_angle, int x, int 
 	LOG_NAVI = 1120;
 	target_velocity = FIFTH_CORNER_VELOCITY_VAL;
 
-	ref_omega = -1.0 * (float)velocity/CIRCLE_05[2];
+	//	ref_omega = -1.0 * (float)velocity/CIRCLE_05[2];
+	ref_omega = (float)velocity/CIRCLE_05[2];
 	min_omega = ref_omega - RAD_15_DEG;
 	max_omega = ref_omega + RAD_15_DEG;
 
@@ -336,7 +338,8 @@ void Navi::run(int line_val, int odo, int velocity, float yaw_angle, int x, int 
 	LOG_NAVI = 1140;
 	target_velocity = SIXTH_CORNER_VELOCITY_VAL;
 
-	ref_omega = -1.0 * (float)velocity/CIRCLE_06[2];
+	//	ref_omega = -1.0 * (float)velocity/CIRCLE_06[2];
+	ref_omega = (float)velocity/CIRCLE_06[2];
 	min_omega = ref_omega - RAD_15_DEG;
 	max_omega = ref_omega + RAD_15_DEG;
 
@@ -380,7 +383,8 @@ void Navi::run(int line_val, int odo, int velocity, float yaw_angle, int x, int 
 	LOG_NAVI = 1210;
 	target_velocity = SEVENTH_CORNER_VELOCITY_VAL;
 
-	ref_omega = -1.0 * (float)velocity/CIRCLE_07[2];
+	//	ref_omega = -1.0 * (float)velocity/CIRCLE_07[2];
+	ref_omega = (float)velocity/CIRCLE_07[2];
 	min_omega = ref_omega - RAD_15_DEG;
 	max_omega = ref_omega + RAD_15_DEG;
 
@@ -398,7 +402,8 @@ void Navi::run(int line_val, int odo, int velocity, float yaw_angle, int x, int 
 	LOG_NAVI = 1220;
 	target_velocity = EIGHTH_CORNER_VELOCITY_VAL;
 
-	ref_omega = -1.0 * (float)velocity/CIRCLE_08[2];
+	//	ref_omega = -1.0 * (float)velocity/CIRCLE_08[2];
+	ref_omega = (float)velocity/CIRCLE_08[2];
 	min_omega = ref_omega - RAD_15_DEG;
 	max_omega = ref_omega + RAD_15_DEG;
 

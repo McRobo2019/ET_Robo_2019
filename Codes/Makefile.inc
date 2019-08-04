@@ -13,6 +13,7 @@ APPL_CXXOBJS += \
     recognition.o \
     judgment.o \
     navi.o \
+    map_trace.o \
 
 
 SRCLANG := c++
