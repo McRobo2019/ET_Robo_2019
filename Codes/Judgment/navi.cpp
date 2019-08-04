@@ -302,6 +302,7 @@ void Navi::run(int line_val, int odo, int velocity, float yaw_angle, int x, int 
       ref_omega= (float)velocity/CIRCLE_04[2];
       min_omega= ref_omega - RAD_15_DEG;
       max_omega= ref_omega + RAD_15_DEG;
+
     }
 
     if (pre_50mm_x < FIFTH_CORNER_AREA[2]){ZONE = FIFTH_CORNER_ZONE;
