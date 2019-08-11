@@ -91,6 +91,8 @@ void Judgment::run() {
     target_omega = gLine_Trace->line_trace_omega(LINE_VAL, mRef_Omega, mMax_Omega, mMin_Omega);
   }
   else if(DRIVE_MODE == TRACK){
+
+    /*
     line_trace_mode    = false;
 
     gMap_Trace->run(LINE_VAL, ODO, (int)mVelocity, YAW_ANGLE, X_POS, Y_POS, PRE_X_POS, PRE_Y_POS);
@@ -101,6 +103,14 @@ void Judgment::run() {
     target_velocity = gMap_Trace->target_velocity;
 
     target_omega = gLine_Trace->line_trace_omega(LINE_VAL, mRef_Omega, mMax_Omega, mMin_Omega);
+    */
+
+    target_velocity = 200;
+    mRef_Omega      = gNavi->omega_frm_vector(2000, 2000, X_POS,Y_POS, YAW_ANGLE, (int)mVelocity);
+    mMax_Omega      = mRef_Omega + 0.3;
+    mMin_Omega      = mRef_Omega - 0.3;
+    target_omega    = gLine_Trace->line_trace_omega(50, mRef_Omega, mMax_Omega, mMin_Omega);
+
   }
   else if(DRIVE_MODE == DEBUG){
     line_trace_mode    = false;

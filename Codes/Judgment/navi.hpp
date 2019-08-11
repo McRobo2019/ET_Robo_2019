@@ -16,12 +16,15 @@ class Navi {
 public:
   explicit Navi();//コンストラクタ
   void init();
+  float omega_frm_vector(float target_x, float target_y, float current_x, float current_y, float yaw_angle, int velocity);
   //  void run(int line_val,int odo, int velocity, float yaw_angle, float ave_yaw_angle, int x, int y, int pre_50mm_x, int pre_50mm_y);
-    void run(int line_val,int odo, int velocity, float yaw_angle, int x, int y, int pre_50mm_x, int pre_50mm_y);
+  void run(int line_val,int odo, int velocity, float yaw_angle, int x, int y, int pre_50mm_x, int pre_50mm_y);
 
+
+  
   Average_500_Data *gAve_yaw_angle_500 = new Average_500_Data(); //20181108
-    Average_500_Data *gAve_x_500 = new Average_500_Data();
-    Average_500_Data *gAve_y_500 = new Average_500_Data();
+  Average_500_Data *gAve_x_500 = new Average_500_Data();
+  Average_500_Data *gAve_y_500 = new Average_500_Data();
 
   int   target_velocity;
   float min_omega;
@@ -33,6 +36,11 @@ public:
   float ave_yaw_angle;
 
   bool  lost_line;
+
+  
+
+
+
 
 private:
   enum Zone{
