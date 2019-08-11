@@ -361,7 +361,7 @@ void Navi::run(int line_val, int odo, int velocity, float yaw_angle, int x, int 
 
 
 
-	if (pre_50mm_x > FOURTH_STRAIGHT_AREA[0]){
+	if (x > FOURTH_STRAIGHT_AREA[0]){
 	  ZONE = FOURTH_STRAIGHT_ZONE;
 	  ref_velocity = target_velocity;
 	  ref_odo      = odo;
