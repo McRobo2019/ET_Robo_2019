@@ -4,7 +4,7 @@
 #include <stdlib.h>
 #include "ev3api.h"
 #include "navi.hpp"
-
+#include "math.h"
 
 Navi::Navi() {
 
@@ -21,7 +21,43 @@ void Navi::init() {
 }
 
 
-/****************************************************************************************/
+float Navi::omega_frm_vector(float target_x, float target_y, float current_x, float current_y, float yaw_angle, int velocity){
+
+  float x12, y12, x10, y10;
+  float predic_dist;
+  float a;
+  float angle_vec0_vec1;
+  float dist_vec0;
+  float time;
+  float ref_omega;
+  predic_dist = 0.5 + (float)velocity; //0.5 sec x velocity;
+
+  //vector 0
+  x12 = target_x - current_x;
+  y12 = target_y - current_y;
+
+  //vector 1
+  x10 = predic_dist * cos(yaw_angle);
+  y10 = predic_dist * sin(yaw_angle);
+
+  a   = (x12*y10)-(y12*x10);
+  
+  dist_vec0 = sqrt(pow(x12,2.0) + pow(y12,2.0));
+
+  angle_vec0_vec1 = a/dist_vec0;
+
+  time = dist_vec0/(float)velocity;
+
+  ref_omega = -1.0 * angle_vec0_vec1/time * RAD_1_DEG;
+
+  return ref_omega;
+
+}
+
+
+
+
+
 /****************************************************************************************/
 //void Navi::run(int line_val, int odo, int velocity, float yaw_angle, float ave_yaw_angle, int x, int y, int pre_50mm_x, int pre_50mm_y) {
 void Navi::run(int line_val, int odo, int velocity, float yaw_angle, int x, int y, int pre_50mm_x, int pre_50mm_y) {
