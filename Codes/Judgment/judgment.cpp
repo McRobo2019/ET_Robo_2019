@@ -105,31 +105,31 @@ void Judgment::run() {
     target_omega = gLine_Trace->line_trace_omega(LINE_VAL, mRef_Omega, mMax_Omega, mMin_Omega);
     */
 
+    /*
     target_velocity = 200;
     mRef_Omega      = gNavi->omega_frm_vector(2000, 2000, X_POS,Y_POS, YAW_ANGLE, (int)mVelocity);
     mMax_Omega      = mRef_Omega + 0.3;
     mMin_Omega      = mRef_Omega - 0.3;
     target_omega    = gLine_Trace->line_trace_omega(50, mRef_Omega, mMax_Omega, mMin_Omega);
+    */
 
-  }
-  else if(DRIVE_MODE == DEBUG){
     line_trace_mode    = false;
 
     switch(TEST_MODE){
     case MODE_00:
-      det_navi_log = 0;
+      LOG_NAVI = 0;
       target_velocity = 0;
       target_omega    = 0.0;
 
       ref_clock = SYS_CLK + 500; //0.5sec
-      ref_odo   = ODO + 1200;
+      ref_odo   = ODO + 2000;
       TEST_MODE = MODE_01;
 
-      det_navi_log = ref_odo;
+      LOG_NAVI = ref_odo;
       break;
 
     case MODE_01:
-      det_navi_log = 1;
+      LOG_NAVI = 1;
       target_velocity = 0;
       target_omega    = 0.0;
 
@@ -140,7 +140,76 @@ void Judgment::run() {
       break;
 
     case MODE_02:
-      det_navi_log = 2;
+      LOG_NAVI = 2;
+      target_omega    = (0.0 - YAW_ANGLE);
+      target_velocity = 0.2*(SYS_CLK - ref_clock);
+      if(target_velocity >= 200){
+	target_velocity = 200;
+	TEST_MODE = MODE_03;
+      }
+      break;
+    
+    case MODE_03:
+      LOG_NAVI = 3;
+      target_velocity = 200;
+      target_omega    = (0.0 - YAW_ANGLE);
+
+      if(ODO > ref_odo){
+	TEST_MODE = MODE_04;
+	ref_odo   = 3000;
+	ref_clock = SYS_CLK + 1000;
+	LOG_NAVI  = ref_odo;
+      }
+      break;
+      
+    case MODE_04:
+      LOG_NAVI = 4;
+
+      if(ODO >= ref_odo){
+	target_velocity = 0;
+	target_omega    = 0.0;
+      }else if (target_velocity <= 30) {
+	target_velocity = 30;
+	target_omega    = (0.0 - YAW_ANGLE);
+      }else{
+	target_velocity = 0.2*(ref_odo - ODO);
+	target_omega    = (0.0 - YAW_ANGLE);
+      }
+      break;
+
+    default:
+      break;
+    }
+  }
+  else if(DRIVE_MODE == DEBUG){
+    line_trace_mode    = false;
+
+    switch(TEST_MODE){
+    case MODE_00:
+      LOG_NAVI = 0;
+      target_velocity = 0;
+      target_omega    = 0.0;
+
+      ref_clock = SYS_CLK + 500; //0.5sec
+      ref_odo   = ODO + 1200;
+      TEST_MODE = MODE_01;
+
+      LOG_NAVI = ref_odo;
+      break;
+
+    case MODE_01:
+      LOG_NAVI = 1;
+      target_velocity = 0;
+      target_omega    = 0.0;
+
+      if(SYS_CLK > ref_clock){
+	TEST_MODE = MODE_02;
+	ref_clock = SYS_CLK;
+      }
+      break;
+
+    case MODE_02:
+      LOG_NAVI = 2;
       target_omega    = 0.0;
       target_velocity = 0.2*(SYS_CLK - ref_clock);
       if(target_velocity >= 400){
@@ -151,7 +220,7 @@ void Judgment::run() {
       break;
 
     case MODE_03:
-      det_navi_log = 3;
+      LOG_NAVI = 3;
       target_velocity = 400;
       target_omega    = 0.0;
 
@@ -163,7 +232,7 @@ void Judgment::run() {
       break;
 
     case MODE_04:
-      det_navi_log = 4;
+      LOG_NAVI = 4;
       target_velocity = 400;
       target_omega    = 0.4 * PAI * (ODO - ref_odo)/800.0;
       if (target_omega >= 0.4 * PAI){
@@ -174,7 +243,7 @@ void Judgment::run() {
       break;
 
     case MODE_05:
-      det_navi_log = 5;
+      LOG_NAVI = 5;
 		target_velocity = 400;
 		target_omega = 0.4 * PAI;
 		
@@ -185,7 +254,7 @@ void Judgment::run() {
       break;
 
     case MODE_06:
-      det_navi_log = 6;
+      LOG_NAVI = 6;
 		target_velocity = 400;
 		target_omega = 0.4 * PAI * (-ODO + ref_odo)/800.0;
 		if (target_omega <= 0) {
@@ -196,7 +265,7 @@ void Judgment::run() {
       break;
 
     case MODE_07:
-      det_navi_log = 7;
+      LOG_NAVI = 7;
 		target_velocity = 400;
 		target_omega = 0;
 		if (ODO > ref_odo) {
@@ -208,17 +277,16 @@ void Judgment::run() {
       break;
 
     case MODE_08:
-      det_navi_log = 8;
-		target_velocity = 0.2 * (ref_clock - SYS_CLK);
-		target_omega = 0;
-		if (target_velocity <= 0) {
-			TEST_MODE = MODE_09;
-		}
-
+      LOG_NAVI = 8;
+      target_velocity = 0.2 * (ref_clock - SYS_CLK);
+      target_omega = 0;
+      if (target_velocity <= 0) {
+	TEST_MODE = MODE_09;
+      }
       break;
 
     case MODE_09:
-      det_navi_log = 9;
+      LOG_NAVI = 9;
 		target_velocity = 0;
 		target_omega = 0.0;
 
