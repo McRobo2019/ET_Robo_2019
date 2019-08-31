@@ -193,8 +193,9 @@ def standardize_input(image):
 def triming_image(image):
     block_img = []
 
-    num_img = img_psp[num_xy[1][1] :num_xy[0][1], num_xy[0][0]: num_xy[1][0]]
+    num_img = image[num_xy[1][1] :num_xy[0][1], num_xy[0][0]: num_xy[1][0]]
     num_img = standardize_input(num_img)
+    num_img = cv2.cvtColor(num_img, cv2.COLOR_BGR2GRAY)
     for i in range (len(block_xy)):
         triming_img = image[block_xy[i][1][1] : block_xy[i][0][1], block_xy[i][0][0] : block_xy[i][1][0]]
         std_img = standardize_input(triming_img)
