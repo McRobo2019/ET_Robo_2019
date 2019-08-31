@@ -1,3 +1,4 @@
+
 /******************************************************************************
  *  navi.cpp
 *****************************************************************************/
@@ -361,10 +362,10 @@ void Navi::run(int line_val, int odo, int velocity, float yaw_angle, int x, int 
 //     max_omega= ref_omega + RAD_15_DEG;
 //     }
 
-
     if (y > CIRCLE_04[1]){
       LOG_NAVI = 1111;
-      min_omega = MINUS_RAD_22P5_DEG;
+      //min_omega = MINUS_RAD_22P5_DEG;
+      min_omega= (float)velocity/CIRCLE_04[2] + MINUS_RAD_5_DEG;
       ref_omega = 0.0;
       max_omega = RAD_22P5_DEG;
     }else{
