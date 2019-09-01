@@ -330,7 +330,8 @@ void Navi::run(int line_val, int odo, int velocity, float yaw_angle, int x, int 
     target_velocity = THIRD_CORNER_VELOCITY_VAL;
 
     ref_omega = (float)velocity/CIRCLE_03[2];
-    min_omega = ref_omega - RAD_15_DEG;
+    //    min_omega = ref_omega - RAD_15_DEG;
+    min_omega = MINUS_RAD_5_DEG;
     max_omega = ref_omega + RAD_15_DEG;
 
     if (y < FOURTH_CORNER_AREA[3]){
@@ -365,7 +366,7 @@ void Navi::run(int line_val, int odo, int velocity, float yaw_angle, int x, int 
     if (y > CIRCLE_04[1]){
       LOG_NAVI = 1111;
       //min_omega = MINUS_RAD_22P5_DEG;
-      min_omega= (float)velocity/CIRCLE_04[2] + MINUS_RAD_5_DEG;
+      min_omega= (float)velocity/CIRCLE_04[2] +  MINUS_RAD_30_DEG;
       ref_omega = 0.0;
       max_omega = RAD_22P5_DEG;
     }else{
@@ -521,28 +522,50 @@ void Navi::run(int line_val, int odo, int velocity, float yaw_angle, int x, int 
 
 
 /** LEFT 2019 ***********************************************************************/
-      case NINTH_CORNER_ZONE:
-	LOG_NAVI = 1230;
-	target_velocity = NINTH_CORNER_VELOCITY_VAL;
-
-	ref_omega = (float)velocity/CIRCLE_09[2];
-	min_omega = ref_omega - RAD_15_DEG;
-	max_omega = ref_omega + RAD_15_DEG;
-
-	if(y > CIRCLE_09[1]){
-	  min_omega = MINUS_RAD_22P5_DEG;
-	  ref_omega = 0;
-	  max_omega = RAD_22P5_DEG;
-	}
+  case NINTH_CORNER_ZONE:
+    LOG_NAVI = 1230;
+    target_velocity = NINTH_CORNER_VELOCITY_VAL;
 
 
-	   
-	if ((pre_50mm_x > TENTH_CORNER_AREA[0])&&(y < CIRCLE_09[1])){
-	  ZONE = TENTH_CORNER_ZONE;
-	  ref_velocity = target_velocity;
-	  ref_odo      = odo;
-	}
-	break;
+    if(y > CIRCLE_09[1]){
+      LOG_NAVI = 1231;
+      /*
+      min_omega = MINUS_RAD_22P5_DEG;
+      ref_omega = 0;
+      max_omega = RAD_22P5_DEG;
+      */
+      /*
+      min_omega = MINUS_RAD_5_DEG;
+      ref_omega = 0;
+      max_omega = RAD_22P5_DEG;
+      */
+
+
+      min_omega = MINUS_RAD_15_DEG;
+      ref_omega = 0;
+      max_omega = RAD_45_DEG;
+
+      /*
+      min_omega = MINUS_RAD_22P5_DEG;
+      ref_omega = 0;
+      max_omega = RAD_90_DEG;
+      */
+
+
+    }else{
+      LOG_NAVI = 1232;      
+      ref_omega = (float)velocity/CIRCLE_09[2];
+      min_omega = ref_omega - RAD_15_DEG;
+      max_omega = ref_omega + RAD_15_DEG;
+      
+    }
+    
+    if ((pre_50mm_x > TENTH_CORNER_AREA[0])&&(y < CIRCLE_09[1])){
+      ZONE = TENTH_CORNER_ZONE;
+      ref_velocity = target_velocity;
+      ref_odo      = odo;
+    }
+    break;
 
 /** LEFT 2019 ***********************************************************************/
       case TENTH_CORNER_ZONE:
