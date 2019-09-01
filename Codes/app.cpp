@@ -531,7 +531,7 @@ static void export_log_dat( ){
   int i;
 		
   //file name gen ----
-  char file_name[MAX_CHAR_NUM] = "log_C_"; //koko
+  char file_name[MAX_CHAR_NUM] = "log_D_"; //koko
   char file_cnt[MAX_CHAR_NUM] = "000";
   char file_format[MAX_CHAR_NUM] = ".csv";
   int  str_to_num;
