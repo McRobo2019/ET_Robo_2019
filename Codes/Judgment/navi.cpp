@@ -31,7 +31,8 @@ float Navi::omega_frm_vector(float target_x, float target_y, float current_x, fl
   float dist_vec0;
   float time;
   float ref_omega;
-  predic_dist = 0.5 + (float)velocity; //0.5 sec x velocity;
+
+  predic_dist = 0.5 * (float)velocity; //0.5 sec x velocity;
 
   //vector 0
   x12 = target_x - current_x;
@@ -55,8 +56,44 @@ float Navi::omega_frm_vector(float target_x, float target_y, float current_x, fl
 
 }
 
+float Navi::omega_frm_circle(float circle_x, float circle_y, float circle_r, float current_x, float current_y, float yaw_angle, int velocity){
+
+  float x10, y10;
+  float predic_dist;
+  float x0,y0,a,a2,b,b2,r2;
+  float diff_r;
+  float ref_omega;
+
+  predic_dist = 0.5 * (float)velocity; //0.5 sec x velocity;
 
 
+  //vector
+  x10 = predic_dist * cos(yaw_angle);
+  y10 = predic_dist * sin(yaw_angle);
+
+  x0  = current_x + x10;
+  y0  = current_y + y10;
+
+  a   = circle_x - x0;
+  b   = circle_y - y0;
+
+  a2  = a * a;
+  b2  = b * b;
+  r2  = a2 + b2;
+
+  if(circle_r < 0){
+    diff_r = -1.0 * circle_r - sqrt(r2);
+  }else{
+    diff_r = sqrt(r2) - circle_r;
+  }
+
+  if(diff_r > 45.0) diff_r = 45.0;
+  if(diff_r < -45.0) diff_r = -45.0;
+   
+  ref_omega = diff_r * RAD_1_DEG;
+
+  return ref_omega;
+}
 
 
 /****************************************************************************************/

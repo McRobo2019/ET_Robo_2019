@@ -17,6 +17,7 @@ public:
   explicit Navi();//コンストラクタ
   void init();
   float omega_frm_vector(float target_x, float target_y, float current_x, float current_y, float yaw_angle, int velocity);
+  float omega_frm_circle(float circle_x, float circle_y, float circle_r, float current_x, float current_y, float yaw_angle, int velocity);
   //  void run(int line_val,int odo, int velocity, float yaw_angle, float ave_yaw_angle, int x, int y, int pre_50mm_x, int pre_50mm_y);
   void run(int line_val,int odo, int velocity, float yaw_angle, int x, int y, int pre_50mm_x, int pre_50mm_y);
 
