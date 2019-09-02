@@ -124,6 +124,7 @@ void Operation::run() {
   float vr;
   float l_pwm;
   float r_pwm;
+  float gain;
 
   monitoring_cmd();
 
@@ -160,12 +161,12 @@ void Operation::run() {
 
     //Motor PI CTL
 
+
     gLeft_Motor_ctlModelClass->setIn1(vl);
     gLeft_Motor_ctlModelClass->setIn2(mLeft_Wheel_Velocity);
     gLeft_Motor_ctlModelClass->step();
     l_pwm = gLeft_Motor_ctlModelClass->getOut1();
     left_motor_pwm = (int)l_pwm;
-
     
     gRight_Motor_ctlModelClass->setIn1(vr);
     gRight_Motor_ctlModelClass->setIn2(mRight_Wheel_Velocity);
