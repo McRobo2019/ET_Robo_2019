@@ -221,6 +221,8 @@ int SECOND_STRAIGHT_AREA[4]  = {1400,  605, 1745,  900};
 int ENTER_2ND_CORNER_AREA[4] = {1400,  900, 1745, 1150};
 //int SECOND_CORNER_AREA[4]    = { 950, 1150, 1745, 1800};
 int SECOND_CORNER_AREA[4]    = { 920, 1150, 1745, 1800};
+int SECOND_CORNER_AREA_2[4]  = { 525, 1075, 1800, 1800}; //for new concept
+
 //int THIRD_STRAIGHT_AREA[4]   = {0, 0, 0, 0};
 //int THIRD_CORNER_AREA[4]     = {500, 1100, 950, 1800};
 //int THIRD_CORNER_AREA[4]     = {500, 1100, 920, 1800};
@@ -255,6 +257,8 @@ int STRAIGT_01[4] = {   0,  165, 1140,  165};
 int CIRCLE_01[3]  = {1140, 605, 440};
 int STRAIGT_02[4] = {1580, 605, 1580, 1150};
 int CIRCLE_02[3]  = {1105, 1150, 475};
+int CIRCLE_22[3]  = {1030, 1075, 550}; //circle for new concept
+
 int STRAIGT_03[4] = {1105, 1625, 920, 1625};
 int CIRCLE_03[3]  = {920, 1335, 290};
 

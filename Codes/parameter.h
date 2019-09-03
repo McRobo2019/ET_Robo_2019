@@ -166,8 +166,13 @@ extern int FIRST_STRAIGHT_AREA[4];
 extern int ENTER_1ST_CORNER_AREA[4];
 extern int FIRST_CORNER_AREA[4];
 extern int SECOND_STRAIGHT_AREA[4];
+extern int SECOND_STRAIGHT_AREA_2[4];
+
+
 extern int ENTER_2ND_CORNER_AREA[4];
 extern int SECOND_CORNER_AREA[4];
+extern int SECOND_CORNER_AREA_2[4];
+
 extern int THIRD_STRAIGHT_AREA[4];
 extern int THIRD_CORNER_AREA[4];
 extern int S_CORNER_AREA[4];
@@ -194,6 +199,8 @@ extern int STRAIGT_01[4];
 extern int CIRCLE_01[3];
 extern int STRAIGT_02[4];
 extern int CIRCLE_02[3];
+extern int CIRCLE_22[3];
+
 extern int STRAIGT_03[4];
 extern int CIRCLE_03[3];
 extern int STRAIGT_04[4];

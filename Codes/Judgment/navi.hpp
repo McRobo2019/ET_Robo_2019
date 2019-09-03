@@ -8,6 +8,7 @@
 #ifndef EV3_APP_NAVI_H_
 #define EV3_APP_NAVI_H_
 #include "util.hpp"
+#include "line_tracer.hpp"
 #include "parameter.h"
 
 using namespace std;
@@ -28,6 +29,7 @@ public:
   Average_500_Data *gAve_y_500 = new Average_500_Data();
 
   int   target_velocity;
+  float target_omega;
   float min_omega;
   float ref_omega;
   float max_omega;
@@ -44,6 +46,8 @@ public:
 
 
 private:
+  Line_Trace *Navi_Line_Trace = new Line_Trace();
+
   enum Zone{
     START_ZONE,
     START_BACK,
