@@ -145,12 +145,20 @@ void Judgment::run() {
 
     case MODE_02:
       LOG_NAVI = 2;
+
+      target_omega    = 0.0;
+      target_velocity = -100;
+
+
+      /*
       target_omega    = (0.0 - YAW_ANGLE);
       target_velocity = 0.2*(SYS_CLK - ref_clock);
       if(target_velocity >= 200){
 	target_velocity = 200;
 	TEST_MODE = MODE_03;
       }
+      */
+
       break;
     
     case MODE_03:
