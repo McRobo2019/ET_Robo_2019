@@ -19,6 +19,9 @@ public:
   void init();
   float omega_frm_vector(float target_x, float target_y, float current_x, float current_y, float yaw_angle, int velocity);
   float omega_frm_circle(float circle_x, float circle_y, float circle_r, float current_x, float current_y, float yaw_angle, int velocity);
+  float omega_frm_angle(float target_angle, float yaw_angle);
+
+
   //  void run(int line_val,int odo, int velocity, float yaw_angle, float ave_yaw_angle, int x, int y, int pre_50mm_x, int pre_50mm_y);
   void run(int line_val,int odo, int velocity, float yaw_angle, int x, int y, int pre_50mm_x, int pre_50mm_y);
 
@@ -39,9 +42,7 @@ public:
   float ave_yaw_angle;
 
   bool  lost_line;
-
-  
-
+  bool  det_line;
 
 
 
@@ -58,6 +59,7 @@ private:
     ENTER_2ND_CORNER_ZONE,
     SECOND_CORNER_ZONE,
     THIRD_STRAIGHT_ZONE,
+    FIND_3RD_CORNER,
     THIRD_CORNER_ZONE,
     S_CORNER_ZONE,
     FOURTH_STRAIGHT_ZONE,
@@ -79,8 +81,18 @@ private:
     LOST
   };
 
-  Zone         ZONE;
+  enum Find_Line{
+		 LEFT_SEARCH,
+		 RIGHT_SEARCH,
+		 FORWARD_SEARCH,
+		 BACKWARD_SEARCH,
+		 ON_LINE,
+		 DET_LINE,
+		 LOST_LINE
+  };
 
+  Zone         ZONE;
+  Find_Line    FIND_LINE;
 };
 
 #endif  // EV3_APP_NAVI_H_

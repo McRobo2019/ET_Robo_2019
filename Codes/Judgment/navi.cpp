@@ -32,6 +32,7 @@ float Navi::omega_frm_vector(float target_x, float target_y, float current_x, fl
   float time;
   float ref_omega;
 
+
   predic_dist = 0.5 * (float)velocity; //0.5 sec x velocity;
 
   //vector 0
@@ -95,17 +96,36 @@ float Navi::omega_frm_circle(float circle_x, float circle_y, float circle_r, flo
   return ref_omega;
 }
 
+float Navi::omega_frm_angle(float target_angle, float yaw_angle){
+  float ref_omega;
+
+  ref_omega = target_angle - yaw_angle;
+
+  if(ref_omega > RAD_30_DEG){
+    ref_omega = RAD_30_DEG;
+  }else if(ref_omega < MINUS_RAD_30_DEG){
+    ref_omega = MINUS_RAD_30_DEG;
+  }else{
+    ref_omega = 3.0 * ref_omega;
+  }
+  
+  return ref_omega;
+}
+
 
 /****************************************************************************************/
 //void Navi::run(int line_val, int odo, int velocity, float yaw_angle, float ave_yaw_angle, int x, int y, int pre_50mm_x, int pre_50mm_y) {
 void Navi::run(int line_val, int odo, int velocity, float yaw_angle, int x, int y, int pre_50mm_x, int pre_50mm_y) {
   static float ref_odo;
   static float dif_odo;
-
+  //  static float ref_x, ref_y;
+  static float ref_yaw_angle;
+  static float det_line_angle;
+  
   static int   ref_velocity;
   static float acl_velocity;
-  static int   max_y;
-
+  //  static int   max_y;
+  float diff_angle;
 
   switch(ZONE){
 
@@ -260,27 +280,189 @@ void Navi::run(int line_val, int odo, int velocity, float yaw_angle, int x, int 
 
       if (pre_50mm_y > SECOND_CORNER_AREA_2[1]){
 	ZONE = SECOND_CORNER_ZONE;
+	DECEL_GAIN = SECOND_CORNER_VELOCITY_VAL/(RAD_90_DEG - RAD_135_DEG);
       }
       break;
       
 /** LEFT 2019 ***********************************************************************/
+// Motion Concept 2 , map trace to line trace
+/** LEFT 2019 ***********************************************************************/      
     case SECOND_CORNER_ZONE:
       LOG_NAVI = 1070;
 
-      if(x < CIRCLE_03[0]){
-	target_velocity = 100;
-	target_omega = omega_frm_circle(CIRCLE_22[0], CIRCLE_22[1], CIRCLE_22[2], x, y, yaw_angle, velocity);
-	
-      }else if (x < (CIRCLE_03[0] - CIRCLE_03[2])){
-	target_velocity = 0;
-	target_omega    = 0.0;
+      if(yaw_angle > RAD_90_DEG){
+	LOG_NAVI        = 1074;
+	target_velocity = DECEL_GAIN * (yaw_angle - RAD_90_DEG) + SECOND_CORNER_VELOCITY_VAL;
+	target_omega    = omega_frm_circle(CIRCLE_22[0], CIRCLE_22[1], CIRCLE_22[2], x, y, yaw_angle, velocity);
+	if(target_velocity < 20){
+	  LOG_NAVI        = 1075;
+	  target_velocity = 0;
+	}
+	if(velocity < 10){
+	  LOG_NAVI      = 1076;
+	  ZONE          = FIND_3RD_CORNER;
+	  if(line_val > 40){
+	    ref_yaw_angle = yaw_angle + RAD_5_DEG;
+	    FIND_LINE     = ON_LINE;
+	    det_line = true;
+	  }else{
+	    ref_yaw_angle = yaw_angle + RAD_90_DEG;
+	    FIND_LINE     = LEFT_SEARCH;
+	    det_line = false;
+	  }
+
+	}
       }else{
+	LOG_NAVI        = 1072;
 	target_velocity = SECOND_CORNER_VELOCITY_VAL;
 	target_omega = omega_frm_circle(CIRCLE_22[0], CIRCLE_22[1], CIRCLE_22[2], x, y, yaw_angle, velocity);
       }
-
-      
       break;
+
+
+/** LEFT 2019 ***********************************************************************/
+  case FIND_3RD_CORNER:
+    
+    
+    LOG_NAVI = 1080;
+      switch(FIND_LINE){
+
+      case LEFT_SEARCH:
+	LOG_NAVI = 1081;
+	target_velocity = 0;
+	target_omega = omega_frm_angle(ref_yaw_angle,  yaw_angle);
+
+	diff_angle = ref_yaw_angle - yaw_angle;
+	diff_angle = diff_angle * diff_angle;
+
+	if(line_val > 40){
+	  LOG_NAVI = 1082;
+	  det_line = true;
+	  det_line_angle = yaw_angle;
+	}
+
+	if(det_line){
+	  if(line_val < 40){
+	    FIND_LINE     = ON_LINE;
+	    ref_yaw_angle = det_line_angle;
+	  }
+	}
+
+	if(diff_angle < 25){
+	  FIND_LINE     = FORWARD_SEARCH;
+	  ref_odo = odo + 200;
+	}
+	
+
+	break;
+
+      case ON_LINE:
+	LOG_NAVI = 1083;
+	target_velocity = 0;
+	target_omega = omega_frm_angle(ref_yaw_angle,  yaw_angle);
+
+	diff_angle = ref_yaw_angle - yaw_angle;
+	diff_angle = diff_angle * diff_angle;
+	
+	if (diff_angle < 1){
+	  ZONE = THIRD_CORNER_ZONE;
+	}
+	break;
+	
+      case FORWARD_SEARCH:
+	LOG_NAVI = 1084;
+	target_velocity = 50;
+	target_omega    = 0.0;
+
+	dif_odo = ref_odo - odo;
+
+	if(line_val > 40){
+	  LOG_NAVI = 1085;
+	  det_line = true;
+	}
+
+	if(det_line){
+	  if(line_val < 40){
+	    FIND_LINE     = RIGHT_SEARCH;
+	    ref_yaw_angle = yaw_angle + MINUS_RAD_180_DEG;
+	    det_line      = false;
+	    
+	  }
+	}
+
+	if(dif_odo < 50){
+	  FIND_LINE = BACKWARD_SEARCH;
+	  ref_odo   = odo - 500;
+	  det_line  = false;
+	}
+
+	break;
+
+      case RIGHT_SEARCH:
+	LOG_NAVI = 1086;
+	target_velocity = 0;
+	target_omega = omega_frm_angle(ref_yaw_angle,  yaw_angle);
+
+	diff_angle = ref_yaw_angle - yaw_angle;
+	diff_angle = diff_angle * diff_angle;
+
+	if(line_val > 40){
+	  LOG_NAVI = 1087;
+	  det_line = true;
+	  det_line_angle = yaw_angle;
+	}
+
+	if(det_line){
+	  if(line_val < 40){
+	    FIND_LINE     = ON_LINE;
+	    ref_yaw_angle = det_line_angle;
+	  }
+	}
+
+	if(diff_angle < 25){
+	  FIND_LINE     = FORWARD_SEARCH;
+	  ref_odo = odo + 200;
+	}
+
+
+      case BACKWARD_SEARCH:
+	LOG_NAVI = 1088;
+	target_velocity = -50;
+	target_omega    = 0.0;
+
+	dif_odo = odo - ref_odo;
+
+	if(line_val > 40){
+	  LOG_NAVI = 1089;
+	  det_line = true;
+	}
+
+	if(det_line){
+	  if(line_val < 40){
+	    FIND_LINE     = FORWARD_SEARCH;
+	    ref_odo = odo + 400;
+	    det_line      = false;
+	  }
+	}
+
+	if(dif_odo < 50){
+	  LOG_NAVI = 1999;
+	  target_velocity = 0;
+	  target_omega    = 0.0;
+
+
+	}
+
+	break;
+
+
+
+
+      default:
+	break;
+      }
+
+    break;
 
 
 
