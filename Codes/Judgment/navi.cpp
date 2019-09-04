@@ -1,4 +1,3 @@
-
 /******************************************************************************
  *  navi.cpp
 *****************************************************************************/
@@ -276,7 +275,7 @@ void Navi::run(int line_val, int odo, int velocity, float yaw_angle, int x, int 
       LOG_NAVI = 1050;
 
       target_velocity = SECOND_STRAIGHT_VELOCITY_VAL;
-      target_omega = omega_frm_vector(STRAIGT_02[0],STRAIGT_02[1], x, y, yaw_angle, velocity);
+      target_omega = omega_frm_vector(STRAIGT_02[2],STRAIGT_02[3], x, y, yaw_angle, velocity);
 
       if (pre_50mm_y > SECOND_CORNER_AREA_2[1]){
 	ZONE = SECOND_CORNER_ZONE;
@@ -449,14 +448,9 @@ void Navi::run(int line_val, int odo, int velocity, float yaw_angle, int x, int 
 	  LOG_NAVI = 1999;
 	  target_velocity = 0;
 	  target_omega    = 0.0;
-
-
 	}
 
 	break;
-
-
-
 
       default:
 	break;
@@ -473,7 +467,6 @@ void Navi::run(int line_val, int odo, int velocity, float yaw_angle, int x, int 
     target_velocity = THIRD_CORNER_VELOCITY_VAL;
 
     ref_omega = (float)velocity/CIRCLE_03[2];
-    //    min_omega = ref_omega - RAD_15_DEG;
     min_omega = MINUS_RAD_5_DEG;
     max_omega = ref_omega + RAD_15_DEG;
 
@@ -488,25 +481,9 @@ void Navi::run(int line_val, int odo, int velocity, float yaw_angle, int x, int 
   case FOURTH_CORNER_ZONE:
     LOG_NAVI = 1110;
     target_velocity = FOURTH_CORNER_VELOCITY_VAL;
-    /*
-    min_omega = MINUS_RAD_45_DEG;
-    ref_omega = 0.0;
-    max_omega = RAD_45_DEG;
-    */
-    
-//       if (odo < ref_odo){
-//       min_omega = MINUS_RAD_22P5_DEG;
-//       ref_omega = 0.0;
-//       max_omega = RAD_22P5_DEG;
-//     } else {
-//     ref_omega= (float)velocity/CIRCLE_04[2];
-//     min_omega= ref_omega - RAD_15_DEG;
-//     max_omega= ref_omega + RAD_15_DEG;
-//     }
 
     if (y > CIRCLE_04[1]){
       LOG_NAVI = 1111;
-      //min_omega = MINUS_RAD_22P5_DEG;
       min_omega= (float)velocity/CIRCLE_04[2] +  MINUS_RAD_30_DEG;
       ref_omega = 0.0;
       max_omega = RAD_22P5_DEG;
@@ -525,14 +502,13 @@ void Navi::run(int line_val, int odo, int velocity, float yaw_angle, int x, int 
       case FIFTH_CORNER_ZONE:
 	LOG_NAVI = 1120;
 	target_velocity = FIFTH_CORNER_VELOCITY_VAL;
-
-	//	ref_omega = -1.0 * (float)velocity/CIRCLE_05[2];
 	ref_omega = (float)velocity/CIRCLE_05[2];
 	min_omega = ref_omega - RAD_15_DEG;
 	max_omega = ref_omega + RAD_15_DEG;
 
 	if (pre_50mm_y > THIRD_STRAIGHT_AREA[1]){
 	  ZONE = THIRD_STRAIGHT_ZONE;
+	  gAve_yaw_angle_500->init();
 	}
 	break;
 
@@ -541,13 +517,22 @@ void Navi::run(int line_val, int odo, int velocity, float yaw_angle, int x, int 
       LOG_NAVI = 1130;
       target_velocity = THIRD_STRAIGHT_VELOCITY_VAL;
 
-      min_omega = MINUS_RAD_5_DEG;
+      min_omega = MINUS_RAD_15_DEG;
       ref_omega = 0;
-      max_omega = RAD_5_DEG;
+      max_omega = RAD_15_DEG;
 
-
+      //CORRECT X YAW ANGLE-------------------------------------------------------------
+      if( (line_val > 40) && (line_val < 60) ){
+	X_POS  = 130;
+	ave_yaw_angle = gAve_yaw_angle_500->average_500(yaw_angle);
+	FL_LOG        =	ave_yaw_angle;
+      }
+      
 
       if (pre_50mm_y > SIXTH_CORNER_AREA[1]){
+	//CORRECT YAW ANGLE-------------------------------------------------------------
+	YAW_ANGLE_OFFSET = RAD_90_DEG - ave_yaw_angle;
+	gAve_yaw_angle_500->init();
 	ZONE = SIXTH_CORNER_ZONE;
       }
       break;
@@ -562,37 +547,24 @@ void Navi::run(int line_val, int odo, int velocity, float yaw_angle, int x, int 
 	min_omega = ref_omega - RAD_22P5_DEG;
 	max_omega = ref_omega + RAD_15_DEG;
 
-
-
-
 	if (x > FOURTH_STRAIGHT_AREA[0]){
-	  ZONE = FOURTH_STRAIGHT_ZONE;
-	  ref_velocity = target_velocity;
-	  ref_odo      = odo;
+	  ZONE = CORRECT_4TH_ST_ZONE;
 	  gAve_yaw_angle_500->init();
 	}
 	break;
 
 /** LEFT 2019 ***********************************************************************/
-    case FOURTH_STRAIGHT_ZONE:
-      LOG_NAVI = 1200;
+//    case FOURTH_STRAIGHT_ZONE:
+  case CORRECT_4TH_ST_ZONE:
+      LOG_NAVI = 1150;
 
-      dif_odo = odo - ref_odo;
-      if(dif_odo < 0){
-	dif_odo = 0;
-      }
+      target_velocity = CORRECT_4TH_ST_ZONE;
 
-      acl_velocity  = ref_velocity + (dif_odo * ACCEL_GAIN);
-      target_velocity = (int)acl_velocity;
-
-      if(target_velocity > FOURTH_STRAIGHT_VELOCITY_VAL){
-	target_velocity = FOURTH_STRAIGHT_VELOCITY_VAL;
-      }
-
-      min_omega = MINUS_RAD_5_DEG;
+      min_omega = MINUS_RAD_15_DEG;
       ref_omega = 0;
-      max_omega = RAD_5_DEG;
+      max_omega = RAD_15_DEG;
 
+      //CORRECT X YAW ANGLE-------------------------------------------------------------
       if( (line_val > 40) && (line_val < 60) ){
 	Y_POS         = 1625.0;
 	ave_yaw_angle =gAve_yaw_angle_500->average_500(yaw_angle);
@@ -600,16 +572,28 @@ void Navi::run(int line_val, int odo, int velocity, float yaw_angle, int x, int 
 
 
       if (pre_50mm_x > SEVENTH_CORNER_AREA[0]){
-	ZONE =     SEVENTH_CORNER_ZONE;
-	ref_velocity = target_velocity;
-	ref_odo      = odo;
+	ZONE = FOURTH_STRAIGHT_ZONE;
+	//CORRECT YAW ANGLE-------------------------------------------------------------
 	YAW_ANGLE_OFFSET = 0.0 - ave_yaw_angle;
+	gAve_yaw_angle_500->init();
+      }
+      break;
 
+  case FOURTH_STRAIGHT_ZONE:
+      LOG_NAVI = 1160;
+
+      target_velocity = FOURTH_STRAIGHT_VELOCITY_VAL;
+      target_omega = omega_frm_vector(STRAIGT_04[2],STRAIGT_04[3], x, y, yaw_angle, velocity);
+
+
+      if (pre_50mm_x > SEVENTH_CORNER_AREA[0]){
+	ZONE =     SEVENTH_CORNER_ZONE;
+	YAW_ANGLE_OFFSET = 0.0 - ave_yaw_angle;
       }
       break;
 
 
-/** LEFT 2019 ***********************************************************************/
+      /** LEFT 2019 ***********************************************************************/
       case SEVENTH_CORNER_ZONE:
 	LOG_NAVI = 1210;
 	target_velocity = SEVENTH_CORNER_VELOCITY_VAL;
