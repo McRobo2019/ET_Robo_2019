@@ -268,7 +268,7 @@ int CIRCLE_02[3]  = {1105, 1150, 475};
 int CIRCLE_22[3]  = {1030, 1075, 550}; //circle for new concept
 
 
-int CIRCLE_03[3]  = {920, 1335, 290};
+int CIRCLE_03[3]  = {920, 1335, 290}; //koko chosei at honban
 
 //int STRAIGT_04[4] = {5000, 2790, 3630,  610};
 //int CIRCLE_04[3]  = {3870,  450,  290};
@@ -294,25 +294,7 @@ int CIRCLE_99[3]  = {2120, 530, 365};
 
 int CIRCLE_10[3]  = {2120, 540, 375};
 int STRAIGT_05[4] = {2495, 885,  2495, 2630};
-
-
-/*
-int CIRCLE_01_LENGTH = 1571;
-
-float CIRCLE_01_ANGLE  = 1.570796;
-
-int CIRCLE_02_LENGTH = 707;
-float CIRCLE_02_ANGLE  = -1.570796;
-
-int CIRCLE_03_LENGTH = 691;
-float CIRCLE_03_ANGLE  = -1.919862;
-
-int CIRCLE_04_LENGTH = 623;
-float CIRCLE_04_ANGLE  = 2.146755;
-
-int CIRCLE_05_LENGTH = 0;
-float CIRCLE_05_ANGLE  = 0;
-*/
+int STRAIGT_06[4] = {2495, 2630, 2210, 2935};
 
 
 int LOG_NAVI = 0;

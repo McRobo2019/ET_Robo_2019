@@ -208,6 +208,8 @@ extern int CIRCLE_03[3];
 extern int STRAIGT_04[4];
 extern int CIRCLE_04[3];
 extern int STRAIGT_05[4];
+extern int STRAIGT_06[4];
+
 extern int CIRCLE_05[3];
 extern int CIRCLE_06[3];
 extern int CIRCLE_07[3];
@@ -218,23 +220,6 @@ extern int CIRCLE_09[3];
 extern int CIRCLE_99[3];
 
 extern int CIRCLE_10[3];
-
-/*
-extern int CIRCLE_01_LENGTH;
-extern float CIRCLE_01_ANGLE;
-
-extern int CIRCLE_02_LENGTH;
-extern float CIRCLE_02_ANGLE;
-
-extern int CIRCLE_03_LENGTH;
-extern float CIRCLE_03_ANGLE;
-
-extern int CIRCLE_04_LENGTH;
-extern float CIRCLE_04_ANGLE;
-
-extern int CIRCLE_05_LENGTH;
-extern float CIRCLE_05_ANGLE;
-*/
 
 extern int   LOG_NAVI;
 extern float FL_LOG;

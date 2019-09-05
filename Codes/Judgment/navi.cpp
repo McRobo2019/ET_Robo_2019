@@ -289,13 +289,6 @@ void Navi::run(int line_val, int odo, int velocity, float yaw_angle, int x, int 
     case SECOND_CORNER_ZONE:
       LOG_NAVI = 1070;
 
-      /*
-      ref_x = CIRCLE_04[0] - CIRCLE_04[2];
-      if(x < ref_x){
-	ZONE            = GATE_01;
-      }
-      */
-
       if(x < CIRCLE_03[0]){
 	ref_y = y - 200;
 	ZONE  = THIRD_CORNER_ZONE;
@@ -306,6 +299,8 @@ void Navi::run(int line_val, int odo, int velocity, float yaw_angle, int x, int 
 	LOG_NAVI        = 1074;
 	target_velocity = SECOND_CORNER_VELOCITY_VAL + DECEL_GAIN * (yaw_angle - RAD_180_DEG);
 	target_omega    = omega_frm_circle(CIRCLE_22[0], CIRCLE_22[1], CIRCLE_22[2], x, y, yaw_angle, velocity);
+
+	//may not active---------------
 	if(target_velocity < 20){
 	  LOG_NAVI        = 1075;
 	  target_velocity = 0;
@@ -315,20 +310,8 @@ void Navi::run(int line_val, int odo, int velocity, float yaw_angle, int x, int 
 	  target_velocity = 0;
 	  target_omega    = 0.0;
 	  ZONE            = GATE_01;
-	  /*
-	  ZONE          = FIND_3RD_CORNER;
-	  if(line_val > 40){
-	    ref_yaw_angle = yaw_angle + RAD_5_DEG;
-	    FIND_LINE     = ON_LINE;
-	    det_line = true;
-	  }else{
-	    ref_yaw_angle = yaw_angle + RAD_90_DEG;
-	    FIND_LINE     = LEFT_SEARCH;
-	    det_line = false;
-	  }
-	  */
-	  
 	}
+	//---------------may not active
       }else{
 	LOG_NAVI        = 1072;
 	target_velocity = SECOND_CORNER_VELOCITY_VAL;
@@ -336,7 +319,7 @@ void Navi::run(int line_val, int odo, int velocity, float yaw_angle, int x, int 
       }
       break;
 
-
+      //may not active---------------
   case GATE_01:
     LOG_NAVI = 3000;
     target_velocity = 100;
@@ -352,17 +335,14 @@ void Navi::run(int line_val, int odo, int velocity, float yaw_angle, int x, int 
     break;
 
     /** LEFT 2019 ***********************************************************************/
+    //may not active---------------
   case FIND_3RD_CORNER:
-    
-    
     LOG_NAVI = 1080;
       switch(FIND_LINE){
-
       case LEFT_SEARCH:
 	LOG_NAVI = 1081;
 	target_velocity = 0;
 	target_omega = omega_frm_angle(ref_yaw_angle,  yaw_angle);
-
 	diff_angle = ref_yaw_angle - yaw_angle;
 	diff_angle = diff_angle * diff_angle;
 
@@ -371,30 +351,24 @@ void Navi::run(int line_val, int odo, int velocity, float yaw_angle, int x, int 
 	  det_line = true;
 	  det_line_angle = yaw_angle;
 	}
-
 	if(det_line){
 	  if(line_val < 40){
 	    FIND_LINE     = ON_LINE;
 	    ref_yaw_angle = det_line_angle;
 	  }
 	}
-
 	if(diff_angle < RAD_22P5_DEG){
 	  FIND_LINE     = FORWARD_SEARCH;
 	  ref_odo = odo + 200;
 	}
-	
-
 	break;
 
       case ON_LINE:
 	LOG_NAVI = 1083;
 	target_velocity = 0;
 	target_omega = omega_frm_angle(ref_yaw_angle,  yaw_angle);
-
 	diff_angle = ref_yaw_angle - yaw_angle;
 	diff_angle = diff_angle * diff_angle;
-	
 	if (diff_angle < RAD_1_DEG){
 	  ZONE = THIRD_CORNER_ZONE;
 	}
@@ -404,65 +378,52 @@ void Navi::run(int line_val, int odo, int velocity, float yaw_angle, int x, int 
 	LOG_NAVI = 1084;
 	target_velocity = 50;
 	target_omega    = 0.0;
-
 	dif_odo = ref_odo - odo;
-
 	if(line_val > 40){
 	  LOG_NAVI = 1085;
 	  det_line = true;
 	}
-
 	if(det_line){
 	  if(line_val < 40){
 	    FIND_LINE     = RIGHT_SEARCH;
 	    ref_yaw_angle = yaw_angle + MINUS_RAD_180_DEG;
 	    det_line      = false;
-	    
 	  }
 	}
-
 	if(dif_odo < 50){
 	  FIND_LINE = BACKWARD_SEARCH;
 	  ref_odo   = odo - 500;
 	  det_line  = false;
 	}
-
 	break;
 
       case RIGHT_SEARCH:
 	LOG_NAVI = 1086;
 	target_velocity = 0;
 	target_omega = omega_frm_angle(ref_yaw_angle,  yaw_angle);
-
 	diff_angle = ref_yaw_angle - yaw_angle;
 	diff_angle = diff_angle * diff_angle;
-
 	if(line_val > 40){
 	  LOG_NAVI = 1087;
 	  det_line = true;
 	  det_line_angle = yaw_angle;
 	}
-
 	if(det_line){
 	  if(line_val < 40){
 	    FIND_LINE     = ON_LINE;
 	    ref_yaw_angle = det_line_angle;
 	  }
 	}
-
 	if(diff_angle < RAD_22P5_DEG){
 	  FIND_LINE     = FORWARD_SEARCH;
 	  ref_odo = odo + 200;
 	}
 
-
       case BACKWARD_SEARCH:
 	LOG_NAVI = 1088;
 	target_velocity = -50;
 	target_omega    = 0.0;
-
 	dif_odo = odo - ref_odo;
-
 	if(line_val > 40){
 	  LOG_NAVI = 1089;
 	  det_line = true;
@@ -483,7 +444,6 @@ void Navi::run(int line_val, int odo, int velocity, float yaw_angle, int x, int 
 	}
 
 	break;
-
       default:
 	break;
       }
@@ -716,33 +676,56 @@ void Navi::run(int line_val, int odo, int velocity, float yaw_angle, int x, int 
 
     case FIFTH_STRAIGHT_ZONE:
       LOG_NAVI = 1050;
-
       target_velocity = FIFTH_STRAIGHT_VELOCITY_VAL;
       target_omega = omega_frm_vector(STRAIGT_05[2],STRAIGT_05[3], x, y, yaw_angle, velocity);
-
-
-      
-
-      break;
-
-
-
-/** LEFT 2019 ***********************************************************************/
-    case LUG_ZONE:
-      LOG_NAVI = 1130;
-      target_velocity = 0;
+      if(pre_50mm_y > STRAIGT_05[3]){
+	ZONE = APPROACH_TO_BLOCK_ZONE;
+      }
       break;
 
 
 /** LEFT 2019 ***********************************************************************/
-    case SECOND_GRAY_ZONE:
-      LOG_NAVI = 1140;
-      break;
-
-/** LEFT 2019 ***********************************************************************/
-    case GARAGE_ZONE:
+  case APPROACH_TO_BLOCK_ZONE:
       LOG_NAVI = 1150;
+      target_velocity = 100;
+      target_omega = omega_frm_vector(STRAIGT_06[2],STRAIGT_06[3], x, y, yaw_angle, velocity);
+
+      if(line_val > 60){
+	  ZONE = BLOCK_ZONE;
+      }
+
+
+      if(pre_50mm_x < STRAIGT_06[2]){
+	  ZONE = BLOCK_ZONE;
+      }
+
       break;
+
+/** LEFT 2019 ***********************************************************************/
+  case BLOCK_ZONE:
+    LOG_NAVI = 1160;
+    //REF YAW RATE GEN-------------------------------------------------------------
+    min_omega = MINUS_RAD_22P5_DEG;
+    ref_omega = 0;
+    max_omega = RAD_22P5_DEG;
+
+    //-------------------------------------------------------------REF YAW RATE GEN
+
+    //LINE TRACE-------------------------------------------------------------------------------
+    target_omega = Navi_Line_Trace->line_trace_omega(line_val, ref_omega, max_omega, min_omega);
+    //--------------------------------------------------------------------------------LINE TRACE
+
+    break;
+
+/** LEFT 2019 ***********************************************************************/
+  case GARAGE_ZONE:
+    LOG_NAVI = 1160;
+    break;
+
+
+
+
+
 
 /** LEFT 2019 ***********************************************************************/
     case LOST:
