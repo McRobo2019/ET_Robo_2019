@@ -153,7 +153,7 @@ extern int SEVENTH_CORNER_VELOCITY_VAL;
 extern int EIGHTH_CORNER_VELOCITY_VAL;
 extern int NINTH_CORNER_VELOCITY_VAL;
 extern int TENTH_CORNER_VELOCITY_VAL;
-
+extern int FIFTH_STRAIGHT_VELOCITY_VAL;
 
 extern int FIRST_GRAY_VELOCITY_VAL;
 extern int LUG_VELOCITY_VAL;
@@ -211,10 +211,15 @@ extern int STRAIGT_05[4];
 extern int CIRCLE_05[3];
 extern int CIRCLE_06[3];
 extern int CIRCLE_07[3];
+extern int CIRCLE_77[3];
+
 extern int CIRCLE_08[3];
 extern int CIRCLE_09[3];
+extern int CIRCLE_99[3];
+
 extern int CIRCLE_10[3];
 
+/*
 extern int CIRCLE_01_LENGTH;
 extern float CIRCLE_01_ANGLE;
 
@@ -229,6 +234,7 @@ extern float CIRCLE_04_ANGLE;
 
 extern int CIRCLE_05_LENGTH;
 extern float CIRCLE_05_ANGLE;
+*/
 
 extern int   LOG_NAVI;
 extern float FL_LOG;

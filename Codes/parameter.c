@@ -196,6 +196,7 @@ int EIGHTH_CORNER_VELOCITY_VAL    = 150; //
 int NINTH_CORNER_VELOCITY_VAL     = 150; //
 int TENTH_CORNER_VELOCITY_VAL     = 150; //
 
+int FIFTH_STRAIGHT_VELOCITY_VAL  = 180; //
 
 int S_CORNER_VELOCITY_VAL         = 150;
 
@@ -250,6 +251,7 @@ int EIGHTH_CORNER_AREA[4]    = {1625,  840, 2215, 1090};
 int NINTH_CORNER_AREA[4]     = {1625,    0, 2075,  840};
 int TENTH_CORNER_AREA[4]     = {2075,    0, 2700,  540};
 int FIFTH_STRAIGHT_AREA[4]   = {2120,   540, 2700, 2630};
+
 int FIRST_GRAY_AREA[4]       = {3920,    0, 4020,  270};
 int LUG_AREA[4]              = {4020,    0, 4765,  320}; //lug + back lug area 180624 kota
 int BACK_LUG_AREA[4]         = {4390,    0, 4765,  320}; // may not be used
@@ -283,12 +285,18 @@ int CIRCLE_06[3]  = {605, 1150, -475};
 int STRAIGT_04[4] = {605, 1625, 1625, 1625};
 
 int CIRCLE_07[3]  = {1625, 1200, -425};
+int CIRCLE_77[3]  = {1625, 1178, -447};
+
 int CIRCLE_08[3]  = {1700, 1090, -350};
 int CIRCLE_09[3]  = {2075, 515, 330};
+int CIRCLE_99[3]  = {2120, 530, 365};
+
+
 int CIRCLE_10[3]  = {2120, 540, 375};
 int STRAIGT_05[4] = {2495, 885,  2495, 2630};
 
 
+/*
 int CIRCLE_01_LENGTH = 1571;
 
 float CIRCLE_01_ANGLE  = 1.570796;
@@ -304,6 +312,7 @@ float CIRCLE_04_ANGLE  = 2.146755;
 
 int CIRCLE_05_LENGTH = 0;
 float CIRCLE_05_ANGLE  = 0;
+*/
 
 
 int LOG_NAVI = 0;
