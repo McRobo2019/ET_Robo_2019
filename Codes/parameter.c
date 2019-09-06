@@ -172,28 +172,38 @@ float COLOR_SENSOR_GAIN      = 3.0; /**** ADJ_PARAMETER ****/
 float ACCEL_GAIN                = 1.0;
 float DECEL_GAIN                = 1.0;
 
+//line-trace
 int START_VELOCITY_VAL            = 100; //koko
-
 int FIRST_STRAIGHT_VELOCITY_VAL   = 180; //
 int ENTER_1ST_CORNER_VELOCITY_VAL = 180; //
-int FIRST_CORNER_VELOCITY_VAL     = 180; //
-int SECOND_STRAIGHT_VELOCITY_VAL  = 180; //
-int ENTER_2ND_CORNER_VELOCITY_VAL = 180; //
-int SECOND_CORNER_VELOCITY_VAL    = 180; //
 
-int THIRD_CORNER_VELOCITY_VAL     = 100; //
+//map-trace
+int FIRST_CORNER_VELOCITY_VAL     = 400; //
+int SECOND_STRAIGHT_VELOCITY_VAL  = 400; //
+int ENTER_2ND_CORNER_VELOCITY_VAL = 400; //
+int SECOND_CORNER_VELOCITY_VAL    = 400; //
+
+//line to map
+int THIRD_CORNER_VELOCITY_VAL     = 150; //
+//line trace
 int FOURTH_CORNER_VELOCITY_VAL    = 100; //
-int FIFTH_CORNER_VELOCITY_VAL     = 100; //
+int FIFTH_CORNER_VELOCITY_VAL     = 150; //
+int THIRD_STRAIGHT_VELOCITY_VAL   = 150; //
+int SIXTH_CORNER_VELOCITY_VAL     = 150; //
+int CORRECT_4TH_ST_VELOCITY_VAL   = 150; //
 
-int THIRD_STRAIGHT_VELOCITY_VAL   = 100; //
-int SIXTH_CORNER_VELOCITY_VAL     = 100; //
+//map trace
+int FOURTH_STRAIGHT_VELOCITY_VAL  = 400; //
+int SEVENTH_CORNER_VELOCITY_VAL   = 250; //
 
-int CORRECT_4TH_ST_VELOCITY_VAL   = 100; //
-int FOURTH_STRAIGHT_VELOCITY_VAL  = 180; //
-
-int SEVENTH_CORNER_VELOCITY_VAL   = 120; //
+//not used
 int EIGHTH_CORNER_VELOCITY_VAL    = 150; //
-int NINTH_CORNER_VELOCITY_VAL     = 150; //
+
+//map trace
+int NINTH_CORNER_VELOCITY_VAL     = 250; //
+
+
+//not used
 int TENTH_CORNER_VELOCITY_VAL     = 150; //
 
 int FIFTH_STRAIGHT_VELOCITY_VAL  = 180; //
@@ -268,7 +278,8 @@ int CIRCLE_02[3]  = {1105, 1150, 475};
 int CIRCLE_22[3]  = {1030, 1075, 550}; //circle for new concept
 
 
-int CIRCLE_03[3]  = {920, 1335, 290}; //koko chosei at honban
+//int CIRCLE_03[3]= {920, 1335, 290}; //koko chosei at honban
+int CIRCLE_03[3]  = {918, 1335, 289}; //koko chosei at honban
 
 //int STRAIGT_04[4] = {5000, 2790, 3630,  610};
 //int CIRCLE_04[3]  = {3870,  450,  290};
@@ -289,10 +300,12 @@ int CIRCLE_77[3]  = {1625, 1178, -447};
 
 int CIRCLE_08[3]  = {1700, 1090, -350};
 int CIRCLE_09[3]  = {2075, 515, 330};
-int CIRCLE_99[3]  = {2120, 530, 365};
+//int CIRCLE_99[3]  = {2120, 530, 365};
+int CIRCLE_99[3]  = {2120, 530, 360};
 
 
 int CIRCLE_10[3]  = {2120, 540, 375};
+
 int STRAIGT_05[4] = {2495, 885,  2495, 2630};
 int STRAIGT_06[4] = {2495, 2630, 2210, 2935};
 

@@ -221,5 +221,6 @@ extern int CIRCLE_99[3];
 
 extern int CIRCLE_10[3];
 
+
 extern int   LOG_NAVI;
 extern float FL_LOG;

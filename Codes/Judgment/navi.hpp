@@ -43,6 +43,7 @@ public:
 
   bool  lost_line;
   bool  det_line;
+  bool  det_left_edge;
 
 
 

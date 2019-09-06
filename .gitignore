@@ -8,3 +8,7 @@ Documents/~$hirojiren_設計ノート.pptx
 *.c#
 *.cpp#
 Codes/.#parameter.c
+*.c~
+*.h~
+Command_System/~$log_analysis.xlsx
+Documents/~$Lコース座標.xlsx
