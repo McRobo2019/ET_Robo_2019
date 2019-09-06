@@ -124,7 +124,6 @@ void Operation::run() {
   float vr;
   float l_pwm;
   float r_pwm;
-  float gain;
 
   monitoring_cmd();
 

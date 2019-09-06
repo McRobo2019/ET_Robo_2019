@@ -52,9 +52,9 @@ void motor_ctlModelClass::step()
   if (rtb_Sum3 > 100.0) {
     // Outport: '<Root>/Out1'
     rtY.Out1 = 100.0;
-  } else if (rtb_Sum3 < 0.0) {
+  } else if (rtb_Sum3 < -100.0) {
     // Outport: '<Root>/Out1'
-    rtY.Out1 = 0.0;
+    rtY.Out1 = -100.0;
   } else {
     // Outport: '<Root>/Out1'
     rtY.Out1 = rtb_Sum3;

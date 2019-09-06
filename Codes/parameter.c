@@ -171,25 +171,41 @@ float COLOR_SENSOR_GAIN      = 3.0; /**** ADJ_PARAMETER ****/
 float ACCEL_GAIN                = 1.0;
 float DECEL_GAIN                = 1.0;
 
+//line-trace
 int START_VELOCITY_VAL            = 100; //koko
-
 int FIRST_STRAIGHT_VELOCITY_VAL   = 180; //
 int ENTER_1ST_CORNER_VELOCITY_VAL = 180; //
-int FIRST_CORNER_VELOCITY_VAL     = 180; //
-int SECOND_STRAIGHT_VELOCITY_VAL  = 180; //
-int ENTER_2ND_CORNER_VELOCITY_VAL = 180; //
-int SECOND_CORNER_VELOCITY_VAL    = 180; //
-int THIRD_CORNER_VELOCITY_VAL     = 120; //
-int FOURTH_CORNER_VELOCITY_VAL    = 120; //
-int FIFTH_CORNER_VELOCITY_VAL     = 120; //
+
+//map-trace
+int FIRST_CORNER_VELOCITY_VAL     = 400; //
+int SECOND_STRAIGHT_VELOCITY_VAL  = 400; //
+int ENTER_2ND_CORNER_VELOCITY_VAL = 400; //
+int SECOND_CORNER_VELOCITY_VAL    = 400; //
+
+//line to map
+int THIRD_CORNER_VELOCITY_VAL     = 150; //
+//line trace
+int FOURTH_CORNER_VELOCITY_VAL    = 100; //
+int FIFTH_CORNER_VELOCITY_VAL     = 150; //
 int THIRD_STRAIGHT_VELOCITY_VAL   = 150; //
-int SIXTH_CORNER_VELOCITY_VAL     = 180; //
-int FOURTH_STRAIGHT_VELOCITY_VAL  = 230; //
-int SEVENTH_CORNER_VELOCITY_VAL   = 120; //
+int SIXTH_CORNER_VELOCITY_VAL     = 150; //
+int CORRECT_4TH_ST_VELOCITY_VAL   = 150; //
+
+//map trace
+int FOURTH_STRAIGHT_VELOCITY_VAL  = 400; //
+int SEVENTH_CORNER_VELOCITY_VAL   = 250; //
+
+//not used
 int EIGHTH_CORNER_VELOCITY_VAL    = 150; //
-int NINTH_CORNER_VELOCITY_VAL     = 150; //
+
+//map trace
+int NINTH_CORNER_VELOCITY_VAL     = 250; //
+
+
+//not used
 int TENTH_CORNER_VELOCITY_VAL     = 150; //
 
+int FIFTH_STRAIGHT_VELOCITY_VAL  = 180; //
 
 int S_CORNER_VELOCITY_VAL         = 150;
 
@@ -221,6 +237,8 @@ int SECOND_STRAIGHT_AREA[4]  = {1400,  605, 1745,  900};
 int ENTER_2ND_CORNER_AREA[4] = {1400,  900, 1745, 1150};
 //int SECOND_CORNER_AREA[4]    = { 950, 1150, 1745, 1800};
 int SECOND_CORNER_AREA[4]    = { 920, 1150, 1745, 1800};
+int SECOND_CORNER_AREA_2[4]  = { 525, 1075, 1800, 1800}; //for new concept
+
 //int THIRD_STRAIGHT_AREA[4]   = {0, 0, 0, 0};
 //int THIRD_CORNER_AREA[4]     = {500, 1100, 950, 1800};
 //int THIRD_CORNER_AREA[4]     = {500, 1100, 920, 1800};
@@ -242,6 +260,7 @@ int EIGHTH_CORNER_AREA[4]    = {1625,  840, 2215, 1090};
 int NINTH_CORNER_AREA[4]     = {1625,    0, 2075,  840};
 int TENTH_CORNER_AREA[4]     = {2075,    0, 2700,  540};
 int FIFTH_STRAIGHT_AREA[4]   = {2120,   540, 2700, 2630};
+
 int FIRST_GRAY_AREA[4]       = {3920,    0, 4020,  270};
 int LUG_AREA[4]              = {4020,    0, 4765,  320}; //lug + back lug area 180624 kota
 int BACK_LUG_AREA[4]         = {4390,    0, 4765,  320}; // may not be used
@@ -255,8 +274,11 @@ int STRAIGT_01[4] = {   0,  165, 1140,  165};
 int CIRCLE_01[3]  = {1140, 605, 440};
 int STRAIGT_02[4] = {1580, 605, 1580, 1150};
 int CIRCLE_02[3]  = {1105, 1150, 475};
-int STRAIGT_03[4] = {1105, 1625, 920, 1625};
-int CIRCLE_03[3]  = {920, 1335, 290};
+int CIRCLE_22[3]  = {1030, 1075, 550}; //circle for new concept
+
+
+//int CIRCLE_03[3]= {920, 1335, 290}; //koko chosei at honban
+int CIRCLE_03[3]  = {918, 1335, 289}; //koko chosei at honban
 
 //int STRAIGT_04[4] = {5000, 2790, 3630,  610};
 //int CIRCLE_04[3]  = {3870,  450,  290};
@@ -265,32 +287,26 @@ int CIRCLE_04[3]  = {500, 890, -305};
 
 //int STRAIGT_05[4] = {3870,  160, 5200,  160};
 int CIRCLE_05[3]  = {500, 955, -370};
+
+int STRAIGT_03[4] = {130, 955, 130, 1150};
+
 int CIRCLE_06[3]  = {605, 1150, -475};
 
 int STRAIGT_04[4] = {605, 1625, 1625, 1625};
 
 int CIRCLE_07[3]  = {1625, 1200, -425};
+int CIRCLE_77[3]  = {1625, 1178, -447};
+
 int CIRCLE_08[3]  = {1700, 1090, -350};
 int CIRCLE_09[3]  = {2075, 515, 330};
+//int CIRCLE_99[3]  = {2120, 530, 365};
+int CIRCLE_99[3]  = {2120, 530, 360};
+
+
 int CIRCLE_10[3]  = {2120, 540, 375};
+
 int STRAIGT_05[4] = {2495, 885,  2495, 2630};
-
-
-int CIRCLE_01_LENGTH = 1571;
-
-float CIRCLE_01_ANGLE  = 1.570796;
-
-int CIRCLE_02_LENGTH = 707;
-float CIRCLE_02_ANGLE  = -1.570796;
-
-int CIRCLE_03_LENGTH = 691;
-float CIRCLE_03_ANGLE  = -1.919862;
-
-int CIRCLE_04_LENGTH = 623;
-float CIRCLE_04_ANGLE  = 2.146755;
-
-int CIRCLE_05_LENGTH = 0;
-float CIRCLE_05_ANGLE  = 0;
+int STRAIGT_06[4] = {2495, 2630, 2210, 2935};
 
 
 int LOG_NAVI = 0;
