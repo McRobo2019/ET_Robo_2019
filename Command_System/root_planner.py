@@ -1,14 +1,6 @@
 import networkx as nx
 import pickle
-import plotly.plotly as py
-import random
 import math
-#from plotly.graph_objs import *
-from plotly.graph_objs import Scatter, Layout, Figure, Data,Stream, YAxis, Marker, Line
-from plotly.offline import init_notebook_mode, plot, iplot
-import plotly
-init_notebook_mode(connected=True)
-
 
 map_block_dict = {
 	0: {'pos': ( 350, 1400), 'connections': [1, 4, 7]}, 
@@ -219,7 +211,7 @@ class PathPlanner():
         self.cameFrom = self.create_cameFrom() if goal != None and start != None else None
         self.gScore = self.create_gScore() if goal != None and start != None else None
         self.fScore = self.create_fScore() if goal != None and start != None else None
-        self.path = self.run_search() if self.map and self.start != None and self.goal != None else None
+#        self.path = self.run_search() if self.map and self.start != None and self.goal != None else None
     
     def reconstruct_path(self, current):
         """ Reconstructs path after search """
