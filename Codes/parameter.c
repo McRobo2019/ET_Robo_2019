@@ -188,8 +188,8 @@ int THIRD_CORNER_VELOCITY_VAL     = 150; //
 int FOURTH_CORNER_VELOCITY_VAL    = 100; //
 int FIFTH_CORNER_VELOCITY_VAL     = 150; //
 int THIRD_STRAIGHT_VELOCITY_VAL   = 150; //
-int SIXTH_CORNER_VELOCITY_VAL     = 150; //
-int CORRECT_4TH_ST_VELOCITY_VAL   = 150; //
+int SIXTH_CORNER_VELOCITY_VAL     = 200; //
+int CORRECT_4TH_ST_VELOCITY_VAL   = 200; //
 
 //map trace
 int FOURTH_STRAIGHT_VELOCITY_VAL  = 400; //
@@ -199,13 +199,13 @@ int SEVENTH_CORNER_VELOCITY_VAL   = 250; //
 int EIGHTH_CORNER_VELOCITY_VAL    = 150; //
 
 //map trace
-int NINTH_CORNER_VELOCITY_VAL     = 250; //
+int NINTH_CORNER_VELOCITY_VAL     = 200; //
 
 
 //not used
 int TENTH_CORNER_VELOCITY_VAL     = 150; //
 
-int FIFTH_STRAIGHT_VELOCITY_VAL  = 180; //
+int FIFTH_STRAIGHT_VELOCITY_VAL  = 400; //
 
 int S_CORNER_VELOCITY_VAL         = 150;
 
@@ -232,7 +232,10 @@ int GARAGE_VELOCITY_VAL           = 100;
 int START_AREA[4]            = { 300,    0,  500,  330};
 int FIRST_STRAIGHT_AREA[4]   = { 500,    0, 1140,  330};
 int ENTER_1ST_CORNER_AREA[4] = { 800,    0, 1140,  605};
-int FIRST_CORNER_AREA[4]     = {1140,    0, 1745,  605};
+
+//int FIRST_CORNER_AREA[4]     = {1140,    0, 1745,  605};
+int FIRST_CORNER_AREA[4]     = {1135,    0, 1745,  605}; //koko
+
 int SECOND_STRAIGHT_AREA[4]  = {1400,  605, 1745,  900};
 int ENTER_2ND_CORNER_AREA[4] = {1400,  900, 1745, 1150};
 //int SECOND_CORNER_AREA[4]    = { 950, 1150, 1745, 1800};
@@ -257,7 +260,10 @@ int SIXTH_CORNER_AREA[4]     = {  0,  1100, 605, 1800};
 int FOURTH_STRAIGHT_AREA[4]  = { 605, 1450, 1625, 1800};
 int SEVENTH_CORNER_AREA[4]   = {1625, 1090, 2215, 1800};
 int EIGHTH_CORNER_AREA[4]    = {1625,  840, 2215, 1090};
-int NINTH_CORNER_AREA[4]     = {1625,    0, 2075,  840};
+
+//int NINTH_CORNER_AREA[4]     = {1625,    0, 2075,  840};
+int NINTH_CORNER_AREA[4]     = {1625,    0, 2075,  850}; //koko
+
 int TENTH_CORNER_AREA[4]     = {2075,    0, 2700,  540};
 int FIFTH_STRAIGHT_AREA[4]   = {2120,   540, 2700, 2630};
 
@@ -271,7 +277,8 @@ int GARAGE_AREA[4]           = {4915,    0, 5200,  320};
 //straigt (x0,y0) - (x1,y1)
 //circle (x0,y0,r)
 int STRAIGT_01[4] = {   0,  165, 1140,  165};
-int CIRCLE_01[3]  = {1140, 605, 440};
+//int CIRCLE_01[3]  = {1140, 605, 440};
+int CIRCLE_01[3]  = {1140, 605, 350}; //koko
 int STRAIGT_02[4] = {1580, 605, 1580, 1150};
 int CIRCLE_02[3]  = {1105, 1150, 475};
 int CIRCLE_22[3]  = {1030, 1075, 550}; //circle for new concept
@@ -300,7 +307,8 @@ int CIRCLE_77[3]  = {1625, 1178, -447};
 int CIRCLE_08[3]  = {1700, 1090, -350};
 int CIRCLE_09[3]  = {2075, 515, 330};
 //int CIRCLE_99[3]  = {2120, 530, 365};
-int CIRCLE_99[3]  = {2120, 530, 360};
+//int CIRCLE_99[3]  = {2120, 530, 360};
+int CIRCLE_99[3]  = {2120, 520, 360};
 
 
 int CIRCLE_10[3]  = {2120, 540, 375};

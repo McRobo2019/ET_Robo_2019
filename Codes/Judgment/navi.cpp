@@ -639,34 +639,17 @@ void Navi::run(int line_val, int odo, int velocity, float yaw_angle, int x, int 
 
 
       /** LEFT 2019 ***********************************************************************/
-      case SEVENTH_CORNER_ZONE:
-	LOG_NAVI = 1210;
-	target_velocity = SEVENTH_CORNER_VELOCITY_VAL;
-	target_omega = omega_frm_circle(CIRCLE_77[0], CIRCLE_77[1], CIRCLE_77[2], x, y, yaw_angle, velocity);
+  case SEVENTH_CORNER_ZONE:
+    LOG_NAVI = 1210;
+    target_velocity = SEVENTH_CORNER_VELOCITY_VAL;
+    target_omega = omega_frm_circle(CIRCLE_77[0], CIRCLE_77[1], CIRCLE_77[2], x, y, yaw_angle, velocity);
+    
+    if (y < 800){
+      //    if (yaw_angle < MINUS_RAD_135_DEG){
+      ZONE =  NINTH_CORNER_ZONE;
+    }
+    break;
 
-	if (y < 810){
-	  ZONE =  NINTH_CORNER_ZONE;
-	}
-	break;
-
-
-
-/** LEFT 2019 ***********************************************************************/
-      case EIGHTH_CORNER_ZONE:
-	LOG_NAVI = 1220;
-	target_velocity = EIGHTH_CORNER_VELOCITY_VAL;
-
-	//	ref_omega = -1.0 * (float)velocity/CIRCLE_08[2];
-	ref_omega = (float)velocity/CIRCLE_08[2];
-	min_omega = ref_omega - RAD_15_DEG;
-	max_omega = ref_omega + RAD_15_DEG;
-
-	if (y < NINTH_CORNER_AREA[3]){
-	  ZONE = NINTH_CORNER_ZONE;
-	  ref_velocity = target_velocity;
-	  ref_odo      = odo;
-	}
-	break;
 
 
 /** LEFT 2019 ***********************************************************************/
@@ -710,7 +693,7 @@ void Navi::run(int line_val, int odo, int velocity, float yaw_angle, int x, int 
 
 /** LEFT 2019 ***********************************************************************/
   case APPROACH_TO_BLOCK_ZONE:
-      LOG_NAVI = 1150;
+      LOG_NAVI = 2150;
       target_velocity = 100;
       target_omega = omega_frm_vector(STRAIGT_06[2],STRAIGT_06[3], x, y, yaw_angle, velocity);
 
@@ -727,7 +710,7 @@ void Navi::run(int line_val, int odo, int velocity, float yaw_angle, int x, int 
 
 /** LEFT 2019 ***********************************************************************/
   case BLOCK_ZONE:
-    LOG_NAVI = 1160;
+    LOG_NAVI = 2160;
     //REF YAW RATE GEN-------------------------------------------------------------
     min_omega = MINUS_RAD_22P5_DEG;
     ref_omega = 0;
