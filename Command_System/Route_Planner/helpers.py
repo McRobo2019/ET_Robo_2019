@@ -9,6 +9,41 @@ import plotly
 init_notebook_mode(connected=True)
 
 
+map_block_dict = {
+	0: {'pos': ( 350, 1400), 'connections': [1, 4, 7]}, 
+	1: {'pos': ( 700, 1400), 'connections': [0, 2, 4, 5, 8]}, 
+	2: {'pos': (1050, 1400), 'connections': [1, 3, 5, 6, 9]}, 
+	3: {'pos': (1400, 1400), 'connections': [2, 6, 10]}, 
+
+	4: {'pos': ( 525, 1225), 'connections': [0, 1, 7, 8]}, 
+	5: {'pos': ( 875, 1225), 'connections': [1, 2, 8, 9]}, 
+	6: {'pos': (1225, 1225), 'connections': [2, 3, 9, 10]}, 
+
+	7:  {'pos': ( 350, 1050), 'connections': [0, 4, 8, 11, 13]}, 
+	8:  {'pos': ( 700, 1050), 'connections': [1, 4, 5,  7,  9, 11, 14]}, 
+	9:  {'pos': (1050, 1050), 'connections': [2, 5, 6,  8, 10, 12, 15]}, 
+	10: {'pos': (1400, 1050), 'connections': [3, 6, 9, 12, 16]}, 
+
+	11: {'pos': ( 525, 875), 'connections': [7,  8, 13, 14]}, 
+	12: {'pos': (1225, 875), 'connections': [9, 10, 15, 16]}, 
+
+	13: {'pos': ( 350, 700), 'connections': [ 7, 11, 14, 17, 20]}, 
+	14: {'pos': ( 700, 700), 'connections': [ 8, 11, 13, 15, 17, 18, 21]}, 
+	15: {'pos': (1050, 700), 'connections': [ 9, 12, 14, 16, 18, 19, 22]}, 
+	16: {'pos': (1400, 700), 'connections': [10, 12, 15, 19, 23]}, 
+
+	17: {'pos': ( 525, 525), 'connections': [13, 14, 20, 21]}, 
+	18: {'pos': ( 875, 525), 'connections': [14, 15, 21, 22]}, 
+	19: {'pos': (1225, 525), 'connections': [15, 16, 22, 23]}, 
+
+	20: {'pos': ( 350, 350), 'connections': [13, 17, 21]}, 
+	21: {'pos': ( 700, 350), 'connections': [14, 17, 18, 20, 22]}, 
+	22: {'pos': (1050, 350), 'connections': [15, 18, 19, 21, 23]}, 
+	23: {'pos': (1400, 350), 'connections': [16, 19, 22]}, 
+
+}
+
+
 map_10_dict = {
 	0: {'pos': (0.7798606835438107, 0.6922727646627362), 'connections': [7, 6, 5]}, 
 	1: {'pos': (0.7647837074641568, 0.3252670836724646), 'connections': [4, 3, 2]}, 
@@ -84,6 +119,11 @@ def load_map_graph(map_dict):
 		for con_node in map_dict[node]['connections']:
 			G.add_edge(node, con_node)
 	return G
+
+def load_map_block():
+	G = load_map_graph(map_block_dict)
+	return Map(G)
+
 
 def load_map_10():
 	G = load_map_graph(map_10_dict)
