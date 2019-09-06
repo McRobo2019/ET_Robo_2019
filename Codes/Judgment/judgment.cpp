@@ -223,9 +223,10 @@ void Judgment::run() {
     case MODE_02:
       LOG_NAVI = 2;
       target_omega    = 0.0;
+      //target_velocity = 0.2*(SYS_CLK - ref_clock);
       target_velocity = 0.2*(SYS_CLK - ref_clock);
-      if(target_velocity >= 400){
-	target_velocity = 400;
+      if(target_velocity >= 200){
+	target_velocity = 200;
 	TEST_MODE = MODE_03;
       }
 
@@ -233,7 +234,7 @@ void Judgment::run() {
 
     case MODE_03:
       LOG_NAVI = 3;
-      target_velocity = 400;
+      target_velocity = 200;
       target_omega    = 0.0;
 
       if(ODO > ref_odo){
@@ -245,7 +246,7 @@ void Judgment::run() {
 
     case MODE_04:
       LOG_NAVI = 4;
-      target_velocity = 400;
+      target_velocity = 200;
       target_omega    = 0.4 * PAI * (ODO - ref_odo)/800.0;
       if (target_omega >= 0.4 * PAI){
 	TEST_MODE = MODE_05;	
@@ -256,7 +257,7 @@ void Judgment::run() {
 
     case MODE_05:
       LOG_NAVI = 5;
-		target_velocity = 400;
+		target_velocity = 200;
 		target_omega = 0.4 * PAI;
 		
 		if (ODO > ref_odo) {
@@ -267,7 +268,7 @@ void Judgment::run() {
 
     case MODE_06:
       LOG_NAVI = 6;
-		target_velocity = 400;
+		target_velocity = 200;
 		target_omega = 0.4 * PAI * (-ODO + ref_odo)/800.0;
 		if (target_omega <= 0) {
 			TEST_MODE = MODE_07;
@@ -278,7 +279,7 @@ void Judgment::run() {
 
     case MODE_07:
       LOG_NAVI = 7;
-		target_velocity = 400;
+		target_velocity = 200;
 		target_omega = 0;
 		if (ODO > ref_odo) {
 			TEST_MODE = MODE_08;
@@ -290,7 +291,8 @@ void Judgment::run() {
 
     case MODE_08:
       LOG_NAVI = 8;
-      target_velocity = 0.2 * (ref_clock - SYS_CLK);
+      //target_velocity = 0.2 * (ref_clock - SYS_CLK);
+      target_velocity = 0.1 * (ref_clock - SYS_CLK);
       target_omega = 0;
       if (target_velocity <= 0) {
 	TEST_MODE = MODE_09;

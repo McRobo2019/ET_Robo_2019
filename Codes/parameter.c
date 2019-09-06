@@ -108,8 +108,7 @@ float MOTOR_CTL_TS = 0.01;
 //float MOTOR_CTL_KI = 1.911314984709480; // A
 //float MOTOR_CTL_KI = 2.645418663957758; // B
 //float MOTOR_CTL_KI = 3.397893306150187; // C
-//float MOTOR_CTL_KI = 0.9; // test
-float MOTOR_CTL_KI = 0.5;
+float MOTOR_CTL_KI = 0.5; // test 0.9
 
 //float MOTOR_CTL_KP = 0.0382262996941896;
 //float MOTOR_CTL_KP = 0.229357798165138; // A 
