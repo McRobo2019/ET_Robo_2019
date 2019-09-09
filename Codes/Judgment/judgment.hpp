@@ -6,7 +6,7 @@
 #define EV3_APP_ANAGOBRAIN_H_
 #include "parameter.h"
 #include "util.hpp"
-#include "line_tracer.hpp"
+//#include "line_tracer.hpp"
 #include "navi.hpp"
 #include "map_trace.hpp"
 

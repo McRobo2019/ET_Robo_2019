@@ -8,6 +8,7 @@
 #ifndef EV3_APP_NAVI_H_
 #define EV3_APP_NAVI_H_
 #include "util.hpp"
+#include "line_tracer.hpp"
 #include "parameter.h"
 
 using namespace std;
@@ -17,6 +18,10 @@ public:
   explicit Navi();//コンストラクタ
   void init();
   float omega_frm_vector(float target_x, float target_y, float current_x, float current_y, float yaw_angle, int velocity);
+  float omega_frm_circle(float circle_x, float circle_y, float circle_r, float current_x, float current_y, float yaw_angle, int velocity);
+  float omega_frm_angle(float target_angle, float yaw_angle);
+
+
   //  void run(int line_val,int odo, int velocity, float yaw_angle, float ave_yaw_angle, int x, int y, int pre_50mm_x, int pre_50mm_y);
   void run(int line_val,int odo, int velocity, float yaw_angle, int x, int y, int pre_50mm_x, int pre_50mm_y);
 
@@ -27,6 +32,7 @@ public:
   Average_500_Data *gAve_y_500 = new Average_500_Data();
 
   int   target_velocity;
+  float target_omega;
   float min_omega;
   float ref_omega;
   float max_omega;
@@ -36,25 +42,31 @@ public:
   float ave_yaw_angle;
 
   bool  lost_line;
-
-  
-
+  bool  det_line;
+  bool  det_left_edge;
 
 
 
 private:
+  Line_Trace *Navi_Line_Trace = new Line_Trace();
+
   enum Zone{
     START_ZONE,
     START_BACK,
     FIRST_STRAIGHT_ZONE,
     ENTER_1ST_CORNER_ZONE,
-    FIRST_CORNER_ZONE,
+    FIRST_CORNER_ZONE,//CORRECT X YAW ANGLE-------------------------------------------------------------
     SECOND_STRAIGHT_ZONE,
     ENTER_2ND_CORNER_ZONE,
     SECOND_CORNER_ZONE,
     THIRD_STRAIGHT_ZONE,
+    FIND_3RD_CORNER,
+    GATE_01,
+
     THIRD_CORNER_ZONE,
     S_CORNER_ZONE,
+
+    CORRECT_4TH_ST_ZONE,
     FOURTH_STRAIGHT_ZONE,
     FOURTH_CORNER_ZONE,
     ENTER_5TH_CORNER_ZONE,
@@ -65,17 +77,24 @@ private:
     NINTH_CORNER_ZONE,
     TENTH_CORNER_ZONE,
     FIFTH_STRAIGHT_ZONE,
-    FIRST_GRAY_ZONE,
-    LUG_ZONE,
-    BACK_LUG_ZONE,
-    SECOND_GRAY_ZONE,
-    SEESAW_ZONE,
+    APPROACH_TO_BLOCK_ZONE,
+    BLOCK_ZONE,
     GARAGE_ZONE,
     LOST
   };
 
-  Zone         ZONE;
+  enum Find_Line{
+		 LEFT_SEARCH,
+		 RIGHT_SEARCH,
+		 FORWARD_SEARCH,
+		 BACKWARD_SEARCH,
+		 ON_LINE,
+		 DET_LINE,
+		 LOST_LINE
+  };
 
+  Zone         ZONE;
+  Find_Line    FIND_LINE;
 };
 
 #endif  // EV3_APP_NAVI_H_
