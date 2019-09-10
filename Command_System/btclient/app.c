@@ -33,7 +33,8 @@ enum EColor {
 /* コマンドコードの定義 */
 enum ECommandCode {
 	eSpecific = 0x01,
-	eAll = 0x02
+	eAll = 0x02,
+	eCap = 0x10,
 };
 
 /* レスポンスコードの定義 */
@@ -82,7 +83,7 @@ static size_t encode_packet(uint8_t reqcode, uint16_t points[], size_t num_of_po
 	size_t packet_index = 0;
 	size_t i = 0;
 
-	if ( (packet == NULL) || ((reqcode != eSpecific) && (reqcode != eAll)) || (num_of_points > 84) ) {
+	if ( (packet == NULL) || ((reqcode != eSpecific) && (reqcode != eAll) && (reqcode != eCap))|| (num_of_points > 84) ) {
 		error("invalid argument");
 		return 0;
 	}
@@ -265,12 +266,13 @@ void main_task(intptr_t unused)
 
 	// タッチセンサ押下待ち
 	lcd_print("Press the touch sensor.\n");
-    while(!ev3_touch_sensor_is_pressed(TOUCH_SENSOR_PORT));
-    while(ev3_touch_sensor_is_pressed(TOUCH_SENSOR_PORT));
+	while(!ev3_touch_sensor_is_pressed(TOUCH_SENSOR_PORT));
+	while(ev3_touch_sensor_is_pressed(TOUCH_SENSOR_PORT));
 
 	// 色判定リクエストメッセージを生成
-	request_len = encode_packet(eSpecific, points, sizeof(points)/sizeof(points[0]), &request); /* 座標IDを指定する場合 */
+	//	request_len = encode_packet(eSpecific, points, sizeof(points)/sizeof(points[0]), &request); /* 座標IDを指定する場合 */
 	//request_len = encode_packet(eAll, NULL, 0, &request); /* すべての座標IDの色を取得する場合 */
+	request_len = encode_packet(eCap, NULL, 0, &request); /* すべての座標IDの色を取得する場合 */
 	if ( request_len == 0 ) {
 		error("failed to encode_packet");
 		goto end;
