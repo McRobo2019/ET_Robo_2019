@@ -56,4 +56,5 @@ class ResponseCode():
     Color   = 0x51
     Error   = 0xC8
     Cap_img = 0x1F 
+    Command = 0x2F 
     

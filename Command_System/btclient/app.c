@@ -39,8 +39,11 @@ enum ECommandCode {
 
 /* レスポンスコードの定義 */
 enum EResCode {
-	eColor = 0x51,
-	eError = 0xc8
+	eColor   = 0x51,
+	eError   = 0xc8,
+	eCap_img = 0x1f,
+	eCommand = 0x2f
+
 };
 
 /* 座標IDと色のセットを表す構造体 */
@@ -129,7 +132,7 @@ static int decode_packet(uint8_t rescode, uint8_t *data, size_t data_len, PointC
 	size_t i = 0;
 	size_t data_index = 0;
 
-	if ( ((rescode != eColor) && (rescode != eError)) || (data == NULL) ) {
+	if ( ((rescode != eColor) && (rescode != eError) && (rescode != eCap_img) && (rescode != eCommand)) || (data == NULL) ) {
 		error("invalid argument");
 		return -1;
 	}
@@ -272,7 +275,7 @@ void main_task(intptr_t unused)
 	// 色判定リクエストメッセージを生成
 	//	request_len = encode_packet(eSpecific, points, sizeof(points)/sizeof(points[0]), &request); /* 座標IDを指定する場合 */
 	//request_len = encode_packet(eAll, NULL, 0, &request); /* すべての座標IDの色を取得する場合 */
-	request_len = encode_packet(eCap, NULL, 0, &request); /* すべての座標IDの色を取得する場合 */
+	request_len = encode_packet(eCap, NULL, 0, &request);
 	if ( request_len == 0 ) {
 		error("failed to encode_packet");
 		goto end;
