@@ -478,16 +478,23 @@ void Navi::run(int line_val, int odo, int velocity, float yaw_angle, int x, int 
 /** LEFT 2019 ***********************************************************************/
   case NINTH_CORNER_ZONE:
     LOG_NAVI = 1230;
-    target_velocity = NINTH_CORNER_VELOCITY_VAL;
+
+    if(yaw_angle < MINUS_RAD_90_DEG){
+      target_velocity = 100;
+    }else{
+      target_velocity = NINTH_CORNER_VELOCITY_VAL;
+    }
+
     target_omega = omega_frm_circle(CIRCLE_99[0], CIRCLE_99[1], CIRCLE_99[2], x, y, yaw_angle, velocity);
     
-    if ((pre_50mm_x > FIFTH_STRAIGHT_AREA[0]) && (pre_50mm_y > FIFTH_STRAIGHT_AREA[1])){
+    if(yaw_angle > RAD_90_DEG){
+    //    if ((pre_50mm_x > FIFTH_STRAIGHT_AREA[0]) && (pre_50mm_y > FIFTH_STRAIGHT_AREA[1])){
       ZONE = FIFTH_STRAIGHT_ZONE;
     }
     break;
 
   case FIFTH_STRAIGHT_ZONE:
-    LOG_NAVI = 1050;
+    LOG_NAVI = 1240;
     target_velocity = FIFTH_STRAIGHT_VELOCITY_VAL;
     target_omega = omega_frm_vector(STRAIGT_05[2],STRAIGT_05[3], x, y, yaw_angle, velocity);
 

@@ -199,7 +199,7 @@ int SEVENTH_CORNER_VELOCITY_VAL   = 250; //
 int EIGHTH_CORNER_VELOCITY_VAL    = 150; //
 
 //map trace
-int NINTH_CORNER_VELOCITY_VAL     = 200; //
+int NINTH_CORNER_VELOCITY_VAL     = 150; //
 
 
 //not used
@@ -308,7 +308,8 @@ int CIRCLE_08[3]  = {1700, 1090, -350};
 int CIRCLE_09[3]  = {2075, 515, 330};
 //int CIRCLE_99[3]  = {2120, 530, 365};
 //int CIRCLE_99[3]  = {2120, 530, 360};
-int CIRCLE_99[3]  = {2120, 520, 360};
+//int CIRCLE_99[3]  = {2120, 520, 360};
+int CIRCLE_99[3]  = {2120, 540, 350};
 
 
 int CIRCLE_10[3]  = {2120, 540, 375};
