@@ -9,11 +9,6 @@ import glob # library for loading images from a directory
 import matplotlib.pyplot as plt
 import matplotlib.image as mpimg
 
-from sample_types import CommandCode
-from sample_types import ResponseCode
-from sample_types import Color
-from SerialInterface import SerialInterface
-
 dots = {   1 : (600, 100),  2 : (800, 100),  3 : (1000, 100),  4 : (1200, 100),   5 : (600, 300),  6 : (800, 300),  7 : (1000, 300),  8 : (1200, 300),   9 : (600, 500), 10 : (800, 500), 11 : (1000, 500), 12 : (1200, 500),  13 : (600, 700), 14 : (800, 700), 15 : (1000, 700), 16 : (1200, 700) }
 points = dots.values() # 全サークル分の座標リストを作る
 
