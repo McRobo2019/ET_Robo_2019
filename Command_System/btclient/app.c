@@ -302,9 +302,17 @@ void main_task(intptr_t unused)
 	debug("rescode = %u\n", rescode);
 	debug("resdata = ");
 	for ( i = 0; i < response_len; i++ ) {
-		debug("%02x ", response[i]);
+	  debug("%02x ", response[i]);
+	  if(response[i] == 7){
+	    debug("*");
+	  }
+	  if(response[i] == 3){
+	    debug("*");
+	  }
+
 	}
 	debug("\n");
+
 
 	// 応答メッセージを解読
 	ret = decode_packet(rescode, response, response_len, &result, &num_of_result, &errmsg);
