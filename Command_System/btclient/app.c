@@ -4,7 +4,7 @@
 #include "app.h"
 #include "lcd.h"
 
-//#define DEBUG_PRINT
+#define DEBUG_PRINT
 
 #define error( fmt, ... ) \
 	lcd_print( \
@@ -138,30 +138,30 @@ static int decode_packet(uint8_t rescode, uint8_t *data, size_t data_len, PointC
 	}
 	
 	if ( rescode == eColor ) {
-		if ( (result == NULL) || (num_of_result == NULL) ) {
-			error("invalid argument");
-			return -1;
-		}
-		num_of_points = (size_t)data[data_index++];
-		l_result = (PointColor *)malloc(sizeof(PointColor)*num_of_points);
-		if ( l_result == NULL ) {
-			error("failed to malloc");
-			return -1;
-		}
-		for ( i = 0; i < num_of_points; i++, data_index = data_index + 3 ) {
-			l_result[i].point = ((uint16_t)data[data_index] << 8) + (uint16_t)data[data_index+1]; /* from network byte order */
-			l_result[i].color = data[data_index+2];
-		}
+	  if ( (result == NULL) || (num_of_result == NULL) ) {
+	    error("invalid argument");
+	    return -1;
+	  }
+	  num_of_points = (size_t)data[data_index++];
+	  l_result = (PointColor *)malloc(sizeof(PointColor)*num_of_points);
+	  if ( l_result == NULL ) {
+	    error("failed to malloc");
+	    return -1;
+	  }
+	  for ( i = 0; i < num_of_points; i++, data_index = data_index + 3 ) {
+	    l_result[i].point = ((uint16_t)data[data_index] << 8) + (uint16_t)data[data_index+1]; /* from network byte order */
+	    l_result[i].color = data[data_index+2];
+	  }
 	} else if ( rescode == eError ) {
-		if ( errmsg == NULL ) {
-			error("invalid argument");
-			return -1;
-		}
-		l_errmsg = (char *)calloc(data_len+1, sizeof(uint8_t));
-		for ( i = 0; i < data_len; i++ ) {
-			l_errmsg[i] = (char)data[i];
-		}
-	}
+	  if ( errmsg == NULL ) {
+	    error("invalid argument");
+	    return -1;
+	  }
+	  l_errmsg = (char *)calloc(data_len+1, sizeof(uint8_t));
+	  for ( i = 0; i < data_len; i++ ) {
+	    l_errmsg[i] = (char)data[i];
+	  }
+	} 
 
 	*result = l_result;
 	*num_of_result = num_of_points;
@@ -302,7 +302,7 @@ void main_task(intptr_t unused)
 	debug("rescode = %u\n", rescode);
 	debug("resdata = ");
 	for ( i = 0; i < response_len; i++ ) {
-		debug("%02x", response[i]);
+		debug("%02x ", response[i]);
 	}
 	debug("\n");
 
