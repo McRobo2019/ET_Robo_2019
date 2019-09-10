@@ -10,8 +10,13 @@ extern "C" {
 #endif
 */
 
+#include "stdbool.h"
+
 //Parameter of System
 extern int SYS_CLK;
+extern bool BLOCK_MODE;
+
+
 
 //Parameter of Robo
 extern int ARM_ANGLE_LT;

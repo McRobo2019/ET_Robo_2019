@@ -362,6 +362,89 @@ static void sys_destroy(){
   delete gOperation;
 }
 
+
+/* コマンド(要求)パケット生成関数 */
+static size_t encode_packet(uint8_t reqcode, uint16_t points[], size_t num_of_points, uint8_t **packet)
+{
+	uint8_t *data = NULL;
+	size_t l_parameter_length = 0;
+	size_t packet_size = 0;
+	size_t packet_index = 0;
+
+	if ( (packet == NULL) || (reqcode != eCap) || (num_of_points > 84) ) {
+	  return 0;
+	}
+
+	packet_size = 1/* Command Code */ + 1/* Parameter Length */ + l_parameter_length;
+
+	data = (uint8_t *)malloc( packet_size );
+	if ( data == NULL ) {
+	  return 0;
+	}
+	
+	/* command code */
+	data[packet_index++] = reqcode;
+	
+	/* parameter length */
+	data[packet_index++] = l_parameter_length;
+	
+	/* parameter */
+	*packet = data;
+
+	return packet_size;
+}
+
+static int serial_write(FILE *bt, uint8_t *data, size_t data_len)
+{
+	if ( (bt == NULL) || (data == NULL) ) {
+		return -1;
+	}
+
+	if ( fwrite(data, 1, data_len, bt) < data_len ) {
+		return -1;
+	}
+
+	return 0;
+}
+
+static int serial_read(FILE *bt, uint8_t *code, uint8_t **data, size_t *data_len)
+{
+	uint8_t l_code;
+	uint8_t l_data_len;
+	uint8_t *l_data = NULL;
+
+	if ( (bt == NULL) || (code == NULL) || (data == NULL) || (data_len == NULL) ) {
+		return -1;
+	}
+
+	if ( fread(&l_code, sizeof(uint8_t), 1, bt) < 1 ) {
+		return -1;
+	}
+	
+	if ( fread(&l_data_len, sizeof(uint8_t), 1, bt) < 1 ) {
+		return -1;
+	}
+
+	l_data = (uint8_t *)malloc(l_data_len);
+	if ( l_data == NULL ) {
+		return -1;
+	}
+	if ( fread(l_data, sizeof(uint8_t), l_data_len, bt) < l_data_len ) {
+		free(l_data);
+		return -1;
+	}
+
+	*code = l_code;
+	*data_len = l_data_len;
+	*data = l_data;
+
+	return 0;
+}
+
+
+
+
+
 //It will be move to the class for log ota 20190414 ----
 #ifdef LOG_RECORD
 static void log_dat( ){
@@ -697,24 +780,39 @@ void jud_cyc(intptr_t exinf) {
 }
 
 void jud_task(intptr_t exinf) {
+  //  int ret = -1;
+  uint8_t *request = NULL;
+  size_t request_len = 0;
+  uint8_t rescode;
+  uint8_t *response   = NULL;
+  size_t response_len = 0;
 
-    if (ev3_button_is_pressed(BACK_BUTTON)) {
 
-    //    wup_tsk(MAIN_TASK);  // バックボタン押下
+  gJudgment->run();
+  gOperation->setCommand(gRecognition->ave_velo,//gRecognition->velocity,
+			 gRecognition->left_wheel_velocity,
+			 gRecognition->right_wheel_velocity,
+			 gJudgment->forward,
+			 gJudgment->target_yaw_rate,
+			 gRecognition->yawrate,
+			 gJudgment->target_velocity,
+			 gJudgment->target_omega
+			 );
 
-    }
-    else {
-      gJudgment->run();
-      gOperation->setCommand(gRecognition->ave_velo,//gRecognition->velocity,
-			     gRecognition->left_wheel_velocity,
-			     gRecognition->right_wheel_velocity,
-			     gJudgment->forward,
-			     gJudgment->target_yaw_rate,
-			     gRecognition->yawrate,
-          		     gJudgment->target_velocity,
-          		     gJudgment->target_omega
-			     );
-    }
+
+  if(BLOCK_MODE){
+    request_len = encode_packet(eCap, NULL, 0, &request);
+    /*
+    ret = serial_write(bt, request, request_len);
+    ret = -1;
+    ret = serial_read(bt, &rescode, &response, &response_len);
+    */
+    serial_write(bt, request, request_len);
+    serial_read(bt, &rescode, &response, &response_len);
+
+
+  }
+
     ext_tsk();
 }
 
@@ -744,83 +842,6 @@ void ope_task(intptr_t exinf) {
 
 
 
-/* コマンド(要求)パケット生成関数 */
-static size_t encode_packet(uint8_t reqcode, uint16_t points[], size_t num_of_points, uint8_t **packet)
-{
-	uint8_t *data = NULL;
-	size_t l_parameter_length = 0;
-	size_t packet_size = 0;
-	size_t packet_index = 0;
-
-	if ( (packet == NULL) || (reqcode != eCap) || (num_of_points > 84) ) {
-	  return 0;
-	}
-
-	packet_size = 1/* Command Code */ + 1/* Parameter Length */ + l_parameter_length;
-
-	data = (uint8_t *)malloc( packet_size );
-	if ( data == NULL ) {
-	  return 0;
-	}
-	
-	/* command code */
-	data[packet_index++] = reqcode;
-	
-	/* parameter length */
-	data[packet_index++] = l_parameter_length;
-	
-	/* parameter */
-	*packet = data;
-
-	return packet_size;
-}
-
-static int serial_write(FILE *bt, uint8_t *data, size_t data_len)
-{
-	if ( (bt == NULL) || (data == NULL) ) {
-		return -1;
-	}
-
-	if ( fwrite(data, 1, data_len, bt) < data_len ) {
-		return -1;
-	}
-
-	return 0;
-}
-
-static int serial_read(FILE *bt, uint8_t *code, uint8_t **data, size_t *data_len)
-{
-	uint8_t l_code;
-	uint8_t l_data_len;
-	uint8_t *l_data = NULL;
-
-	if ( (bt == NULL) || (code == NULL) || (data == NULL) || (data_len == NULL) ) {
-		return -1;
-	}
-
-	if ( fread(&l_code, sizeof(uint8_t), 1, bt) < 1 ) {
-		return -1;
-	}
-	
-	if ( fread(&l_data_len, sizeof(uint8_t), 1, bt) < 1 ) {
-		return -1;
-	}
-
-	l_data = (uint8_t *)malloc(l_data_len);
-	if ( l_data == NULL ) {
-		return -1;
-	}
-	if ( fread(l_data, sizeof(uint8_t), l_data_len, bt) < l_data_len ) {
-		free(l_data);
-		return -1;
-	}
-
-	*code = l_code;
-	*data_len = l_data_len;
-	*data = l_data;
-
-	return 0;
-}
 
 
 
@@ -838,6 +859,7 @@ void main_task(intptr_t unused) {
   sys_initialize();
 
 
+  /*
   request_len = encode_packet(eCap, NULL, 0, &request);
   // メッセージを送信
   
@@ -850,6 +872,7 @@ void main_task(intptr_t unused) {
     }
   }
   ret = serial_write(bt, request, request_len);
+  */
 
 
   //**********************************************************************************//
@@ -875,20 +898,22 @@ void main_task(intptr_t unused) {
   ev3_lcd_draw_string("PRESS TS or 1",0, 80);
 
 
-
+  /*
   request_len = encode_packet(eCap, NULL, 0, &request);
   ret = serial_write(bt, request, request_len);
   ret = -1;
   ret = serial_read(bt, &rescode, &response, &response_len);
+  */
 
 
   while(1){
-
+    /*
     if(ret != 0){
       ev3_lcd_draw_string("serial read not yet",0, 40);
     }else{
       ev3_lcd_draw_string("serial read done",0, 40);
     }
+    */
 
     if(ev3_bluetooth_is_connected()){
       ev3_lcd_draw_string("BT connected",0, 60);
@@ -903,6 +928,9 @@ void main_task(intptr_t unused) {
     tslp_tsk(10); //What dose it mean? kota 170812
   }
 
+  // メッセージ Command Systemを送信
+  request_len = encode_packet(eCap, NULL, 0, &request);
+  ret = serial_write(bt, request, request_len);
 
   ev3_lcd_fill_rect(0, 0, EV3_LCD_WIDTH, EV3_LCD_HEIGHT, EV3_LCD_WHITE);
   ev3_led_set_color(LED_OFF);
@@ -910,7 +938,7 @@ void main_task(intptr_t unused) {
   ev3_sta_cyc(JUD_CYC);
   gOperation->set_robo_mode_launch();
   ev3_sta_cyc(OPE_CYC);
-  ter_tsk(BT_TASK);
+  //  ter_tsk(BT_TASK);
 
   slp_tsk();  // バックボタンが押されるまで待つ
 
