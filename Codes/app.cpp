@@ -59,8 +59,21 @@ enum Sys_Mode{
   TRACK,
   DEBUG,
 };
-
 Sys_Mode SYS_MODE;
+
+/* コマンドコードの定義 */
+enum ECommandCode {
+  eCap = 0x10,
+};
+
+/* レスポンスコードの定義 */
+enum EResCode {
+  eCap_img = 0x1f,
+  eCommand = 0x2f
+};
+
+
+
 
 static int32_t   bt_cmd = 0;      /* Bluetoothコマンド 1:リモートスタート */
 static FILE     *bt     = NULL;   /* Bluetoothファイルハンドル */
@@ -730,18 +743,121 @@ void ope_task(intptr_t exinf) {
 }
 
 
+
+/* コマンド(要求)パケット生成関数 */
+static size_t encode_packet(uint8_t reqcode, uint16_t points[], size_t num_of_points, uint8_t **packet)
+{
+	uint8_t *data = NULL;
+	size_t l_parameter_length = 0;
+	size_t packet_size = 0;
+	size_t packet_index = 0;
+
+	if ( (packet == NULL) || (reqcode != eCap) || (num_of_points > 84) ) {
+	  return 0;
+	}
+
+	packet_size = 1/* Command Code */ + 1/* Parameter Length */ + l_parameter_length;
+
+	data = (uint8_t *)malloc( packet_size );
+	if ( data == NULL ) {
+	  return 0;
+	}
+	
+	/* command code */
+	data[packet_index++] = reqcode;
+	
+	/* parameter length */
+	data[packet_index++] = l_parameter_length;
+	
+	/* parameter */
+	*packet = data;
+
+	return packet_size;
+}
+
+static int serial_write(FILE *bt, uint8_t *data, size_t data_len)
+{
+	if ( (bt == NULL) || (data == NULL) ) {
+		return -1;
+	}
+
+	if ( fwrite(data, 1, data_len, bt) < data_len ) {
+		return -1;
+	}
+
+	return 0;
+}
+
+static int serial_read(FILE *bt, uint8_t *code, uint8_t **data, size_t *data_len)
+{
+	uint8_t l_code;
+	uint8_t l_data_len;
+	uint8_t *l_data = NULL;
+
+	if ( (bt == NULL) || (code == NULL) || (data == NULL) || (data_len == NULL) ) {
+		return -1;
+	}
+
+	if ( fread(&l_code, sizeof(uint8_t), 1, bt) < 1 ) {
+		return -1;
+	}
+	
+	if ( fread(&l_data_len, sizeof(uint8_t), 1, bt) < 1 ) {
+		return -1;
+	}
+
+	l_data = (uint8_t *)malloc(l_data_len);
+	if ( l_data == NULL ) {
+		return -1;
+	}
+	if ( fread(l_data, sizeof(uint8_t), l_data_len, bt) < l_data_len ) {
+		free(l_data);
+		return -1;
+	}
+
+	*code = l_code;
+	*data_len = l_data_len;
+	*data = l_data;
+
+	return 0;
+}
+
+
+
 //Main Task
 void main_task(intptr_t unused) {
+  int ret = -1;
+  uint8_t *request = NULL;
+  size_t request_len = 0;
+  uint8_t rescode;
+  uint8_t *response   = NULL;
+  size_t response_len = 0;
   //**********************************************************************************//
   //System Intialize
   //**********************************************************************************//
   sys_initialize();
+
+
+  request_len = encode_packet(eCap, NULL, 0, &request);
+  // メッセージを送信
+  
+  while(1){
+    ev3_lcd_set_font(EV3_FONT_MEDIUM);
+    ev3_lcd_draw_string("Capture Image",0, 40);
+    ev3_lcd_draw_string("PRESS Enter",0, 80);
+    if (ev3_button_is_pressed(ENTER_BUTTON)){
+      break;
+    }
+  }
+  ret = serial_write(bt, request, request_len);
+
 
   //**********************************************************************************//
   //Reset angle of arm
   //**********************************************************************************//
   gOperation->arm_reset();
   gOperation->arm_line_trace();
+
 
   //**********************************************************************************//
   //Color Sensor calibration 
@@ -753,11 +869,26 @@ void main_task(intptr_t unused) {
   //REDAY for START
   ev3_sta_cyc(REC_CYC);
 
+  
   ev3_lcd_set_font(EV3_FONT_MEDIUM);
   ev3_lcd_draw_string("Set ANG on Start Line",0, 40);
   ev3_lcd_draw_string("PRESS TS or 1",0, 80);
 
+
+
+  request_len = encode_packet(eCap, NULL, 0, &request);
+  ret = serial_write(bt, request, request_len);
+  ret = -1;
+  ret = serial_read(bt, &rescode, &response, &response_len);
+
+
   while(1){
+
+    if(ret != 0){
+      ev3_lcd_draw_string("serial read not yet",0, 40);
+    }else{
+      ev3_lcd_draw_string("serial read done",0, 40);
+    }
 
     if(ev3_bluetooth_is_connected()){
       ev3_lcd_draw_string("BT connected",0, 60);
@@ -765,10 +896,6 @@ void main_task(intptr_t unused) {
       ev3_lcd_draw_string("BT unconnected",0, 60);
     }
 
-    if (bt_cmd == 1){
-
-      break; /* リモートスタート */
-    }
     if (gTouchSensor.isPressed()){
       tslp_tsk(100);
       break; /* タッチセンサが押された */
@@ -783,7 +910,7 @@ void main_task(intptr_t unused) {
   ev3_sta_cyc(JUD_CYC);
   gOperation->set_robo_mode_launch();
   ev3_sta_cyc(OPE_CYC);
-  //  ter_tsk(BT_TASK);
+  ter_tsk(BT_TASK);
 
   slp_tsk();  // バックボタンが押されるまで待つ
 
