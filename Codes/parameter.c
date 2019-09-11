@@ -189,10 +189,10 @@ int FOURTH_CORNER_VELOCITY_VAL    = 100; //
 int FIFTH_CORNER_VELOCITY_VAL     = 150; //
 int THIRD_STRAIGHT_VELOCITY_VAL   = 150; //
 int SIXTH_CORNER_VELOCITY_VAL     = 200; //
-int CORRECT_4TH_ST_VELOCITY_VAL   = 200; //
+int CORRECT_4TH_ST_VELOCITY_VAL   = 300; //
 
 //map trace
-int FOURTH_STRAIGHT_VELOCITY_VAL  = 400; //
+int FOURTH_STRAIGHT_VELOCITY_VAL  = 300; //
 int SEVENTH_CORNER_VELOCITY_VAL   = 250; //
 
 //not used
@@ -205,7 +205,7 @@ int NINTH_CORNER_VELOCITY_VAL     = 150; //
 //not used
 int TENTH_CORNER_VELOCITY_VAL     = 150; //
 
-int FIFTH_STRAIGHT_VELOCITY_VAL  = 400; //
+int FIFTH_STRAIGHT_VELOCITY_VAL   = 400; //
 
 int S_CORNER_VELOCITY_VAL         = 150;
 
@@ -258,7 +258,9 @@ int FIFTH_CORNER_AREA[4]     = {  0,   420, 500,  890};
 int THIRD_STRAIGHT_AREA[4]   = {  0,   890, 500, 1100};
 int SIXTH_CORNER_AREA[4]     = {  0,  1100, 605, 1800};
 int FOURTH_STRAIGHT_AREA[4]  = { 605, 1450, 1625, 1800};
-int SEVENTH_CORNER_AREA[4]   = {1625, 1090, 2215, 1800};
+//int SEVENTH_CORNER_AREA[4]   = {1625, 1090, 2215, 1800};
+int SEVENTH_CORNER_AREA[4]   = {1600, 1090, 2215, 1800}; //koko
+//int SEVENTH_CORNER_AREA[4]   = {1570, 1090, 2215, 1800};
 int EIGHTH_CORNER_AREA[4]    = {1625,  840, 2215, 1090};
 
 //int NINTH_CORNER_AREA[4]     = {1625,    0, 2075,  840};
@@ -302,14 +304,20 @@ int CIRCLE_06[3]  = {605, 1150, -475};
 int STRAIGT_04[4] = {605, 1625, 1625, 1625};
 
 int CIRCLE_07[3]  = {1625, 1200, -425};
-int CIRCLE_77[3]  = {1625, 1178, -447};
+//int CIRCLE_77[3]= {1625, 1178, -447};
+int CIRCLE_77[3]  = {1600, 1178, -447}; //koko
+//int CIRCLE_77[3]= {1570, 1178, -447}; //koko
 
 int CIRCLE_08[3]  = {1700, 1090, -350};
 int CIRCLE_09[3]  = {2075, 515, 330};
 //int CIRCLE_99[3]  = {2120, 530, 365};
 //int CIRCLE_99[3]  = {2120, 530, 360};
 //int CIRCLE_99[3]  = {2120, 520, 360};
-int CIRCLE_99[3]  = {2120, 540, 350};
+//int CIRCLE_99[3]  = {2120, 540, 350};
+int CIRCLE_99[3]  = {2120, 540, 325}; //A best
+//int CIRCLE_99[3]  = {2120, 540, 300}; //A best
+//int CIRCLE_99[3]  = {2120, 540, 250}; //B too tight
+//int CIRCLE_99[3]  = {2120, 540, 200}; //C too  tight
 
 
 int CIRCLE_10[3]  = {2120, 540, 375};

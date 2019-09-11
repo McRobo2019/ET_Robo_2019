@@ -186,7 +186,7 @@ static void sys_initialize() {
   
   ev3_lcd_fill_rect(0, 0, EV3_LCD_WIDTH, EV3_LCD_HEIGHT, EV3_LCD_WHITE);
   ev3_lcd_set_font(EV3_FONT_MEDIUM);
-  ev3_lcd_draw_string("hirojiren_C",0, 0);
+  ev3_lcd_draw_string("LEFT-B---",0, 0);
   battery = ev3_battery_voltage_mV();
   sprintf(battery_str, "V:%d", battery);
   ev3_lcd_draw_string(battery_str,0, 20);
@@ -627,7 +627,7 @@ static void export_log_dat( ){
   int i;
 		
   //file name gen ----
-  char file_name[MAX_CHAR_NUM] = "log_D_"; //koko
+  char file_name[MAX_CHAR_NUM] = "log_A_"; //koko
   char file_cnt[MAX_CHAR_NUM] = "000";
   char file_format[MAX_CHAR_NUM] = ".csv";
   int  str_to_num;
