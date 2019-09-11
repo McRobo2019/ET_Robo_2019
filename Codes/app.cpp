@@ -186,7 +186,7 @@ static void sys_initialize() {
   
   ev3_lcd_fill_rect(0, 0, EV3_LCD_WIDTH, EV3_LCD_HEIGHT, EV3_LCD_WHITE);
   ev3_lcd_set_font(EV3_FONT_MEDIUM);
-  ev3_lcd_draw_string("LEFT-B---",0, 0);
+  ev3_lcd_draw_string("LEFT-C---",0, 0);
   battery = ev3_battery_voltage_mV();
   sprintf(battery_str, "V:%d", battery);
   ev3_lcd_draw_string(battery_str,0, 20);

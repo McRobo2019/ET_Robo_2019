@@ -125,6 +125,7 @@ void Navi::run(int line_val, int odo, int velocity, float yaw_angle, int x, int 
   
   static int   ref_velocity;
   static float acl_velocity;
+  //  static int   min_y;
   //  static int   max_y;
   //  float diff_angle;
 
@@ -329,6 +330,7 @@ void Navi::run(int line_val, int odo, int velocity, float yaw_angle, int x, int 
 
     if (y < FOURTH_CORNER_AREA[3]){
       ZONE = FOURTH_CORNER_ZONE;
+      //      min_y = 9999;
     }
     break;
 
@@ -365,6 +367,10 @@ void Navi::run(int line_val, int odo, int velocity, float yaw_angle, int x, int 
     target_omega = Navi_Line_Trace->line_trace_omega(line_val, ref_omega, max_omega, min_omega);
     //--------------------------------------------------------------------------------LINE TRACE
 
+    //For correct y
+    /*    if(y < min_y){
+      min_y = y;
+      }*/
 
     if (pre_50mm_x < FIFTH_CORNER_AREA[2]){
       ZONE = FIFTH_CORNER_ZONE;
@@ -383,7 +389,14 @@ void Navi::run(int line_val, int odo, int velocity, float yaw_angle, int x, int 
     target_omega = Navi_Line_Trace->line_trace_omega(line_val, ref_omega, max_omega, min_omega);
     //--------------------------------------------------------------------------------LINE TRACE
 
+    //For correct y
+    /*    if(y < min_y){
+      min_y = y;
+      }*/
+    
+
     if (pre_50mm_y > THIRD_STRAIGHT_AREA[1]){
+      //      Y_POS = Y_POS + (585 - min_y); //koko
       ZONE = THIRD_STRAIGHT_ZONE;
       gAve_yaw_angle_500->init();
     }
@@ -521,15 +534,18 @@ void Navi::run(int line_val, int odo, int velocity, float yaw_angle, int x, int 
 /** LEFT 2019 ***********************************************************************/
   case APPROACH_TO_BLOCK_ZONE:
     LOG_NAVI = 2150;
-    target_velocity = 100;
-    target_omega = omega_frm_vector(STRAIGT_06[2],STRAIGT_06[3], x, y, yaw_angle, velocity);
-    
+    //    target_velocity = 100;
+    target_velocity = 0;
+    //target_omega = omega_frm_vector(STRAIGT_06[2],STRAIGT_06[3], x, y, yaw_angle, velocity);
+    target_omega = RAD_22P5_DEG;
+    /*
     if(line_val > 60){
       ZONE = BLOCK_ZONE;
     }
 
     
-    if(pre_50mm_x < STRAIGT_06[2]){
+    if(pre_50mm_x < STRAIGT_06[2]){*/
+    if(yaw_angle > RAD_135_DEG){
       ZONE = BLOCK_ZONE;
     }
 
@@ -538,6 +554,8 @@ void Navi::run(int line_val, int odo, int velocity, float yaw_angle, int x, int 
 /** LEFT 2019 ***********************************************************************/
   case BLOCK_ZONE:
     LOG_NAVI = 2160;
+
+    target_velocity = 100;
     //REF YAW RATE GEN-------------------------------------------------------------
     min_omega = MINUS_RAD_22P5_DEG;
     ref_omega = 0;
@@ -546,7 +564,8 @@ void Navi::run(int line_val, int odo, int velocity, float yaw_angle, int x, int 
     //-------------------------------------------------------------REF YAW RATE GEN
 
     //LINE TRACE-------------------------------------------------------------------------------
-    target_omega = Navi_Line_Trace->line_trace_omega(line_val, ref_omega, max_omega, min_omega);
+    //    target_omega = Navi_Line_Trace->line_trace_omega(line_val, ref_omega, max_omega, min_omega);
+    target_omega = 0.0;
     //--------------------------------------------------------------------------------LINE TRACE
 
     break;
