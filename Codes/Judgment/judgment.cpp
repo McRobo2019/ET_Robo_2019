@@ -38,7 +38,6 @@ void Judgment::init() {
   gNavi->init();
   gMap_Trace->init();
 
-
 }
 
 
