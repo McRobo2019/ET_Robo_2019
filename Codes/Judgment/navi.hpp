@@ -24,8 +24,7 @@ public:
 
   //  void run(int line_val,int odo, int velocity, float yaw_angle, float ave_yaw_angle, int x, int y, int pre_50mm_x, int pre_50mm_y);
   void run(int line_val,int odo, int velocity, float yaw_angle, int x, int y, int pre_50mm_x, int pre_50mm_y);
-
-
+  void block(int line_val,int odo, int velocity, float yaw_angle, int x, int y);
   
   Average_500_Data *gAve_yaw_angle_500 = new Average_500_Data(); //20181108
   Average_500_Data *gAve_x_500 = new Average_500_Data();
@@ -44,6 +43,7 @@ public:
   bool  lost_line;
   bool  det_line;
   bool  det_left_edge;
+  bool  det_right_edge;
 
 
 
@@ -93,8 +93,27 @@ private:
 		 LOST_LINE
   };
 
+  enum Block_Motion{
+    RX_COMMAND,
+    FORWARD,
+    REVERSE,
+    LEFT_LINE_DET,
+    RIGHT_LINE_DET,
+    LEFT_90_TURN,
+    RIGHT_90_TURN,
+    LEFT_45_TURN,
+    RIGHT_45_TURN,
+    FORWARD_TO_CIRCLE,
+    LEFT_180_TURN,
+    GOAL
+  };
+
+
+
   Zone         ZONE;
   Find_Line    FIND_LINE;
+  Block_Motion BLOCK_MOTION;
+
 };
 
 #endif  // EV3_APP_NAVI_H_

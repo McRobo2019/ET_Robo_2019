@@ -59,39 +59,20 @@ void Judgment::set_drive_mode_DB(){
 
 
 void Judgment::run() {
-  //  float yaw_time;
 
   static float ref_odo;
-  //  static float ref_angle;
-  /*
-  static float dif_odo;
-
-  static int   ref_forward;
-  static float acl_forward;
-  */
   static int ref_clock;
 
 
-  //  LINE_VAL = 50; //for debug
   ave_line_val = gAve_line_val->average_500(LINE_VAL);
   ave_yaw_angle_500 = gAve_yaw_angle_500->average_500(YAW_ANGLE);
 
 
   if(DRIVE_MODE == LINE_TRACE){
     line_trace_mode = true;
-
     gNavi->run(LINE_VAL, ODO, (int)mVelocity, YAW_ANGLE, X_POS, Y_POS, PRE_X_POS, PRE_Y_POS);
-
-    /*    
-    mRef_Omega      = gNavi->ref_omega;
-    mMax_Omega      = gNavi->max_omega;
-    mMin_Omega      = gNavi->min_omega;
-    */
-
     target_velocity = gNavi->target_velocity;
     target_omega    = gNavi->target_omega;
-
-    //    target_omega = gLine_Trace->line_trace_omega(LINE_VAL, mRef_Omega, mMax_Omega, mMin_Omega);
   }
   else if(DRIVE_MODE == TRACK){
 
