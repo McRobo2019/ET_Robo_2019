@@ -36,7 +36,6 @@ extern float dT_10ms;
 
 extern float PAI;
 
-extern float RAD_315_DEG;
 extern float RAD_1_DEG; //deg@1rad 
 extern float RAD_5_DEG; //
 extern float RAD_6_DEG;

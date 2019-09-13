@@ -41,6 +41,13 @@ float RAD_89_DEG   = 1.5533; //
 float RAD_88p5_DEG = 1.5446; //
 float RAD_87_DEG   = 1.5184; //
 float RAD_90_DEG   = 1.5708; //
+
+float RAD_91_DEG   = 1.5882;
+float RAD_92_DEG   = 1.6057; //
+float RAD_93_DEG   = 1.6231; //
+float RAD_94_DEG   = 1.6406; //
+float RAD_95_DEG   = 1.6580; //
+
 float RAD_100_DEG  = 1.7453;
 float RAD_120_DEG  = 2.0944; //
 float RAD_135_DEG  = 2.3562; //
@@ -259,7 +266,6 @@ int CIRCLE_03[3]  = {918, 1335, 289}; //koko chosei at honban
 
 int CIRCLE_04[3]  = {500, 890, -305};
 
-//int STRAIGT_05[4] = {3870,  160, 5200,  160};
 int CIRCLE_05[3]  = {500, 955, -370};
 
 int STRAIGT_03[4] = {130, 955, 130, 1150};
