@@ -244,7 +244,8 @@ int NINTH_CORNER_AREA[4]     = {1625,    0, 2075,  850}; //koko
 
 int TENTH_CORNER_AREA[4]     = {2075,     0, 2700,  540};
 int FIFTH_STRAIGHT_AREA[4]   = {2120,   540, 2700, 2630};
-int CORRECT_5TH_ST_AREA[4]   = {2120,  1250, 2700, 2075};
+//int CORRECT_5TH_ST_AREA[4]   = {2120,  1250, 2700, 2075};
+int CORRECT_5TH_ST_AREA[4]   = {2120,  1350, 2700, 2075};
 
 int GARAGE_AREA[4]           = {4915,    0, 5200,  320};
 

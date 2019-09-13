@@ -590,7 +590,7 @@ void Navi::run(int line_val, int odo, int velocity, float yaw_angle, int x, int 
 	  det_line       = false;
 	  det_left_edge  = false;
 	  det_right_edge = false;
-	  ref_odo        = odo + 100;
+	  ref_odo        = odo + 200;
 	}
       }
       break;
@@ -600,13 +600,13 @@ void Navi::run(int line_val, int odo, int velocity, float yaw_angle, int x, int 
       target_velocity = 50;
 
       if(yaw_angle > RAD_45_DEG){
-	target_omega = MINUS_RAD_22P5_DEG;
+	target_omega = MINUS_RAD_45_DEG;
       }else{
 	target_omega = 0.0;
       }
       
       //DETECT LINE
-      if(line_val > 50){
+      if((odo > ref_odo) && (line_val > 50)){
 	LOG_NAVI = 1321;
 	det_line       = true;
 	det_left_edge  = true;
@@ -633,7 +633,7 @@ void Navi::run(int line_val, int odo, int velocity, float yaw_angle, int x, int 
 
     case ON_LINE:
       LOG_NAVI = 1330;
-      target_velocity = 50;
+      target_velocity = 100;
 
       //REF YAW RATE GEN-------------------------------------------------------------
       min_omega = MINUS_RAD_22P5_DEG;
@@ -658,7 +658,7 @@ void Navi::run(int line_val, int odo, int velocity, float yaw_angle, int x, int 
     /** LEFT 2019 ***********************************************************************/
   case CORRECT_5TH_ST_ZONE:
     LOG_NAVI = 1340;
-    target_velocity = 50;
+    target_velocity = 100;
 
     min_omega = MINUS_RAD_15_DEG;
     ref_omega = 0;
@@ -686,7 +686,7 @@ void Navi::run(int line_val, int odo, int velocity, float yaw_angle, int x, int 
     /** LEFT 2019 ***********************************************************************/
   case LAST_STRAIGHT_ZONE:
     LOG_NAVI = 1350;
-    target_velocity = FIFTH_STRAIGHT_VELOCITY_VAL;
+    target_velocity = 100;
     //    target_omega = omega_frm_vector(STRAIGT_05[2],STRAIGT_05[3], x, y, yaw_angle, velocity);
     target_omega = omega_frm_angle(RAD_90_DEG, yaw_angle);
     if(pre_50mm_y > STRAIGT_05[3]){
@@ -706,7 +706,8 @@ void Navi::run(int line_val, int odo, int velocity, float yaw_angle, int x, int 
     LOG_NAVI = 2150;
     target_velocity = 100;
     //    if(yaw_angle > RAD_91_DEG){
-    if(yaw_angle > RAD_92_DEG){
+    //    if(yaw_angle < RAD_92_DEG){
+    if(yaw_angle < RAD_95_DEG){
       target_omega = RAD_5_DEG;
     }else{
       target_omega = 0.0;
