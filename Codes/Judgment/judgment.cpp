@@ -21,6 +21,7 @@ void Judgment::init() {
   PRE_ON_LINE_MODE   = ON_THE_LEFT_EDGE;
   TEST_MODE          = MODE_00;
 
+  BLOCK_MODE         = false;
   on_line            = true;
   left_line          = false;
   right_line         = false;
@@ -71,8 +72,16 @@ void Judgment::run() {
   if(DRIVE_MODE == LINE_TRACE){
     line_trace_mode = true;
     gNavi->run(LINE_VAL, ODO, (int)mVelocity, YAW_ANGLE, X_POS, Y_POS, PRE_X_POS, PRE_Y_POS,mGreen_flag);
+
+    if(BLOCK_MODE){
+      gNavi->block(LINE_VAL, ODO, (int)mVelocity, YAW_ANGLE, X_POS, Y_POS, mGreen_flag);
+    }
+
     target_velocity = gNavi->target_velocity;
     target_omega    = gNavi->target_omega;
+
+
+
   }
   else if(DRIVE_MODE == TRACK){
 
