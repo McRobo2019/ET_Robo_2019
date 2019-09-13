@@ -813,7 +813,7 @@ void Navi::block(int line_val, int odo, int velocity, float yaw_angle, int x, in
     break;
 
   case RX_COMMAND:
-    LOG_NAVI = 3000;
+    LOG_NAVI = 3000+cmd_cnt;
 
     target_velocity = 0;
     target_omega    = 0.0;
@@ -917,17 +917,19 @@ void Navi::block(int line_val, int odo, int velocity, float yaw_angle, int x, in
     }else{
       LOG_NAVI = 88;
     }
-    cmd_cnt++;
+
 
 
     break;
 
   case FORWARD:
     LOG_NAVI = 3010;
+    LOG_NAVI = LOG_NAVI + cmd_cnt;
     if(odo > ref_odo){
       target_velocity = 0;
       target_omega    = 0.0;
       BLOCK_MOTION = RX_COMMAND;
+      cmd_cnt++;
     }else{
       target_velocity = 100;
       target_omega    = omega_frm_angle(ref_angle, yaw_angle);
@@ -936,10 +938,12 @@ void Navi::block(int line_val, int odo, int velocity, float yaw_angle, int x, in
 
   case REVERSE:
     LOG_NAVI = 3020;
+    LOG_NAVI = LOG_NAVI + cmd_cnt;
     if(odo < ref_odo){
       target_velocity = 0;
       target_omega    = 0.0;
       BLOCK_MOTION = RX_COMMAND;
+      cmd_cnt++;
     }else{
       target_velocity = -100;
       target_omega    = 0.0;
@@ -948,6 +952,7 @@ void Navi::block(int line_val, int odo, int velocity, float yaw_angle, int x, in
 
   case LEFT_LINE_DET:
     LOG_NAVI = 3100;
+    LOG_NAVI = LOG_NAVI + cmd_cnt;
     if(yaw_angle < ref_angle){
       target_velocity = 0;
       target_omega    = RAD_22P5_DEG;
@@ -970,6 +975,7 @@ void Navi::block(int line_val, int odo, int velocity, float yaw_angle, int x, in
       LOG_NAVI = 3120;
       if(line_val > 50){
 	BLOCK_MOTION = RX_COMMAND;
+	cmd_cnt++;
       }else{
 	target_velocity = 0;
 	target_omega    = MINUS_RAD_22P5_DEG;
@@ -990,6 +996,7 @@ void Navi::block(int line_val, int odo, int velocity, float yaw_angle, int x, in
       det_line = true;
       det_left_edge = true;
       BLOCK_MOTION = RX_COMMAND;
+      cmd_cnt++;
     }
 
     break;
@@ -1018,11 +1025,13 @@ void Navi::block(int line_val, int odo, int velocity, float yaw_angle, int x, in
     if(det_left_edge){
       LOG_NAVI = 3340;
       BLOCK_MOTION = RX_COMMAND;
+      cmd_cnt++;
     }
 
     if(yaw_angle > (ref_angle - RAD_1_DEG)){
       LOG_NAVI = 3350;
       BLOCK_MOTION = RX_COMMAND;
+      cmd_cnt++;
     }
     break;
 
@@ -1043,11 +1052,13 @@ void Navi::block(int line_val, int odo, int velocity, float yaw_angle, int x, in
     if(det_left_edge){
       LOG_NAVI = 3440;
       BLOCK_MOTION = RX_COMMAND;
+      cmd_cnt++;
     }
 
     if(yaw_angle < (ref_angle + RAD_1_DEG)){
       LOG_NAVI = 3450;
       BLOCK_MOTION = RX_COMMAND;
+      cmd_cnt++;
     }
     break;
 
@@ -1059,6 +1070,7 @@ void Navi::block(int line_val, int odo, int velocity, float yaw_angle, int x, in
     if(yaw_angle > (ref_angle - RAD_1_DEG)){
       LOG_NAVI = 3550;
       BLOCK_MOTION = RX_COMMAND;
+      cmd_cnt++;
     }
     break;
 
@@ -1070,6 +1082,7 @@ void Navi::block(int line_val, int odo, int velocity, float yaw_angle, int x, in
     if(yaw_angle < (ref_angle + RAD_1_DEG)){
       LOG_NAVI = 3650;
       BLOCK_MOTION = RX_COMMAND;
+      cmd_cnt++;
     }
 
     break;
@@ -1080,6 +1093,7 @@ void Navi::block(int line_val, int odo, int velocity, float yaw_angle, int x, in
       target_velocity = 0;
       target_omega    = 0.0;
       BLOCK_MOTION = RX_COMMAND;
+      cmd_cnt++;
     }else{
       target_velocity = 100;
       target_omega    = omega_frm_angle(ref_angle, yaw_angle);
@@ -1094,6 +1108,7 @@ void Navi::block(int line_val, int odo, int velocity, float yaw_angle, int x, in
     if(yaw_angle > (ref_angle - RAD_1_DEG)){
       LOG_NAVI = 3810;
       BLOCK_MOTION = RX_COMMAND;
+      cmd_cnt++;
     }
     break;
 
