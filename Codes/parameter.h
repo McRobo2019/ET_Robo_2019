@@ -47,6 +47,13 @@ extern float RAD_89_DEG;
 extern float RAD_88p5_DEG;
 extern float RAD_87_DEG;
 extern float RAD_90_DEG;
+
+extern float RAD_91_DEG;
+extern float RAD_92_DEG;
+extern float RAD_93_DEG;
+extern float RAD_94_DEG;
+extern float RAD_95_DEG;
+
 extern float RAD_120_DEG;
 extern float RAD_100_DEG;
 extern float RAD_135_DEG;

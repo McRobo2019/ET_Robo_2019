@@ -817,7 +817,7 @@ void Navi::block(int line_val, int odo, int velocity, float yaw_angle, int x, in
   case FORWARD:
     LOG_NAVI = 3010;
     if(odo > ref_odo){
-      target_velocity = 100;
+      target_velocity = 0;
       target_omega    = 0.0;
       BLOCK_MOTION = RX_COMMAND;
     }else{
@@ -887,32 +887,108 @@ void Navi::block(int line_val, int odo, int velocity, float yaw_angle, int x, in
     break;
 
   case LEFT_90_TURN:
+    LOG_NAVI = 3300;
     target_velocity = 0;
     target_omega    = omega_frm_angle(ref_angle, yaw_angle);
-    if(yaw_angle > (ref_angle - RAD_1_DEG)){
 
+    if(yaw_angle > (ref_angle - RAD_45_DEG)){
+      LOG_NAVI = 3310;
+      if(line_val > 60){
+	LOG_NAVI = 3320;
+	det_line = true;
+      }
+      if(det_line){
+	LOG_NAVI = 3110;
+	if(line_val < 20){
+	  LOG_NAVI = 3330;
+	  lost_line = true;
+	  det_left_edge = true;
+	}
+      }
+    }
+
+    if(det_left_edge){
+      LOG_NAVI = 3340;
+      BLOCK_MOTION = RX_COMMAND;
+    }
+
+    if(yaw_angle > (ref_angle - RAD_1_DEG)){
+      LOG_NAVI = 3350;
+      BLOCK_MOTION = RX_COMMAND;
     }
     break;
 
   case RIGHT_90_TURN:
+    LOG_NAVI = 3400;
+    target_velocity = 0;
+    target_omega    = omega_frm_angle(ref_angle, yaw_angle);
 
+    if(yaw_angle > (ref_angle + RAD_45_DEG)){
+      LOG_NAVI = 3410;
+      if(line_val > 60){
+	LOG_NAVI = 3320;
+	det_line = true;
+	det_left_edge = true;
+      }
+    }
+
+    if(det_left_edge){
+      LOG_NAVI = 3440;
+      BLOCK_MOTION = RX_COMMAND;
+    }
+
+    if(yaw_angle < (ref_angle + RAD_1_DEG)){
+      LOG_NAVI = 3450;
+      BLOCK_MOTION = RX_COMMAND;
+    }
     break;
 
   case LEFT_45_TURN:
+    LOG_NAVI = 3500;
+    target_velocity = 0;
+    target_omega    = omega_frm_angle(ref_angle, yaw_angle);
 
+    if(yaw_angle > (ref_angle - RAD_1_DEG)){
+      LOG_NAVI = 3550;
+      BLOCK_MOTION = RX_COMMAND;
+    }
     break;
 
   case RIGHT_45_TURN:
+    LOG_NAVI = 3600;
+    target_velocity = 0;
+    target_omega    = omega_frm_angle(ref_angle, yaw_angle);
+
+    if(yaw_angle < (ref_angle + RAD_1_DEG)){
+      LOG_NAVI = 3650;
+      BLOCK_MOTION = RX_COMMAND;
+    }
 
     break;
 
   case FORWARD_TO_CIRCLE:
-
+    LOG_NAVI = 3700;
+    if(odo > ref_odo){
+      target_velocity = 0;
+      target_omega    = 0.0;
+      BLOCK_MOTION = RX_COMMAND;
+    }else{
+      target_velocity = 100;
+      target_omega    = omega_frm_angle(ref_angle, yaw_angle);
+    }
     break;
 
   case LEFT_180_TURN:
+    LOG_NAVI = 3800;
+    target_velocity = 0;
+    target_omega    = omega_frm_angle(ref_angle, yaw_angle);
 
+    if(yaw_angle > (ref_angle - RAD_1_DEG)){
+      LOG_NAVI = 3810;
+      BLOCK_MOTION = RX_COMMAND;
+    }
     break;
+
   case GOAL:
 
 
