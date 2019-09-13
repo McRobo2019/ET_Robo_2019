@@ -19,7 +19,7 @@ public:
 	void set_drive_mode_LT();
 	void set_drive_mode_TK();
 	void set_drive_mode_DB();
-	void run();
+	void run(uint8_t *block_cmd, size_t block_cmd_len);
 	void set_in_data(bool    green_flag,
 			 float   velocity,
 			 float   pre_velo_0p5sec,

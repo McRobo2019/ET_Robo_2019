@@ -298,6 +298,6 @@ int STRAIGT_05[4] = {2495, 885,  2445, 2000};
 //int STRAIGT_06[4] = {2495, 2630, 2210, 2935};
 int STRAIGT_06[4] = {2495, 2630, 2050, 3100};
 
-
+int START_NODE[2] = {1795, 2930};
 int LOG_NAVI = 0;
 float FL_LOG = 0.0;

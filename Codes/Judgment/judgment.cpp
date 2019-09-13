@@ -59,7 +59,7 @@ void Judgment::set_drive_mode_DB(){
 
 
 
-void Judgment::run() {
+void Judgment::run(uint8_t *block_cmd, size_t block_cmd_len){
 
   static float ref_odo;
   static int ref_clock;
@@ -74,7 +74,7 @@ void Judgment::run() {
     gNavi->run(LINE_VAL, ODO, (int)mVelocity, YAW_ANGLE, X_POS, Y_POS, PRE_X_POS, PRE_Y_POS,mGreen_flag);
 
     if(BLOCK_MODE){
-      gNavi->block(LINE_VAL, ODO, (int)mVelocity, YAW_ANGLE, X_POS, Y_POS, mGreen_flag);
+      gNavi->block(LINE_VAL, ODO, (int)mVelocity, YAW_ANGLE, X_POS, Y_POS, mGreen_flag, block_cmd, block_cmd_len);
     }
 
     target_velocity = gNavi->target_velocity;
@@ -183,6 +183,44 @@ void Judgment::run() {
     }
   }
   else if(DRIVE_MODE == DEBUG){
+    gNavi->block(LINE_VAL, ODO, (int)mVelocity, YAW_ANGLE, X_POS, Y_POS, mGreen_flag, block_cmd, block_cmd_len);
+    /*
+    static int i;
+    static int cnt;
+
+    if (block_cmd == NULL){
+      LOG_NAVI = 99;
+    }
+
+    cnt = i/10;
+
+    if(cnt > block_cmd_len){
+      i = 0;
+      cnt = 0;
+    }
+
+    if(block_cmd[i] == 0x00){
+      LOG_NAVI = 0;
+    }else if(block_cmd[i] == 0x01){
+      LOG_NAVI = 1;
+    }else if(block_cmd[i] == 0x02){
+      LOG_NAVI = 2;
+    }else if(block_cmd[i] == 0x03){
+      LOG_NAVI = 3;
+    }else if(block_cmd[i] == 0x04){
+      LOG_NAVI = 4;
+    }else if(block_cmd[i] == 0x05){
+      LOG_NAVI = 5;
+    }else if(block_cmd[i] == 0x06){
+      LOG_NAVI = 6;
+    }else{
+      LOG_NAVI = 88;
+    }
+    i++;
+    */
+
+
+    /*
     line_trace_mode    = false;
 
     switch(TEST_MODE){
@@ -301,6 +339,8 @@ void Judgment::run() {
     default:
       break;
     }
+    */
+
   }
 }
 

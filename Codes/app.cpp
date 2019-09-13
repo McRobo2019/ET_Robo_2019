@@ -83,6 +83,11 @@ static Recognition          *gRecognition;
 static Judgment             *gJudgment;
 static Operation            *gOperation;
 
+static  uint8_t rescode;
+static  uint8_t *response   = NULL;
+static  size_t  response_len = 0;
+
+
 
 //It will be moved to log class 190414 ota ----
 #ifdef LOG_RECORD
@@ -553,8 +558,7 @@ static void log_dat( ){
 
       if (log_cnt < log_size){
 	log_dat_00[log_cnt]  = SYS_CLK;
-
-	log_dat_01[log_cnt]  = gJudgment->det_navi_log;
+	log_dat_01[log_cnt]  = LOG_NAVI;
 	log_dat_02[log_cnt]  = ev3_battery_current_mA();
 
 	log_dat_03[log_cnt]  = gOperation->left_motor_pwm;
@@ -783,12 +787,8 @@ void jud_task(intptr_t exinf) {
   //  int ret = -1;
   uint8_t *request = NULL;
   size_t request_len = 0;
-  uint8_t rescode;
-  uint8_t *response   = NULL;
-  size_t response_len = 0;
 
-
-  gJudgment->run();
+  gJudgment->run(response, response_len);
   gOperation->setCommand(gRecognition->ave_velo,//gRecognition->velocity,
 			 gRecognition->left_wheel_velocity,
 			 gRecognition->right_wheel_velocity,
@@ -802,15 +802,8 @@ void jud_task(intptr_t exinf) {
 
   if(BLOCK_MODE){
     request_len = encode_packet(eCap, NULL, 0, &request);
-    /*
-    ret = serial_write(bt, request, request_len);
-    ret = -1;
-    ret = serial_read(bt, &rescode, &response, &response_len);
-    */
     serial_write(bt, request, request_len);
     serial_read(bt, &rescode, &response, &response_len);
-
-
   }
 
     ext_tsk();
@@ -841,47 +834,20 @@ void ope_task(intptr_t exinf) {
 }
 
 
-
-
-
-
 //Main Task
 void main_task(intptr_t unused) {
   int ret = -1;
   uint8_t *request = NULL;
   size_t request_len = 0;
-  uint8_t rescode;
-  uint8_t *response   = NULL;
-  size_t response_len = 0;
   //**********************************************************************************//
   //System Intialize
   //**********************************************************************************//
   sys_initialize();
-
-
-  /*
-  request_len = encode_packet(eCap, NULL, 0, &request);
-  // メッセージを送信
-  
-  while(1){
-    ev3_lcd_set_font(EV3_FONT_MEDIUM);
-    ev3_lcd_draw_string("Capture Image",0, 40);
-    ev3_lcd_draw_string("PRESS Enter",0, 80);
-    if (ev3_button_is_pressed(ENTER_BUTTON)){
-      break;
-    }
-  }
-  ret = serial_write(bt, request, request_len);
-  */
-
-
   //**********************************************************************************//
   //Reset angle of arm
   //**********************************************************************************//
   gOperation->arm_reset();
   gOperation->arm_line_trace();
-
-
   //**********************************************************************************//
   //Color Sensor calibration 
   //20190721 move sensoor_calib functin from rec class to color_sensor_calib class
@@ -891,30 +857,30 @@ void main_task(intptr_t unused) {
 
   //REDAY for START
   ev3_sta_cyc(REC_CYC);
-
   
   ev3_lcd_set_font(EV3_FONT_MEDIUM);
   ev3_lcd_draw_string("Set ANG on Start Line",0, 40);
   ev3_lcd_draw_string("PRESS TS or 1",0, 80);
 
+  /* DEBUG SERIAL ************/
+  uint8_t   *data;
+  const int SIZE = 16;
+  uint8_t uint8_dat;
+  int i;
 
-  /*
-  request_len = encode_packet(eCap, NULL, 0, &request);
-  ret = serial_write(bt, request, request_len);
-  ret = -1;
-  ret = serial_read(bt, &rescode, &response, &response_len);
-  */
+  uint8_dat = 0x00;
+  data = new uint8_t[SIZE];
 
+  for (i=0; i < SIZE; i++){
+    data[i] = uint8_dat;
+    uint8_dat = uint8_dat + 0x01;
+    
+  }
+  response     = data;
+  response_len = SIZE;
+  /************ DEBUG SERIAL */
 
   while(1){
-    /*
-    if(ret != 0){
-      ev3_lcd_draw_string("serial read not yet",0, 40);
-    }else{
-      ev3_lcd_draw_string("serial read done",0, 40);
-    }
-    */
-
     if(ev3_bluetooth_is_connected()){
       ev3_lcd_draw_string("BT connected",0, 60);
     }else{

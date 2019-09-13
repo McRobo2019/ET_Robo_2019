@@ -12,6 +12,7 @@ Navi::Navi() {
 
 void Navi::init() {
   ZONE            = START_ZONE;
+  BLOCK_MOTION    = INT_BLOCK;
   target_velocity = 10;
   lost_line       = false;
   det_line        = false;
@@ -118,13 +119,13 @@ float Navi::omega_frm_angle(float target_angle, float yaw_angle){
 //void Navi::run(int line_val, int odo, int velocity, float yaw_angle, float ave_yaw_angle, int x, int y, int pre_50mm_x, int pre_50mm_y) {
 void Navi::run(int line_val, int odo, int velocity, float yaw_angle, int x, int y, int pre_50mm_x, int pre_50mm_y, bool green_flag) {
   static float ref_odo;
-  static float dif_odo;
+  //  static float dif_odo;
   //  static float ref_x, ref_y;
   //  static float ref_yaw_angle;
   //  static float det_line_angle;
   
-  static int   ref_velocity;
-  static float acl_velocity;
+  //  static int   ref_velocity;
+  //  static float acl_velocity;
   //  static int   min_y;
   //  static int   max_y;
   //  float diff_angle;
@@ -704,14 +705,15 @@ void Navi::run(int line_val, int odo, int velocity, float yaw_angle, int x, int 
   case TURN_TO_BLOCK:
     LOG_NAVI = 2150;
     target_velocity = 100;
-    if(yaw_angle > RAD_91_DEG){
+    //    if(yaw_angle > RAD_91_DEG){
+    if(yaw_angle > RAD_92_DEG){
       target_omega = RAD_5_DEG;
     }else{
       target_omega = 0.0;
     }
 
     if(odo > ref_odo){
-      if(line_val > 40){
+      if(line_val > 60){
 	ZONE = APPROACH_TO_BLOCK_ZONE;
 	ref_odo = odo + 100;
       }
@@ -763,7 +765,7 @@ void Navi::run(int line_val, int odo, int velocity, float yaw_angle, int x, int 
       Y_POS         = 350;
       ave_yaw_angle =gAve_yaw_angle_500->average_500(yaw_angle);
     }
-    if (x < 1750){ // modify lator
+    if (x < START_NODE[0]){ // modify lator
       	//CORRECT Y YAW ANGLE-------------------------------------------------------------
       YAW_ANGLE_OFFSET = RAD_180_DEG - ave_yaw_angle;
       target_velocity  = 0;
@@ -796,22 +798,128 @@ void Navi::run(int line_val, int odo, int velocity, float yaw_angle, int x, int 
 
 
 
-void Navi::block(int line_val, int odo, int velocity, float yaw_angle, int x, int y, bool green_flag){
-  int ref_odo;
-  float ref_angle;
+void Navi::block(int line_val, int odo, int velocity, float yaw_angle, int x, int y, bool green_flag, uint8_t *block_cmd, size_t block_cmd_len){
+  static int ref_odo;
+  static float ref_angle;
+  static uint8_t cmd_cnt;
+
   switch(BLOCK_MOTION){
+  case INT_BLOCK:
+    X_POS = 350;
+    Y_POS = 700;
+    LOG_NAVI = 5000;
+    cmd_cnt = 0;
+    BLOCK_MOTION = RX_COMMAND;
+    break;
+
   case RX_COMMAND:
     LOG_NAVI = 3000;
 
     target_velocity = 0;
     target_omega    = 0.0;
-    lost_line       = false;
-    det_line        = false;
-    det_left_edge   = false;
-    det_right_edge  = false;
 
-    ref_odo = odo + 350;
-    ref_angle = yaw_angle + RAD_90_DEG;
+    if (block_cmd == NULL){
+      LOG_NAVI = 99;
+    }
+
+    if(cmd_cnt > block_cmd_len){
+      BLOCK_MOTION = GOAL;
+    }
+
+    if(block_cmd[cmd_cnt] == 0x00){
+      BLOCK_MOTION    = FORWARD;
+      lost_line       = false;
+      det_line        = false;
+      det_left_edge   = false;
+      det_right_edge  = false;
+      ref_odo         = odo + 350;
+      ref_angle       = yaw_angle;
+    }else if(block_cmd[cmd_cnt] == 0x01){
+      BLOCK_MOTION    = REVERSE;
+      lost_line       = false;
+      det_line        = false;
+      det_left_edge   = false;
+      det_right_edge  = false;
+      ref_odo         = odo - 350;
+      ref_angle       = yaw_angle;
+    }else if(block_cmd[cmd_cnt] == 0x02){
+      BLOCK_MOTION    = LEFT_LINE_DET;
+      lost_line       = false;
+      det_line        = false;
+      det_left_edge   = false;
+      det_right_edge  = false;
+      ref_odo         = odo;
+      ref_angle       = yaw_angle + RAD_135_DEG;
+    }else if(block_cmd[cmd_cnt] == 0x03){
+      BLOCK_MOTION    = RIGHT_LINE_DET;
+      lost_line       = false;
+      det_line        = false;
+      det_left_edge   = false;
+      det_right_edge  = false;
+      ref_odo         = odo;
+      ref_angle       = yaw_angle + MINUS_RAD_135_DEG;
+    }else if(block_cmd[cmd_cnt] == 0x04){
+      BLOCK_MOTION    = LEFT_90_TURN;
+      lost_line       = false;
+      det_line        = false;
+      det_left_edge   = false;
+      det_right_edge  = false;
+      ref_odo         = odo;
+      ref_angle       = yaw_angle + RAD_90_DEG;
+    }else if(block_cmd[cmd_cnt] == 0x05){
+      BLOCK_MOTION    = RIGHT_90_TURN;
+      lost_line       = false;
+      det_line        = false;
+      det_left_edge   = false;
+      det_right_edge  = false;
+      ref_odo         = odo;
+      ref_angle       = yaw_angle + MINUS_RAD_90_DEG;
+    }else if(block_cmd[cmd_cnt] == 0x06){
+      BLOCK_MOTION    = RIGHT_90_TURN;
+      lost_line       = false;
+      det_line        = false;
+      det_left_edge   = false;
+      det_right_edge  = false;
+      ref_odo         = odo;
+      ref_angle       = yaw_angle + MINUS_RAD_90_DEG;
+    }else if(block_cmd[cmd_cnt] == 0x06){
+      BLOCK_MOTION    = LEFT_45_TURN;
+      lost_line       = false;
+      det_line        = false;
+      det_left_edge   = false;
+      det_right_edge  = false;
+      ref_odo         = odo;
+      ref_angle       = yaw_angle + RAD_45_DEG;
+    }else if(block_cmd[cmd_cnt] == 0x07){
+      BLOCK_MOTION    = RIGHT_45_TURN;
+      lost_line       = false;
+      det_line        = false;
+      det_left_edge   = false;
+      det_right_edge  = false;
+      ref_odo         = odo;
+      ref_angle       = yaw_angle + MINUS_RAD_45_DEG;
+    }else if(block_cmd[cmd_cnt] == 0x08){
+      BLOCK_MOTION    = FORWARD_TO_CIRCLE;
+      lost_line       = false;
+      det_line        = false;
+      det_left_edge   = false;
+      det_right_edge  = false;
+      ref_odo         = odo + 247;
+      ref_angle       = yaw_angle;
+    }else if(block_cmd[cmd_cnt] == 0x09){
+      BLOCK_MOTION    = LEFT_180_TURN;
+      lost_line       = false;
+      det_line        = false;
+      det_left_edge   = false;
+      det_right_edge  = false;
+      ref_odo         = odo;
+      ref_angle       = yaw_angle + RAD_180_DEG;
+    }else{
+      LOG_NAVI = 88;
+    }
+    cmd_cnt++;
+
+
     break;
 
   case FORWARD:
@@ -829,7 +937,7 @@ void Navi::block(int line_val, int odo, int velocity, float yaw_angle, int x, in
   case REVERSE:
     LOG_NAVI = 3020;
     if(odo < ref_odo){
-      target_velocity = 100;
+      target_velocity = 0;
       target_omega    = 0.0;
       BLOCK_MOTION = RX_COMMAND;
     }else{

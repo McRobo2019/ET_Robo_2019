@@ -24,7 +24,7 @@ public:
 
   //  void run(int line_val,int odo, int velocity, float yaw_angle, float ave_yaw_angle, int x, int y, int pre_50mm_x, int pre_50mm_y);
   void run(int line_val,int odo, int velocity, float yaw_angle, int x, int y, int pre_50mm_x, int pre_50mm_y, bool green_flag);
-  void block(int line_val,int odo, int velocity, float yaw_angle, int x, int y, bool green_flag);
+  void block(int line_val,int odo, int velocity, float yaw_angle, int x, int y, bool green_flag,  uint8_t *block_cmd, size_t block_cmd_len);
   
   Average_500_Data *gAve_yaw_angle_500 = new Average_500_Data(); //20181108
   Average_500_Data *gAve_x_500 = new Average_500_Data();
@@ -99,6 +99,7 @@ private:
   };
 
   enum Block_Motion{
+    INT_BLOCK,
     RX_COMMAND,
     FORWARD,
     REVERSE,
