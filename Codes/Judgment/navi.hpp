@@ -23,8 +23,8 @@ public:
 
 
   //  void run(int line_val,int odo, int velocity, float yaw_angle, float ave_yaw_angle, int x, int y, int pre_50mm_x, int pre_50mm_y);
-  void run(int line_val,int odo, int velocity, float yaw_angle, int x, int y, int pre_50mm_x, int pre_50mm_y);
-  void block(int line_val,int odo, int velocity, float yaw_angle, int x, int y);
+  void run(int line_val,int odo, int velocity, float yaw_angle, int x, int y, int pre_50mm_x, int pre_50mm_y, bool green_flag);
+  void block(int line_val,int odo, int velocity, float yaw_angle, int x, int y, bool green_flag);
   
   Average_500_Data *gAve_yaw_angle_500 = new Average_500_Data(); //20181108
   Average_500_Data *gAve_x_500 = new Average_500_Data();
@@ -77,6 +77,10 @@ private:
     NINTH_CORNER_ZONE,
     TENTH_CORNER_ZONE,
     FIFTH_STRAIGHT_ZONE,
+    FIND_5TH_ST_LINE,
+    CORRECT_5TH_ST_ZONE,
+    LAST_STRAIGHT_ZONE,
+    TURN_TO_BLOCK,
     APPROACH_TO_BLOCK_ZONE,
     BLOCK_ZONE,
     GARAGE_ZONE,
@@ -84,6 +88,7 @@ private:
   };
 
   enum Find_Line{
+		 PRE_FIND,
 		 LEFT_SEARCH,
 		 RIGHT_SEARCH,
 		 FORWARD_SEARCH,

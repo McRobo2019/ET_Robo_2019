@@ -24,15 +24,11 @@ extern int TAIL_ANGLE_BALANCE_START;
 extern int TAIL_ANGLE_LAUNCH;
 extern int TAIL_ANGLE_RUN;     /* バランス走行時の角度[度] */
 extern int TAIL_ON_ANGLE; /* 完全停止時の角度[度] */
-extern int TAIL_ANGLE_LUG; /* 3点移動時の角度[度] */
 extern int TAIL_ANGLE_GARAGE; /* 完全停止時の角度[度] */
 
 extern float WHEEL_R;       //radius of wheel[mm]
 extern float RoboTread;      //トレッド長さ[mm]
 extern float HALF_TREAD;
-
-extern float MAX_VELOCITY;
-
 
 //Parameter of time length unit
 extern float dT_4ms;
@@ -53,6 +49,7 @@ extern float RAD_88p5_DEG;
 extern float RAD_87_DEG;
 extern float RAD_90_DEG;
 extern float RAD_120_DEG;
+extern float RAD_100_DEG;
 extern float RAD_135_DEG;
 extern float RAD_150_DEG;
 extern float RAD_180_DEG;
@@ -110,14 +107,6 @@ extern float MOTOR_CTL_KI;
 extern float MOTOR_CTL_KP;
 
 
-//LUG
-
-extern int   MAX_LUG_FORWARD;
-extern float LUG_1st_STOP_X;
-extern float LUG_2nd_STOP_X;
-extern float LUG_3rd_STOP_X;
-
-extern float LUG_YAW_GAIN;
 extern int   TAIL_STD_LINE_DET;
 
 extern int   CALIB_LINE_100_MAX_THRS;
@@ -161,8 +150,6 @@ extern int TENTH_CORNER_VELOCITY_VAL;
 extern int FIFTH_STRAIGHT_VELOCITY_VAL;
 
 extern int FIRST_GRAY_VELOCITY_VAL;
-extern int LUG_VELOCITY_VAL;
-extern int BACK_LUG_VELOCITY_VAL;
 extern int SECOND_GRAY_VELOCITY_VAL;
 extern int SEESAW_VELOCITY_VAL;
 extern int GARAGE_VELOCITY_VAL;
@@ -194,12 +181,8 @@ extern int NINTH_CORNER_AREA[4];
 extern int TENTH_CORNER_AREA[4];
 
 extern int FIFTH_STRAIGHT_AREA[4];
+extern int CORRECT_5TH_ST_AREA[4];
 
-extern int FIRST_GRAY_AREA[4];
-extern int LUG_AREA[4];
-extern int BACK_LUG_AREA[4];
-extern int SECOND_GRAY_AREA[4];
-extern int SEESAW_AREA[4];
 extern int GARAGE_AREA[4];
 
 extern int STRAIGT_01[4];

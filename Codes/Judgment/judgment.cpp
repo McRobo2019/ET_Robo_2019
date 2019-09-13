@@ -70,7 +70,7 @@ void Judgment::run() {
 
   if(DRIVE_MODE == LINE_TRACE){
     line_trace_mode = true;
-    gNavi->run(LINE_VAL, ODO, (int)mVelocity, YAW_ANGLE, X_POS, Y_POS, PRE_X_POS, PRE_Y_POS);
+    gNavi->run(LINE_VAL, ODO, (int)mVelocity, YAW_ANGLE, X_POS, Y_POS, PRE_X_POS, PRE_Y_POS,mGreen_flag);
     target_velocity = gNavi->target_velocity;
     target_omega    = gNavi->target_omega;
   }
