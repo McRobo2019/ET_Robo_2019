@@ -24,7 +24,8 @@ public:
 
   //  void run(int line_val,int odo, int velocity, float yaw_angle, float ave_yaw_angle, int x, int y, int pre_50mm_x, int pre_50mm_y);
   void run(int line_val,int odo, int velocity, float yaw_angle, int x, int y, int pre_50mm_x, int pre_50mm_y, bool green_flag);
-  void block(int line_val,int odo, int velocity, float yaw_angle, int x, int y, bool green_flag,  uint8_t *block_cmd, size_t block_cmd_len);
+  void block_node(int line_val,int odo, int velocity, float yaw_angle, int x, int y, bool green_flag,  uint8_t *node_list, size_t node_list_len);
+  void block_cmd(int line_val,int odo, int velocity, float yaw_angle, int x, int y, bool green_flag,  uint8_t *block_cmd, size_t block_cmd_len);
   
   Average_500_Data *gAve_yaw_angle_500 = new Average_500_Data(); //20181108
   Average_500_Data *gAve_x_500 = new Average_500_Data();
@@ -101,6 +102,7 @@ private:
   enum Block_Motion{
     INT_BLOCK,
     RX_COMMAND,
+    ADJ_DIR,
     FORWARD,
     REVERSE,
     LEFT_LINE_DET,
@@ -111,6 +113,7 @@ private:
     RIGHT_45_TURN,
     FORWARD_TO_CIRCLE,
     LEFT_180_TURN,
+    BACK_TO_NODE,
     GOAL
   };
 

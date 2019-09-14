@@ -34,9 +34,11 @@ float Navi::omega_frm_vector(float target_x, float target_y, float current_x, fl
   float time;
   float ref_omega;
 
-
   predic_dist = 0.5 * (float)velocity; //0.5 sec x velocity;
 
+  if(predic_dist == 0){
+    predic_dist = 1.0;
+  }
   //vector 0
   x12 = target_x - current_x;
   y12 = target_y - current_y;
@@ -51,7 +53,11 @@ float Navi::omega_frm_vector(float target_x, float target_y, float current_x, fl
 
   angle_vec0_vec1 = a/dist_vec0;
 
-  time = dist_vec0/(float)velocity;
+  if(velocity == 0){
+    time = dist_vec0/20.0;
+  }else{
+    time = dist_vec0/(float)velocity;
+  }
 
   ref_omega = -1.0 * angle_vec0_vec1/time * RAD_1_DEG;
 
@@ -113,6 +119,7 @@ float Navi::omega_frm_angle(float target_angle, float yaw_angle){
   
   return ref_omega;
 }
+
 
 
 /****************************************************************************************/
@@ -798,8 +805,153 @@ void Navi::run(int line_val, int odo, int velocity, float yaw_angle, int x, int 
   }
 
 
+void Navi::block_node(int line_val, int odo, int velocity, float yaw_angle, int x, int y, bool green_flag, uint8_t *node_list, size_t node_list_len){
+  static int ref_x,ref_y;
+  static int ref_odo;
+  static float ref_angle;
+  static uint8_t cmd_cnt;
+  static int next_node, current_node, camefrom_node;
+					
+  float min, max, input_val;
 
-void Navi::block(int line_val, int odo, int velocity, float yaw_angle, int x, int y, bool green_flag, uint8_t *block_cmd, size_t block_cmd_len){
+  switch(BLOCK_MOTION){
+  case INT_BLOCK:
+    X_POS = 350;
+    Y_POS = 700;
+    LOG_NAVI = 5000;
+    cmd_cnt = 1;        //node_list from Command System has a dammy node at head
+    next_node     = 13;
+    current_node  = 13; //13 is start node
+    camefrom_node = 13;
+    BLOCK_MOTION = RX_COMMAND;
+    break;
+
+  case RX_COMMAND:
+    LOG_NAVI = 3000+cmd_cnt;
+
+    target_velocity = 0;
+    target_omega    = 0.0;
+
+    if (node_list == NULL){
+      LOG_NAVI = 99;
+    }
+
+    if(cmd_cnt > node_list_len){
+      BLOCK_MOTION = GOAL;
+    }else{
+      camefrom_node = current_node;
+      current_node  = next_node;
+      next_node     = node_list[cmd_cnt];
+      ref_x         = NODE_POS[current_node][0]; 
+      ref_y         = NODE_POS[current_node][0]; 
+    }
+
+
+    if(next_node == current_node){
+      BLOCK_MOTION = RX_COMMAND;
+      cmd_cnt++;
+    }else if((current_node == 4)||(current_node == 5)||(current_node == 6)||(current_node == 11)||(current_node == 12)||(current_node == 17)||(current_node == 18) ||(current_node == 19)){ //circle node
+      if(next_node == camefrom_node){
+	BLOCK_MOTION = BACK_TO_NODE;
+	//      ref_odo      = odo - 247;
+	ref_odo      = odo - 245;
+      }else{
+	BLOCK_MOTION = ADJ_DIR;
+      }
+    }else{
+      BLOCK_MOTION = ADJ_DIR;
+    }
+    /*
+    if(node_list[cmd_cnt] == 0x00){
+    }else if(node_list[cmd_cnt] == 0x01){
+      current_node  = 1;
+    }else if(node_list[cmd_cnt] == 0x02){
+    }else if(node_list[cmd_cnt] == 0x03){
+    }else if(node_list[cmd_cnt] == 0x04){
+    }else if(node_list[cmd_cnt] == 0x05){
+    }else if(node_list[cmd_cnt] == 0x06){
+    }else if(node_list[cmd_cnt] == 0x06){
+    }else if(node_list[cmd_cnt] == 0x07){
+    }else if(node_list[cmd_cnt] == 0x08){
+    }else if(node_list[cmd_cnt] == 0x09){
+    }else if(node_list[cmd_cnt] == 0x0a){
+    }else if(node_list[cmd_cnt] == 0x0b){
+    }else if(node_list[cmd_cnt] == 0x0c){
+    }else if(node_list[cmd_cnt] == 0x0d){
+    }else if(node_list[cmd_cnt] == 0x0e){
+    }else if(node_list[cmd_cnt] == 0x0f){
+    }else if(node_list[cmd_cnt] == 0x10){
+    }else if(node_list[cmd_cnt] == 0x11){
+    }else if(node_list[cmd_cnt] == 0x12){
+    }else if(node_list[cmd_cnt] == 0x13){
+    }else if(node_list[cmd_cnt] == 0x14){
+    }else if(node_list[cmd_cnt] == 0x15){
+    }else if(node_list[cmd_cnt] == 0x16){
+    }else if(node_list[cmd_cnt] == 0x17){
+    }else{LOG_NAVI = 88;}*/
+   break;
+
+
+  case BACK_TO_NODE:
+    LOG_NAVI = 3100;
+    min       = ref_odo - 2;
+    max       = ref_odo + 2;
+    input_val = (float)odo;
+    
+    if( min_max_check(min, max, input_val)){
+      target_velocity = 0;
+      target_omega    = 0.0;
+      BLOCK_MOTION = RX_COMMAND;
+      cmd_cnt++;
+    }else{
+      target_velocity = -100;
+      target_omega    = 0.0;
+    }
+    break;
+
+  case ADJ_DIR:
+    LOG_NAVI     = 3200;
+    target_velocity = 0;
+    target_omega    = omega_frm_vector(ref_x, ref_y, x, y, yaw_angle, 100);
+    min             = MINUS_RAD_5_DEG;
+    max             = RAD_5_DEG;
+    input_val       = target_omega;
+
+    if( min_max_check(min, max, input_val)){
+      BLOCK_MOTION = FORWARD;
+    }
+  break;
+
+  case FORWARD:
+    LOG_NAVI = 3300;
+    min = (float)ref_x - 2;
+    max = (float)ref_x + 2;
+    input_val = (float)x;
+
+    if( min_max_check(min, max, input_val)){
+      min = (float)ref_y - 2;
+      max = (float)ref_y + 2;
+      input_val = (float)y;
+      if( min_max_check(min, max, input_val)){
+	target_velocity = 0;
+	target_omega    = 0.0;
+	BLOCK_MOTION = RX_COMMAND;
+	cmd_cnt++;
+      }
+    }
+
+    target_velocity = 100;
+    target_omega    = omega_frm_vector(ref_x, ref_y, x, y, yaw_angle, velocity);
+
+    break;
+
+  default:
+    break;
+  }
+}
+
+
+void Navi::block_cmd(int line_val, int odo, int velocity, float yaw_angle, int x, int y, bool green_flag, uint8_t *block_cmd, size_t block_cmd_len){
   static int ref_odo;
   static float ref_angle;
   static uint8_t cmd_cnt;

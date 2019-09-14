@@ -75,7 +75,7 @@ void Judgment::run(uint8_t *block_cmd, size_t block_cmd_len){
 
     //    if(BLOCK_MODE){
     if(RECEIVED_CMD){
-      gNavi->block(LINE_VAL, ODO, (int)mVelocity, YAW_ANGLE, X_POS, Y_POS, mGreen_flag, block_cmd, block_cmd_len);
+      gNavi->block_node(LINE_VAL, ODO, (int)mVelocity, YAW_ANGLE, X_POS, Y_POS, mGreen_flag, block_cmd, block_cmd_len);
     }
 
     target_velocity = gNavi->target_velocity;
@@ -184,7 +184,7 @@ void Judgment::run(uint8_t *block_cmd, size_t block_cmd_len){
     }
   }
   else if(DRIVE_MODE == DEBUG){
-    gNavi->block(LINE_VAL, ODO, (int)mVelocity, YAW_ANGLE, X_POS, Y_POS, mGreen_flag, block_cmd, block_cmd_len);
+    gNavi->block_node(LINE_VAL, ODO, (int)mVelocity, YAW_ANGLE, X_POS, Y_POS, mGreen_flag, block_cmd, block_cmd_len);
     target_velocity = gNavi->target_velocity;
     target_omega    = gNavi->target_omega;
 

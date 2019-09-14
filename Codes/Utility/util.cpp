@@ -46,6 +46,17 @@ int emergencyStop(float velocity){
 
 }
 
+bool min_max_check(float min, float max, float input){
+  if( (input > min) && (input < max)){
+    return true;
+  }else{
+    return false;
+  }
+
+}
+
+
+
 PID::PID(){
 
 }

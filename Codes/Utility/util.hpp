@@ -6,6 +6,8 @@
 extern void init_f(const char *str);
 extern void msg_f(const char *str, int32_t line);
 extern int emergencyStop(float velocity);
+bool min_max_check(float min, float max, float input);
+
 
 class PID{
 public:

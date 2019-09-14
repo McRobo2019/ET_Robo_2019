@@ -216,6 +216,7 @@ extern int CIRCLE_99[3];
 
 extern int CIRCLE_10[3];
 extern int START_NODE[2];
+extern int NODE_POS[24][2];
 
 
 extern int   LOG_NAVI;
