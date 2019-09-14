@@ -136,6 +136,9 @@ void Navi::run(int line_val, int odo, int velocity, float yaw_angle, int x, int 
   //  static int   min_y;
   //  static int   max_y;
   //  float diff_angle;
+  static float second_corner_speed;
+
+  second_corner_speed = (250.0/662.0) * (float)x -196.7;
 
   switch(ZONE){
 
@@ -308,7 +311,8 @@ void Navi::run(int line_val, int odo, int velocity, float yaw_angle, int x, int 
       LOG_NAVI = 1070;
 
       LOG_NAVI        = 1072;
-      target_velocity = SECOND_CORNER_VELOCITY_VAL;
+      //target_velocity = SECOND_CORNER_VELOCITY_VAL;
+      target_velocity = second_corner_speed;
       target_omega = omega_frm_circle(CIRCLE_22[0], CIRCLE_22[1], CIRCLE_22[2], x, y, yaw_angle, velocity);
 
       if(x < CIRCLE_03[0]){
