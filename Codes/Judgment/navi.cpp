@@ -748,6 +748,11 @@ void Navi::run(int line_val, int odo, int velocity, float yaw_angle, int x, int 
     //LINE TRACE-------------------------------------------------------------------------------
     target_omega = Navi_Line_Trace->line_trace_omega(line_val, ref_omega, max_omega, min_omega);
     //--------------------------------------------------------------------------------LINE TRACE
+
+    if(y > 2910){
+      target_velocity = 0;
+  }
+
     if(x < 1700){ //parameterize lator
       ZONE = BLOCK_ZONE;
       gAve_yaw_angle_500->init();
@@ -758,7 +763,7 @@ void Navi::run(int line_val, int odo, int velocity, float yaw_angle, int x, int 
 
 /** LEFT 2019 ***********************************************************************/
   case BLOCK_ZONE:
-    LOG_NAVI = 2160;
+    LOG_NAVI = 2170;
 
     target_velocity = 50;
     //REF YAW RATE GEN-------------------------------------------------------------
