@@ -3,8 +3,9 @@
 #include "stdbool.h"
 
 //Parameter of System
-int SYS_CLK = 0;
-bool BLOCK_MODE = false;
+int SYS_CLK       = 0;
+bool BLOCK_MODE   = false;
+bool RECEIVED_CMD = false;
 
 //Parameter of Robo
 int ARM_ANGLE_LT       = 30;

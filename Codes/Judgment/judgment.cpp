@@ -73,7 +73,8 @@ void Judgment::run(uint8_t *block_cmd, size_t block_cmd_len){
     line_trace_mode = true;
     gNavi->run(LINE_VAL, ODO, (int)mVelocity, YAW_ANGLE, X_POS, Y_POS, PRE_X_POS, PRE_Y_POS,mGreen_flag);
 
-    if(BLOCK_MODE){
+    //    if(BLOCK_MODE){
+    if(RECEIVED_CMD){
       gNavi->block(LINE_VAL, ODO, (int)mVelocity, YAW_ANGLE, X_POS, Y_POS, mGreen_flag, block_cmd, block_cmd_len);
     }
 

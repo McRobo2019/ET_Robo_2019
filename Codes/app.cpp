@@ -784,7 +784,7 @@ void jud_cyc(intptr_t exinf) {
 }
 
 void jud_task(intptr_t exinf) {
-  //  int ret = -1;
+  int ret = -1;
   uint8_t *request = NULL;
   size_t request_len = 0;
 
@@ -801,9 +801,14 @@ void jud_task(intptr_t exinf) {
 
 
   if(BLOCK_MODE){
-    request_len = encode_packet(eCap, NULL, 0, &request);
-    serial_write(bt, request, request_len);
-    serial_read(bt, &rescode, &response, &response_len);
+    if(RECEIVED_CMD == false){
+      request_len = encode_packet(eCap, NULL, 0, &request);
+      serial_write(bt, request, request_len);
+      ret = serial_read(bt, &rescode, &response, &response_len);
+      if(ret == 0){
+	  RECEIVED_CMD = true;
+	}
+    }
   }
 
     ext_tsk();
@@ -836,7 +841,7 @@ void ope_task(intptr_t exinf) {
 
 //Main Task
 void main_task(intptr_t unused) {
-  int ret = -1;
+  //  int ret = -1;
   uint8_t *request = NULL;
   size_t request_len = 0;
   //**********************************************************************************//
@@ -896,7 +901,8 @@ void main_task(intptr_t unused) {
 
   // メッセージ Command Systemを送信
   request_len = encode_packet(eCap, NULL, 0, &request);
-  ret = serial_write(bt, request, request_len);
+  //  ret = serial_write(bt, request, request_len);
+  serial_write(bt, request, request_len);
 
   ev3_lcd_fill_rect(0, 0, EV3_LCD_WIDTH, EV3_LCD_HEIGHT, EV3_LCD_WHITE);
   ev3_led_set_color(LED_OFF);

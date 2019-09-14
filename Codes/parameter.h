@@ -15,6 +15,7 @@ extern "C" {
 //Parameter of System
 extern int SYS_CLK;
 extern bool BLOCK_MODE;
+extern bool RECEIVED_CMD;
 
 
 
