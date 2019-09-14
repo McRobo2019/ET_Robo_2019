@@ -40,6 +40,7 @@ extern float PAI;
 extern float RAD_1_DEG; //deg@1rad 
 extern float RAD_5_DEG; //
 extern float RAD_6_DEG;
+extern float RAD_10_DEG; //
 extern float RAD_15_DEG; //deg@1rad 
 extern float RAD_22P5_DEG; //
 extern float RAD_30_DEG; //

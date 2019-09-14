@@ -33,6 +33,7 @@ float PAI         =  3.141592;
 float RAD_1_DEG    = 0.0175; //deg@1rad 
 float RAD_5_DEG    = 0.0873; //
 float RAD_6_DEG    = 0.1047; //
+float RAD_10_DEG   = 0.1745; //
 float RAD_15_DEG   = 0.2618; //
 float RAD_22P5_DEG = 0.3927; //
 float RAD_30_DEG   = 0.5236; //

@@ -719,7 +719,7 @@ void Navi::run(int line_val, int odo, int velocity, float yaw_angle, int x, int 
     //    if(yaw_angle > RAD_91_DEG){
     //    if(yaw_angle < RAD_92_DEG){
     if(yaw_angle < RAD_95_DEG){
-      target_omega = RAD_5_DEG;
+      target_omega = RAD_10_DEG; //change
     }else{
       target_omega = 0.0;
     }
