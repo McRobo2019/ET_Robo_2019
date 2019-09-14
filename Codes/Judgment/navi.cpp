@@ -468,9 +468,9 @@ void Navi::run(int line_val, int odo, int velocity, float yaw_angle, int x, int 
 
     target_velocity = CORRECT_4TH_ST_VELOCITY_VAL;
     
-    min_omega = MINUS_RAD_15_DEG;
+    min_omega = MINUS_RAD_22P5_DEG;
     ref_omega = 0;
-    max_omega = RAD_15_DEG;
+    max_omega = RAD_22P5_DEG;
 
     //LINE TRACE-------------------------------------------------------------------------------
     target_omega = Navi_Line_Trace->line_trace_omega(line_val, ref_omega, max_omega, min_omega);
