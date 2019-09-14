@@ -186,6 +186,11 @@ void main_task(intptr_t unused)
 	  goto end;
 	}
 
+	lcd_print("Press the touch sensor.\n");
+	while(!ev3_touch_sensor_is_pressed(TOUCH_SENSOR_PORT));
+	while(ev3_touch_sensor_is_pressed(TOUCH_SENSOR_PORT));
+	ret = serial_write(bt, request, request_len);
+
 	// 応答を受信
 	ret = serial_read(bt, &rescode, &response, &response_len);
 	if ( ret != 0 ) {
