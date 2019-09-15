@@ -128,7 +128,7 @@ void Navi::run(int line_val, int odo, int velocity, float yaw_angle, int x, int 
   static float ref_odo;
   //  static float dif_odo;
   //  static float ref_x, ref_y;
-  //  static float ref_yaw_angle;
+  static float ref_yaw_angle;
   //  static float det_line_angle;
   
   //  static int   ref_velocity;
@@ -715,7 +715,12 @@ void Navi::run(int line_val, int odo, int velocity, float yaw_angle, int x, int 
     /** LEFT 2019 ***********************************************************************/
   case TURN_TO_BLOCK:
     LOG_NAVI = 2150;
-    target_velocity = 100;
+
+    if(y > 2630){
+      target_velocity = 50;
+    }else{
+      target_velocity = 100;
+    }
     //    if(yaw_angle > RAD_91_DEG){
     //    if(yaw_angle < RAD_92_DEG){
     if(yaw_angle < RAD_95_DEG){
@@ -725,19 +730,18 @@ void Navi::run(int line_val, int odo, int velocity, float yaw_angle, int x, int 
     }
 
     if(odo > ref_odo){
-      if(line_val > 60){
+      if(line_val > 50){
 	ZONE = APPROACH_TO_BLOCK_ZONE;
 	ref_odo = odo + 100;
       }
     }
-
     break;
-
+    
     /** LEFT 2019 ***********************************************************************/
   case APPROACH_TO_BLOCK_ZONE:
     LOG_NAVI = 2160;
 
-    target_velocity = 100;
+    target_velocity = 50;
     
     //REF YAW RATE GEN-------------------------------------------------------------
     min_omega = MINUS_RAD_22P5_DEG;
@@ -749,18 +753,48 @@ void Navi::run(int line_val, int odo, int velocity, float yaw_angle, int x, int 
     target_omega = Navi_Line_Trace->line_trace_omega(line_val, ref_omega, max_omega, min_omega);
     //--------------------------------------------------------------------------------LINE TRACE
 
-    if(y > 2910){
+    if(y > 2980){
       target_velocity = 0;
-  }
+      target_omega    = 0.0;
+      ZONE            = BACK_TO_LINE;
+      ref_yaw_angle = yaw_angle + RAD_15_DEG;
+    }
 
     if(x < 1700){ //parameterize lator
       ZONE = BLOCK_ZONE;
       gAve_yaw_angle_500->init();
     }
-
-
     break;
 
+
+/** LEFT 2019 ***********************************************************************/
+  case BACK_TO_LINE:
+    target_velocity = -50;
+    target_omega    = 0.0;
+
+    //REF YAW RATE GEN-------------------------------------------------------------
+    min_omega = MINUS_RAD_22P5_DEG;
+    ref_omega = 0;
+    max_omega = RAD_22P5_DEG;
+    //-------------------------------------------------------------REF YAW RATE GEN
+    
+    //DETECT LINE
+    if(line_val > 60){
+      det_line  = true;
+    }
+
+    if(det_line){
+      //LINE TRACE-------------------------------------------------------------------------------
+      target_omega = RAD_15_DEG;
+      //--------------------------------------------------------------------------------LINE TRACE
+      if(yaw_angle > ref_yaw_angle){
+	ZONE = APPROACH_TO_BLOCK_ZONE;
+      }
+    }
+
+    
+
+    break;
 /** LEFT 2019 ***********************************************************************/
   case BLOCK_ZONE:
     LOG_NAVI = 2170;
